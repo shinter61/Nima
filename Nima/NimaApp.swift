@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct NimaApp: App {
+    @StateObject private var gameData = GameData()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(gameData)
         }
     }
 }

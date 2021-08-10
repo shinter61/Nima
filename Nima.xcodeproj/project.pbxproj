@@ -7,12 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528B8B126C1627200BC4736 /* DiscardsView.swift */; };
 		E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35826BFCDC1000A45D8 /* NimaApp.swift */; };
 		E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35A26BFCDC1000A45D8 /* ContentView.swift */; };
 		E53BE35D26BFCDC2000A45D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */; };
 		E53BE36026BFCDC2000A45D8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E53BE35F26BFCDC2000A45D8 /* Preview Assets.xcassets */; };
 		E53BE36B26BFCDC2000A45D8 /* NimaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE36A26BFCDC2000A45D8 /* NimaTests.swift */; };
 		E53BE37626BFCDC2000A45D8 /* NimaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE37526BFCDC2000A45D8 /* NimaUITests.swift */; };
+		E53BE38426BFD0EC000A45D8 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38326BFD0EC000A45D8 /* MainMenu.swift */; };
+		E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38526BFD62B000A45D8 /* GameView.swift */; };
+		E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38726BFDA3E000A45D8 /* GameData.swift */; };
+		E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38926BFDAE2000A45D8 /* Tile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E528B8B126C1627200BC4736 /* DiscardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardsView.swift; sourceTree = "<group>"; };
 		E53BE35526BFCDC1000A45D8 /* Nima.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nima.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53BE35826BFCDC1000A45D8 /* NimaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimaApp.swift; sourceTree = "<group>"; };
 		E53BE35A26BFCDC1000A45D8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +51,10 @@
 		E53BE37126BFCDC2000A45D8 /* NimaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NimaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53BE37526BFCDC2000A45D8 /* NimaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimaUITests.swift; sourceTree = "<group>"; };
 		E53BE37726BFCDC2000A45D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E53BE38326BFD0EC000A45D8 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		E53BE38526BFD62B000A45D8 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		E53BE38726BFDA3E000A45D8 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
+		E53BE38926BFDAE2000A45D8 /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +110,11 @@
 				E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */,
 				E53BE36126BFCDC2000A45D8 /* Info.plist */,
 				E53BE35E26BFCDC2000A45D8 /* Preview Content */,
+				E53BE38326BFD0EC000A45D8 /* MainMenu.swift */,
+				E53BE38526BFD62B000A45D8 /* GameView.swift */,
+				E53BE38726BFDA3E000A45D8 /* GameData.swift */,
+				E53BE38926BFDAE2000A45D8 /* Tile.swift */,
+				E528B8B126C1627200BC4736 /* DiscardsView.swift */,
 			);
 			path = Nima;
 			sourceTree = "<group>";
@@ -260,6 +275,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */,
+				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
+				E53BE38426BFD0EC000A45D8 /* MainMenu.swift in Sources */,
+				E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */,
+				E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */,
+				E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */,
 				E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

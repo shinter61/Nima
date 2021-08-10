@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var gameData: GameData
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            MainMenu()
+        }
+        .navigationBarHidden(true)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(GameData())
     }
 }
