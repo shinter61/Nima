@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		684BB6AF0B23C5A7D63DFF52 /* Pods_Nima.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3837FFC245BA46B1A5748F4E /* Pods_Nima.framework */; };
+		6DDB2A315CC7F2AD4181FF8C /* Pods_NimaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11430B84CC56C23444812E39 /* Pods_NimaTests.framework */; };
+		B0C84FDC7421EE0388C1AF51 /* Pods_Nima_NimaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38AE9B264F09762EF1E21EE4 /* Pods_Nima_NimaUITests.framework */; };
 		E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528B8B126C1627200BC4736 /* DiscardsView.swift */; };
 		E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35826BFCDC1000A45D8 /* NimaApp.swift */; };
 		E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35A26BFCDC1000A45D8 /* ContentView.swift */; };
@@ -38,6 +41,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		11430B84CC56C23444812E39 /* Pods_NimaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NimaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		256DBFF6FF227AAAA1793D8B /* Pods-Nima.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima.debug.xcconfig"; path = "Target Support Files/Pods-Nima/Pods-Nima.debug.xcconfig"; sourceTree = "<group>"; };
+		3837FFC245BA46B1A5748F4E /* Pods_Nima.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nima.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		38AE9B264F09762EF1E21EE4 /* Pods_Nima_NimaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nima_NimaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		48B801D7CD3406AEE5B01887 /* Pods-Nima-NimaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima-NimaUITests.debug.xcconfig"; path = "Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		4D579F6BE605DC32A588F76E /* Pods-NimaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NimaTests.debug.xcconfig"; path = "Target Support Files/Pods-NimaTests/Pods-NimaTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6A9B589B929D84550E8EC531 /* Pods-Nima.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima.release.xcconfig"; path = "Target Support Files/Pods-Nima/Pods-Nima.release.xcconfig"; sourceTree = "<group>"; };
+		A14D955FAC720D48B781D40C /* Pods-Nima-NimaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima-NimaUITests.release.xcconfig"; path = "Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E528B8B126C1627200BC4736 /* DiscardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardsView.swift; sourceTree = "<group>"; };
 		E53BE35526BFCDC1000A45D8 /* Nima.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nima.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53BE35826BFCDC1000A45D8 /* NimaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimaApp.swift; sourceTree = "<group>"; };
@@ -55,6 +66,7 @@
 		E53BE38526BFD62B000A45D8 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		E53BE38726BFDA3E000A45D8 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		E53BE38926BFDAE2000A45D8 /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		F7B9344C7ADBE3FF1B1CF99A /* Pods-NimaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NimaTests.release.xcconfig"; path = "Target Support Files/Pods-NimaTests/Pods-NimaTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				684BB6AF0B23C5A7D63DFF52 /* Pods_Nima.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DDB2A315CC7F2AD4181FF8C /* Pods_NimaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,12 +90,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C84FDC7421EE0388C1AF51 /* Pods_Nima_NimaUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F5D459FE7502687E66DB0E5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				256DBFF6FF227AAAA1793D8B /* Pods-Nima.debug.xcconfig */,
+				6A9B589B929D84550E8EC531 /* Pods-Nima.release.xcconfig */,
+				48B801D7CD3406AEE5B01887 /* Pods-Nima-NimaUITests.debug.xcconfig */,
+				A14D955FAC720D48B781D40C /* Pods-Nima-NimaUITests.release.xcconfig */,
+				4D579F6BE605DC32A588F76E /* Pods-NimaTests.debug.xcconfig */,
+				F7B9344C7ADBE3FF1B1CF99A /* Pods-NimaTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		E53BE34C26BFCDC1000A45D8 = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +118,8 @@
 				E53BE36926BFCDC2000A45D8 /* NimaTests */,
 				E53BE37426BFCDC2000A45D8 /* NimaUITests */,
 				E53BE35626BFCDC1000A45D8 /* Products */,
+				2F5D459FE7502687E66DB0E5 /* Pods */,
+				F8E202F48EA6062ED4C59DA7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -145,6 +176,16 @@
 			path = NimaUITests;
 			sourceTree = "<group>";
 		};
+		F8E202F48EA6062ED4C59DA7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3837FFC245BA46B1A5748F4E /* Pods_Nima.framework */,
+				38AE9B264F09762EF1E21EE4 /* Pods_Nima_NimaUITests.framework */,
+				11430B84CC56C23444812E39 /* Pods_NimaTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -152,9 +193,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E53BE37A26BFCDC2000A45D8 /* Build configuration list for PBXNativeTarget "Nima" */;
 			buildPhases = (
+				7A024C10F1DF3D23F3023F19 /* [CP] Check Pods Manifest.lock */,
 				E53BE35126BFCDC1000A45D8 /* Sources */,
 				E53BE35226BFCDC1000A45D8 /* Frameworks */,
 				E53BE35326BFCDC1000A45D8 /* Resources */,
+				E8DEED807AF06395121EA52F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -169,6 +212,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E53BE37D26BFCDC2000A45D8 /* Build configuration list for PBXNativeTarget "NimaTests" */;
 			buildPhases = (
+				596CA636B2DFC65A323403A8 /* [CP] Check Pods Manifest.lock */,
 				E53BE36226BFCDC2000A45D8 /* Sources */,
 				E53BE36326BFCDC2000A45D8 /* Frameworks */,
 				E53BE36426BFCDC2000A45D8 /* Resources */,
@@ -187,9 +231,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E53BE38026BFCDC2000A45D8 /* Build configuration list for PBXNativeTarget "NimaUITests" */;
 			buildPhases = (
+				C55ED024638A6FCA2F27DF8A /* [CP] Check Pods Manifest.lock */,
 				E53BE36D26BFCDC2000A45D8 /* Sources */,
 				E53BE36E26BFCDC2000A45D8 /* Frameworks */,
 				E53BE36F26BFCDC2000A45D8 /* Resources */,
+				3FADB2F22D99C2FC0FD76E24 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -268,6 +314,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3FADB2F22D99C2FC0FD76E24 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		596CA636B2DFC65A323403A8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NimaTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7A024C10F1DF3D23F3023F19 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nima-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C55ED024638A6FCA2F27DF8A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nima-NimaUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8DEED807AF06395121EA52F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima/Pods-Nima-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima/Pods-Nima-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nima/Pods-Nima-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E53BE35126BFCDC1000A45D8 /* Sources */ = {
@@ -434,6 +583,7 @@
 		};
 		E53BE37B26BFCDC2000A45D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 256DBFF6FF227AAAA1793D8B /* Pods-Nima.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -456,6 +606,7 @@
 		};
 		E53BE37C26BFCDC2000A45D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A9B589B929D84550E8EC531 /* Pods-Nima.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -478,6 +629,7 @@
 		};
 		E53BE37E26BFCDC2000A45D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4D579F6BE605DC32A588F76E /* Pods-NimaTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -500,6 +652,7 @@
 		};
 		E53BE37F26BFCDC2000A45D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7B9344C7ADBE3FF1B1CF99A /* Pods-NimaTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -522,6 +675,7 @@
 		};
 		E53BE38126BFCDC2000A45D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 48B801D7CD3406AEE5B01887 /* Pods-Nima-NimaUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -542,6 +696,7 @@
 		};
 		E53BE38226BFCDC2000A45D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A14D955FAC720D48B781D40C /* Pods-Nima-NimaUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
