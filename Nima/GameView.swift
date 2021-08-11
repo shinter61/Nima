@@ -6,13 +6,29 @@
 //
 
 import SwiftUI
+import SocketIO
 
 struct GameView: View {
     @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var gameService: GameService
     
     init() {
         UITableView.appearance().backgroundColor = .clear
         UITableView.appearance().separatorStyle = .none
+    }
+    
+    func addHandler(socket: SocketIOClient!) -> Void {
+        socket.on(clientEvent: .connect) { (data, ack) in
+            socket.emit("AddPlayer", gameData.playerID)
+        }
+        socket.on("InformPlayersNames") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                gameData.opponentID = dict["player2"]!
+            }
+            if let hash = data[0] as? [String: String], gameData.playerID == hash["player2"] {
+                gameData.opponentID = hash["player1"]!
+            }
+        }
     }
     
     var body: some View {
@@ -20,12 +36,13 @@ struct GameView: View {
             let width = geometry.size.width
             let height = geometry.size.height
             
+            Text("\(gameData.opponentID)").position(x: width*0.2, y: height*0.2)
             Text("残り \(gameData.stock.count)")
                 .position(x: width/2, y: height*0.4)
             DiscardsView(discards: gameData.myDiscards)
             .position(x: width/2, y: height*0.6)
             
-            Text("あなた 35000点").position(x: width*0.2, y: height*0.8)
+            Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.8)
             Button(action: {
                 gameData.draw()
             }) {
@@ -35,7 +52,7 @@ struct GameView: View {
                 HStack(alignment: .center, spacing: -4, content: {
                     ForEach(gameData.myTiles, id: \.self) { tile in
                         Button(action: {
-                            gameData.discard(tile: tile)
+                            let myDiscards = gameData.discard(tile: tile)
                         }) {
                             Image(tile.name())
                                 .resizable()
@@ -52,6 +69,8 @@ struct GameView: View {
         }
         .onAppear {
             gameData.reload()
+            addHandler(socket: gameService.socket)
+            gameService.socket.connect(withPayload: ["name": gameData.playerID])
         }
     }
 }

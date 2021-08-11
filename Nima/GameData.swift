@@ -14,6 +14,9 @@ final class GameData: ObservableObject {
     @Published var myDiscards: [Tile] = []
     @Published var yourDiscards: [Tile] = []
     
+    @Published var playerID: String = UUID().uuidString
+    @Published var opponentID: String = ""
+    
     func reload() -> Void {
         var originalTiles: [Tile] = []
         let characters = ["east", "south", "west", "north", "white", "green", "red"]
@@ -52,10 +55,11 @@ final class GameData: ObservableObject {
         }
     }
     
-    func discard(tile: Tile) -> Void {
+    func discard(tile: Tile) -> [Tile] {
         let idx: Int = myTiles.firstIndex(where: {$0.isEqual(tile: tile)})!
         let removed: Tile = myTiles.remove(at: idx)
         myDiscards.append(removed)
+        return myDiscards
     }
     
     func draw() -> Void {

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MainMenu: View {
     @State private var showingGame: Bool = false
-    @State private var showingTest: Bool = false
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -24,20 +23,9 @@ struct MainMenu: View {
             }
             .position(x: width/2, y: height*0.4)
             
-            Button(action: {
-                showingTest = true
-            }) {
-                Text("テストする")
-            }
-            .position(x: width/2, y: height*0.6)
-            
             NavigationLink(
                 destination: GameView().navigationBarHidden(true),
                 isActive: self.$showingGame
-            ) { EmptyView() }
-            NavigationLink(
-                destination: TestView().navigationBarHidden(true),
-                isActive: self.$showingTest
             ) { EmptyView() }
         }
     }
