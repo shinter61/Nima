@@ -66,4 +66,25 @@ final class GameData: ObservableObject {
         let removed: Tile = stock.removeFirst()
         myTiles.append(removed)
     }
+    
+    func encode(tiles: [Tile]) -> String {
+        var jsonStr = ""
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
+            let jsonData = try encoder.encode(tiles)
+            jsonStr = String(data: jsonData, encoding: .utf8) ?? ""
+            print(jsonStr)
+        } catch {
+            print(error.localizedDescription)
+        }
+        return jsonStr
+    }
+    
+    func decode(str: String) -> [Tile] {
+        let jsonData = str.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        let tiles = try! decoder.decode(Array<Tile>.self, from: jsonData)
+        return tiles
+    }
 }
