@@ -37,6 +37,23 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 if gameData.opponentID == dict["id"] {
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
+                    // ここにポン・カン・ロンなどの処理を挟む
+                    socket.emit("Draw", gameData.playerID)
+                }
+            }
+        }
+        socket.on("DistributeInitTiles") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if gameData.playerID == dict["id"] {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                }
+            }
+        }
+        socket.on("Draw") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if gameData.playerID == dict["id"] {
+                    let tiles: [Tile] = gameData.decode(str: dict["tiles"]!)
+                    gameData.myTiles.append(tiles[0])
                 }
             }
         }
@@ -66,17 +83,17 @@ struct GameView: View {
             DiscardsView(discards: gameData.yourDiscards)
                 .rotationEffect(Angle(degrees: 180.0))
                 .position(x: width/2, y: height*0.4)
-//            Text("残り \(gameData.stock.count)")
-//                .position(x: width/2, y: height*0.4)
+            Text("残り \(gameData.stock.count)")
+                .position(x: width*0.2, y: height*0.5)
+            Button(action: {
+                gameService.socket.emit("StartGame")
+            }) {
+                Text("勝負開始")
+            }
+            .position(x: width*0.8, y: height*0.5)
             DiscardsView(discards: gameData.myDiscards)
                 .position(x: width/2, y: height*0.6)
-                
             Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.8)
-            Button(action: {
-                gameData.draw()
-            }) {
-                Text("ツモる")
-            }.position(x: width*0.9, y: height*0.8)
             List {
                 HStack(alignment: .center, spacing: -4, content: {
                     ForEach(gameData.myTiles, id: \.self) { tile in
@@ -102,7 +119,6 @@ struct GameView: View {
             .position(x: width/2, y: height*0.9)
         }
         .onAppear {
-            gameData.reload()
             addHandler(socket: gameService.socket)
             gameService.socket.connect(withPayload: ["name": gameData.playerID])
         }

@@ -17,44 +17,6 @@ final class GameData: ObservableObject {
     @Published var playerID: String = UUID().uuidString
     @Published var opponentID: String = ""
     
-    func reload() -> Void {
-        var originalTiles: [Tile] = []
-        let characters = ["east", "south", "west", "north", "white", "green", "red"]
-        let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        let kinds = ["pin", "sou", "man"]
-        
-        for i in 0..<characters.count {
-            for _ in 0..<4 {
-                originalTiles.append(Tile(kind: "", number: 0, character: characters[i]))
-            }
-        }
-        
-        for i in 0..<numbers.count {
-            for j in 0..<kinds.count {
-                if (numbers[i] >= 2 && numbers[i] <= 8 && kinds[j] != "pin") {
-                    continue
-                }
-                for _ in 0..<4 {
-                    originalTiles.append(Tile(kind: kinds[j], number: numbers[i], character: ""))
-                }
-            }
-        }
-        
-        originalTiles.shuffle()
-        
-        stock = originalTiles // ランダムな山を生成
-        
-        // 自分と相手の配牌を生成
-        for _ in 0..<13 {
-            let removed: Tile = stock.removeFirst()
-            myTiles.append(removed)
-        }
-        for _ in 0..<13 {
-            let removed: Tile = stock.removeFirst()
-            yourTiles.append(removed)
-        }
-    }
-    
     func discard(tile: Tile) -> [Tile] {
         let idx: Int = myTiles.firstIndex(where: {$0.isEqual(tile: tile)})!
         let removed: Tile = myTiles.remove(at: idx)
