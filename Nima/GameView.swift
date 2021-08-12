@@ -11,6 +11,7 @@ import SocketIO
 struct GameView: View {
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
+    @State private var isMyTurn: Bool = false
     
     init() {
         UITableView.appearance().backgroundColor = .clear
@@ -55,6 +56,7 @@ struct GameView: View {
                 if gameData.playerID == dict["id"] {
                     let tiles: [Tile] = gameData.decode(str: dict["tiles"]!)
                     gameData.myTiles.append(tiles[0])
+                    isMyTurn = true
                 }
             }
         }
@@ -105,6 +107,7 @@ struct GameView: View {
                                 gameData.playerID,
                                 gameData.encode(tiles: myDiscards)
                             )
+                            isMyTurn = false
                         }) {
                             Image(tile.name())
                                 .resizable()
@@ -112,6 +115,7 @@ struct GameView: View {
                                 .frame(width: 30, height: 60, alignment: .center)
                         }
                         .buttonStyle(PlainButtonStyle())
+                        .disabled(!isMyTurn)
                     }
                 })
             }
