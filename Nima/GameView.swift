@@ -51,6 +51,7 @@ struct GameView: View {
         }
         socket.on("Draw") { (data, ack) in
             if let dict = data[0] as? [String: String] {
+                gameData.stockCount = Int(dict["stockCount"]!)!
                 if gameData.playerID == dict["id"] {
                     let tiles: [Tile] = gameData.decode(str: dict["tiles"]!)
                     gameData.myTiles.append(tiles[0])
@@ -83,7 +84,7 @@ struct GameView: View {
             DiscardsView(discards: gameData.yourDiscards)
                 .rotationEffect(Angle(degrees: 180.0))
                 .position(x: width/2, y: height*0.4)
-            Text("残り \(gameData.stock.count)")
+            Text("残り \(gameData.stockCount)")
                 .position(x: width*0.2, y: height*0.5)
             Button(action: {
                 gameService.socket.emit("StartGame")

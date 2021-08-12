@@ -8,7 +8,7 @@
 import Foundation
 
 final class GameData: ObservableObject {
-    @Published var stock: [Tile] = []
+    @Published var stockCount: Int = 0
     @Published var myTiles: [Tile] = []
     @Published var yourTiles: [Tile] = []
     @Published var myDiscards: [Tile] = []
@@ -22,11 +22,6 @@ final class GameData: ObservableObject {
         let removed: Tile = myTiles.remove(at: idx)
         myDiscards.append(removed)
         return myDiscards
-    }
-    
-    func draw() -> Void {
-        let removed: Tile = stock.removeFirst()
-        myTiles.append(removed)
     }
     
     func encode(tiles: [Tile]) -> String {
