@@ -47,6 +47,7 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.organizeTiles()
                 }
             }
         }
@@ -102,6 +103,7 @@ struct GameView: View {
                     ForEach(gameData.myTiles, id: \.self) { tile in
                         Button(action: {
                             let myDiscards = gameData.discard(tile: tile)
+                            gameData.organizeTiles()
                             gameService.socket.emit(
                                 "Discard",
                                 gameData.playerID,
