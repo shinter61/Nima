@@ -41,13 +41,18 @@ struct GameView: View {
                     // ここにポン・カン・ロンなどの処理を挟む
                     socket.emit("Draw", gameData.playerID)
                 }
+                if gameData.playerID == dict["id"] {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.myDiscards = gameData.decode(str: dict["discards"]!)
+                }
             }
         }
         socket.on("DistributeInitTiles") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
-                    gameData.organizeTiles()
+                    
+                    if (gameData.myTiles.count == 14) { isMyTurn = true }
                 }
             }
         }
@@ -55,9 +60,8 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 gameData.stockCount = Int(dict["stockCount"]!)!
                 if gameData.playerID == dict["id"] {
-                    let tiles: [Tile] = gameData.decode(str: dict["tiles"]!)
-                    gameData.myTiles.append(tiles[0])
-                    isMyTurn = true
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    if (gameData.myTiles.count == 14) { isMyTurn = true }
                 }
             }
         }
@@ -102,12 +106,10 @@ struct GameView: View {
                 HStack(alignment: .center, spacing: -4, content: {
                     ForEach(gameData.myTiles, id: \.self) { tile in
                         Button(action: {
-                            let myDiscards = gameData.discard(tile: tile)
-                            gameData.organizeTiles()
                             gameService.socket.emit(
                                 "Discard",
                                 gameData.playerID,
-                                gameData.encode(tiles: myDiscards)
+                                gameData.encode(tiles: [tile])
                             )
                             isMyTurn = false
                         }) {

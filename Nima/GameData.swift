@@ -44,40 +44,4 @@ final class GameData: ObservableObject {
         let tiles = try! decoder.decode(Array<Tile>.self, from: jsonData)
         return tiles
     }
-    
-    // 牌に通し番号をつけてそれでソートするか..?コードは綺麗になるが謎の通し番号がデータに入ることになる
-    func organizeTiles() -> Void {
-        var newTiles: [Tile] = []
-        var pinzuTiles: [Tile] = []
-        var souzuTiles: [Tile] = []
-        var manzuTiles: [Tile] = []
-        var eastTiles: [Tile] = []
-        var southTiles: [Tile] = []
-        var westTiles: [Tile] = []
-        var northTiles: [Tile] = []
-        var whiteTiles: [Tile] = []
-        var greenTiles: [Tile] = []
-        var redTiles: [Tile] = []
-        
-        for tile in myTiles {
-            if tile.kind == "pin" { pinzuTiles.append(tile) }
-            else if tile.kind == "sou" { souzuTiles.append(tile) }
-            else if tile.kind == "man" { manzuTiles.append(tile) }
-            else if tile.character == "east" { eastTiles.append(tile) }
-            else if tile.character == "south" { southTiles.append(tile) }
-            else if tile.character == "west" { westTiles.append(tile) }
-            else if tile.character == "north" { northTiles.append(tile) }
-            else if tile.character == "white" { whiteTiles.append(tile) }
-            else if tile.character == "green" { greenTiles.append(tile) }
-            else if tile.character == "red" { redTiles.append(tile) }
-        }
-        
-        pinzuTiles.sort(by: { $0.number < $1.number })
-        souzuTiles.sort(by: { $0.number < $1.number })
-        manzuTiles.sort(by: { $0.number < $1.number })
-        newTiles = pinzuTiles + souzuTiles + manzuTiles + eastTiles +
-            southTiles + westTiles + northTiles + whiteTiles + greenTiles + redTiles
-        
-        myTiles = newTiles
-    }
 }
