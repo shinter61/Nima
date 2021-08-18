@@ -12,6 +12,11 @@ struct GameView: View {
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
     @State private var isMyTurn: Bool = false
+    @State private var isWin: Bool = false
+    @State private var showingScore: Bool = false
+    @State private var score: Int = 0
+    @State private var hands: [String] = []
+    @State private var scoreName: String = ""
     
     init() {
         UITableView.appearance().backgroundColor = .clear
@@ -62,7 +67,17 @@ struct GameView: View {
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     if (gameData.myTiles.count == 14) { isMyTurn = true }
+                    if (dict["isWin"] == "true") { isWin = true }
                 }
+            }
+        }
+        socket.on("Win") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                score = Int(dict["score"]!)!
+                scoreName = dict["scoreName"]!
+                let jsonData = dict["hands"]!.data(using: .utf8)!
+                hands = try! JSONDecoder().decode(Array<String>.self, from: jsonData)
+                showingScore = true
             }
         }
     }
@@ -102,6 +117,16 @@ struct GameView: View {
             DiscardsView(discards: gameData.myDiscards)
                 .position(x: width/2, y: height*0.6)
             Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.8)
+            if (isWin) {
+                Button(action: {
+                    gameService.socket.emit("Win", gameData.playerID)
+                }) {
+                    Text("ツモ")
+                        .font(.system(size: 24, weight: .bold, design: .serif))
+                        .foregroundColor(.red)
+                }
+                .position(x: width*0.85, y: height*0.8)
+            }
             List {
                 HStack(alignment: .center, spacing: -4, content: {
                     ForEach(gameData.myTiles, id: \.self) { tile in
@@ -126,6 +151,11 @@ struct GameView: View {
             .frame(width: 30*13, height: 70, alignment: .center)
             .listStyle(PlainListStyle())
             .position(x: width/2, y: height*0.9)
+            
+            NavigationLink(
+                destination: ScoreView(score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
+                isActive: self.$showingScore
+            ) { EmptyView() }
         }
         .onAppear {
             addHandler(socket: gameService.socket)
