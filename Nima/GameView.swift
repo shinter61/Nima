@@ -14,6 +14,7 @@ struct GameView: View {
     @State private var isMyTurn: Bool = false
     @State private var isWin: Bool = false
     @State private var canRon: Bool = false
+    @State private var canPon: Bool = false
     @State private var showingScore: Bool = false
     @State private var score: Int = 0
     @State private var hands: [String] = []
@@ -44,10 +45,13 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 if gameData.opponentID == dict["id"] {
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
-                    // ここにポン・カン・ロンなどの処理を挟む
+                    if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
+                        canPon = true
+                    }
                     if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
                         canRon = true
-                    } else {
+                    }
+                    if !canPon && !canRon {
                         socket.emit("Draw", gameData.playerID)
                     }
                 }
@@ -72,8 +76,20 @@ struct GameView: View {
                 gameData.stockCount = Int(dict["stockCount"]!)!
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
-                    if (gameData.myTiles.count == 14) { isMyTurn = true }
+                    if (gameData.myTiles.count + gameData.myMinkos.count*3 == 14) { isMyTurn = true }
                     if (dict["isWin"] == "true") { isWin = true }
+                }
+            }
+        }
+        socket.on("Pon") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if gameData.playerID == dict["id"] {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
+                    gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
+                    if (gameData.myTiles.count + gameData.myMinkos.count*3 == 14) { isMyTurn = true }
+                } else {
+                    gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                 }
             }
         }
@@ -122,50 +138,80 @@ struct GameView: View {
             .position(x: width*0.8, y: height*0.5)
             DiscardsView(discards: gameData.myDiscards)
                 .position(x: width/2, y: height*0.6)
-            Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.8)
-            if (canRon) {
-                Button(action: {
-                    gameService.socket.emit("Win", gameData.playerID, "ron")
-                }) {
-                    Text("ロン")
-                        .font(.system(size: 24, weight: .bold, design: .serif))
-                        .foregroundColor(.red)
-                }
-                .position(x: width*0.85, y: height*0.8)
-            }
-            if (isWin) {
-                Button(action: {
-                    gameService.socket.emit("Win", gameData.playerID, "draw")
-                }) {
-                    Text("ツモ")
-                        .font(.system(size: 24, weight: .bold, design: .serif))
-                        .foregroundColor(.red)
-                }
-                .position(x: width*0.85, y: height*0.8)
-            }
-            List {
-                HStack(alignment: .center, spacing: -4, content: {
-                    ForEach(gameData.myTiles, id: \.self) { tile in
-                        Button(action: {
-                            gameService.socket.emit(
-                                "Discard",
-                                gameData.playerID,
-                                gameData.encode(tiles: [tile])
-                            )
-                            isMyTurn = false
-                        }) {
-                            Image(tile.name())
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 60, alignment: .center)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .disabled(!isMyTurn)
+            Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
+            Group {
+                if (canPon) {
+                    Button(action: {
+                        gameService.socket.emit("Pon", gameData.playerID)
+                        canPon = false
+                    }) {
+                        Text("ポン")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(.red)
                     }
-                })
+                    .position(x: width*0.65, y: height*0.8)
+                }
+                if (canRon) {
+                    Button(action: {
+                        gameService.socket.emit("Win", gameData.playerID, "ron")
+                    }) {
+                        Text("ロン")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(.red)
+                    }
+                    .position(x: width*0.75, y: height*0.8)
+                }
+                if (isWin) {
+                    Button(action: {
+                        gameService.socket.emit("Win", gameData.playerID, "draw")
+                    }) {
+                        Text("ツモ")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(.red)
+                    }
+                    .position(x: width*0.75, y: height*0.8)
+                }
+                if (canRon || canPon) {
+                    Button(action: {
+                        gameService.socket.emit("Draw", gameData.playerID)
+                        canRon = false
+                        canPon = false
+                        isWin = false
+                    }) {
+                        Text("スキップ")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(.gray)
+                    }
+                    .position(x: width*0.85, y: height*0.8)
+                }
             }
-            .frame(width: 30*13, height: 70, alignment: .center)
-            .listStyle(PlainListStyle())
+            
+            HStack(alignment: .center, spacing: 0, content: {
+                List {
+                    HStack(alignment: .center, spacing: -4, content: {
+                        ForEach(gameData.myTiles, id: \.self) { tile in
+                            Button(action: {
+                                gameService.socket.emit(
+                                    "Discard",
+                                    gameData.playerID,
+                                    gameData.encode(tiles: [tile])
+                                )
+                                isMyTurn = false
+                            }) {
+                                Image(tile.name())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 60, alignment: .center)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .disabled(!isMyTurn)
+                        }
+                    })
+                }
+                .frame(width: 30*13, height: 70, alignment: .center)
+                .listStyle(PlainListStyle())
+                MinkoView()
+            })
             .position(x: width/2, y: height*0.9)
             
             NavigationLink(

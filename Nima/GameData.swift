@@ -10,6 +10,7 @@ import Foundation
 final class GameData: ObservableObject {
     @Published var stockCount: Int = 0
     @Published var myTiles: [Tile] = []
+    @Published var myMinkos: [Tile] = []
     @Published var myDiscards: [Tile] = []
     @Published var myWaits: [Tile] = []
     @Published var yourDiscards: [Tile] = []
@@ -22,6 +23,16 @@ final class GameData: ObservableObject {
         let removed: Tile = myTiles.remove(at: idx)
         myDiscards.append(removed)
         return myDiscards
+    }
+    
+    func collectToitz() -> [String] {
+        var toitzNames: [String] = []
+        for i in 0..<(myTiles.count-1) {
+            if (myTiles[i].isEqual(tile: myTiles[i+1])) { toitzNames.append(myTiles[i].name()) }
+        }
+        let uniqToitzNames = Array(Set(toitzNames))
+        
+        return uniqToitzNames
     }
     
     func encode(tiles: [Tile]) -> String {
