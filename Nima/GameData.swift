@@ -10,8 +10,8 @@ import Foundation
 final class GameData: ObservableObject {
     @Published var stockCount: Int = 0
     @Published var myTiles: [Tile] = []
-    @Published var yourTiles: [Tile] = []
     @Published var myDiscards: [Tile] = []
+    @Published var myWaits: [Tile] = []
     @Published var yourDiscards: [Tile] = []
     
     @Published var playerID: String = UUID().uuidString

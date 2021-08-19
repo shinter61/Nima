@@ -13,6 +13,7 @@ struct GameView: View {
     @EnvironmentObject var gameService: GameService
     @State private var isMyTurn: Bool = false
     @State private var isWin: Bool = false
+    @State private var canRon: Bool = false
     @State private var showingScore: Bool = false
     @State private var score: Int = 0
     @State private var hands: [String] = []
@@ -44,11 +45,16 @@ struct GameView: View {
                 if gameData.opponentID == dict["id"] {
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
                     // ここにポン・カン・ロンなどの処理を挟む
-                    socket.emit("Draw", gameData.playerID)
+                    if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
+                        canRon = true
+                    } else {
+                        socket.emit("Draw", gameData.playerID)
+                    }
                 }
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
+                    gameData.myWaits = gameData.decode(str: dict["waits"]!)
                 }
             }
         }
@@ -117,6 +123,16 @@ struct GameView: View {
             DiscardsView(discards: gameData.myDiscards)
                 .position(x: width/2, y: height*0.6)
             Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.8)
+            if (canRon) {
+                Button(action: {
+                    gameService.socket.emit("Ron", gameData.playerID)
+                }) {
+                    Text("ロン")
+                        .font(.system(size: 24, weight: .bold, design: .serif))
+                        .foregroundColor(.red)
+                }
+                .position(x: width*0.85, y: height*0.8)
+            }
             if (isWin) {
                 Button(action: {
                     gameService.socket.emit("Win", gameData.playerID)
