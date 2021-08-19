@@ -125,7 +125,7 @@ struct GameView: View {
             Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.8)
             if (canRon) {
                 Button(action: {
-                    gameService.socket.emit("Ron", gameData.playerID)
+                    gameService.socket.emit("Win", gameData.playerID, "ron")
                 }) {
                     Text("ロン")
                         .font(.system(size: 24, weight: .bold, design: .serif))
@@ -135,7 +135,7 @@ struct GameView: View {
             }
             if (isWin) {
                 Button(action: {
-                    gameService.socket.emit("Win", gameData.playerID)
+                    gameService.socket.emit("Win", gameData.playerID, "draw")
                 }) {
                     Text("ツモ")
                         .font(.system(size: 24, weight: .bold, design: .serif))
