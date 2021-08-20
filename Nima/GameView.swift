@@ -15,10 +15,14 @@ struct GameView: View {
     @State private var isWin: Bool = false
     @State private var canRon: Bool = false
     @State private var canPon: Bool = false
+    @State private var canRiichi: Bool = false
+    @State private var nextRiichi: Bool = false
+    @State private var isRiichi: Bool = false
     @State private var showingScore: Bool = false
     @State private var score: Int = 0
     @State private var hands: [String] = []
     @State private var scoreName: String = ""
+    @State private var waitsCandidate: [WaitCandidate] = []
     
     init() {
         UITableView.appearance().backgroundColor = .clear
@@ -45,6 +49,7 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 if gameData.opponentID == dict["id"] {
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
+                    gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
                         canPon = true
                     }
@@ -59,6 +64,7 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myWaits = gameData.decode(str: dict["waits"]!)
+                    gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                 }
             }
         }
@@ -78,6 +84,8 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     if (gameData.myTiles.count + gameData.myMinkos.count*3 == 14) { isMyTurn = true }
                     if (dict["isWin"] == "true") { isWin = true }
+                    waitsCandidate = gameData.decodeWaitsCandidate(str: dict["waitsCandidate"]!)
+                    if (waitExists()) { canRiichi = true }
                 }
             }
         }
@@ -104,6 +112,19 @@ struct GameView: View {
         }
     }
     
+    func waitExists() -> Bool {
+        var exists = false
+        for i in 0..<waitsCandidate.count {
+            if (waitsCandidate[i].waitTiles.count != 0) { exists = true }
+        }
+        return exists
+    }
+   
+    func waitExistsFor(tile: Tile) -> Bool {
+        let result: WaitCandidate = waitsCandidate.first(where: { $0.tile.isEqual(tile: tile) })!
+        return !result.waitTiles.isEmpty
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -125,7 +146,7 @@ struct GameView: View {
                 
                 Text("\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
             }
-            DiscardsView(discards: gameData.yourDiscards)
+            DiscardsView(discards: gameData.yourDiscards, riichiTurn: gameData.yourRiichiTurn)
                 .rotationEffect(Angle(degrees: 180.0))
                 .position(x: width/2, y: height*0.4)
             Text("残り \(gameData.stockCount)")
@@ -136,11 +157,11 @@ struct GameView: View {
                 Text("勝負開始")
             }
             .position(x: width*0.8, y: height*0.5)
-            DiscardsView(discards: gameData.myDiscards)
+            DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
                 .position(x: width/2, y: height*0.6)
             Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
             Group {
-                if (canPon) {
+                if (canPon && !isRiichi) {
                     Button(action: {
                         gameService.socket.emit("Pon", gameData.playerID)
                         canPon = false
@@ -161,6 +182,14 @@ struct GameView: View {
                     }
                     .position(x: width*0.75, y: height*0.8)
                 }
+                if (canRiichi && !isRiichi && gameData.isMenzen()) {
+                    Button(action: { nextRiichi.toggle() }) {
+                        Text("立直")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(nextRiichi ? .blue : .red)
+                    }
+                    .position(x: width*0.65, y: height*0.8)
+                }
                 if (isWin) {
                     Button(action: {
                         gameService.socket.emit("Win", gameData.playerID, "draw")
@@ -171,7 +200,7 @@ struct GameView: View {
                     }
                     .position(x: width*0.75, y: height*0.8)
                 }
-                if (canRon || canPon) {
+                if (canRon || (canPon && !isRiichi)) {
                     Button(action: {
                         gameService.socket.emit("Draw", gameData.playerID)
                         canRon = false
@@ -184,17 +213,29 @@ struct GameView: View {
                     }
                     .position(x: width*0.85, y: height*0.8)
                 }
+                if (isRiichi) {
+                    Text("立直中")
+                        .font(.system(size: 16, weight: .bold, design: .serif))
+                        .foregroundColor(.green)
+                        .position(x: width*0.85, y: height*0.75)
+                }
             }
             
             HStack(alignment: .center, spacing: 0, content: {
                 List {
                     HStack(alignment: .center, spacing: -4, content: {
-                        ForEach(gameData.myTiles, id: \.self) { tile in
+                        ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
                             Button(action: {
+                                if (nextRiichi) {
+                                    canRiichi.toggle()
+                                    nextRiichi.toggle()
+                                    isRiichi = true
+                                }
                                 gameService.socket.emit(
                                     "Discard",
                                     gameData.playerID,
-                                    gameData.encode(tiles: [tile])
+                                    gameData.encode(tiles: [tile]),
+                                    isRiichi
                                 )
                                 isMyTurn = false
                             }) {
@@ -204,7 +245,7 @@ struct GameView: View {
                                     .frame(width: 30, height: 60, alignment: .center)
                             }
                             .buttonStyle(PlainButtonStyle())
-                            .disabled(!isMyTurn)
+                            .disabled(!isMyTurn || (nextRiichi && !waitExistsFor(tile: tile)) || (isRiichi && index != gameData.myTiles.count - 1))
                         }
                     })
                 }

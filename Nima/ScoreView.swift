@@ -16,11 +16,11 @@ struct ScoreView: View {
             List {
                 ForEach(hands, id: \.self) { hand in
                     Text(hand)
-                        .font(.system(size: 24, weight: .light, design: .serif))
+                        .font(.system(size: 16, weight: .light, design: .serif))
                 }
             }
             .listStyle(PlainListStyle())
-            .frame(width: 300, height: 400, alignment: .center)
+            .frame(width: 300, height: 200, alignment: .center)
             HStack {
                 Spacer()
                 VStack(alignment: .leading, spacing: 10, content: {

@@ -28,3 +28,8 @@ struct Tile: Hashable, Codable {
         }
     }
 }
+
+struct WaitCandidate: Hashable, Codable {
+    var tile: Tile
+    var waitTiles: [Tile]
+}

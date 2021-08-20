@@ -15,6 +15,9 @@ final class GameData: ObservableObject {
     @Published var myWaits: [Tile] = []
     @Published var yourDiscards: [Tile] = []
     
+    @Published var myRiichiTurn: Int = -1
+    @Published var yourRiichiTurn: Int = -1
+    
     @Published var playerID: String = UUID().uuidString
     @Published var opponentID: String = ""
     
@@ -54,5 +57,16 @@ final class GameData: ObservableObject {
         let decoder = JSONDecoder()
         let tiles = try! decoder.decode(Array<Tile>.self, from: jsonData)
         return tiles
+    }
+    
+    func decodeWaitsCandidate(str: String) -> [WaitCandidate] {
+        let jsonData = str.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        let tiles = try! decoder.decode(Array<WaitCandidate>.self, from: jsonData)
+        return tiles
+    }
+    
+    func isMenzen() -> Bool {
+        return myMinkos.isEmpty
     }
 }
