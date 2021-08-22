@@ -6,11 +6,22 @@
 //
 
 import SwiftUI
+import SocketIO
 
 struct ScoreView: View {
+    @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var gameService: GameService
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var showingScore: Bool
     var score: Int
     var scoreName: String
     var hands: [String]
+    
+    func pop() -> Void {
+        gameService.socket.emit("StartGame")
+        self.presentationMode.wrappedValue.dismiss()
+    }
+    
     var body: some View {
         VStack {
             List {
@@ -32,12 +43,20 @@ struct ScoreView: View {
                 })
                     .padding(.trailing, 50)
             }
+            .padding(.bottom, 20)
+            Text(String(gameData.countdown))
+            if gameData.countdown <= 0 {
+                ActionEmptyView(action: pop)
+            }
         }
+        .onAppear { gameData.start() }
     }
 }
 
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {
-        ScoreView(score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
+        ScoreView(showingScore: .constant(false), score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
+            .environmentObject(GameData())
+            .environmentObject(GameService())
     }
 }

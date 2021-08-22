@@ -56,7 +56,7 @@ struct GameView: View {
                     if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
                         canRon = true
                     }
-                    if !canPon && !canRon {
+                    if !(canPon && !isRiichi) && !canRon {
                         socket.emit("Draw", gameData.playerID)
                     }
                 }
@@ -72,8 +72,16 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.myScore = Int(dict["score"]!)!
+                    gameData.myMinkos = []
+                    gameData.myDiscards = []
+                    gameData.yourDiscards = []
+                    gameData.stockCount = 0
+                    gameData.myRiichiTurn = -1
                     
                     if (gameData.myTiles.count == 14) { isMyTurn = true }
+                } else {
+                    gameData.yourScore = Int(dict["score"]!)!
                 }
             }
         }
@@ -107,6 +115,12 @@ struct GameView: View {
                 scoreName = dict["scoreName"]!
                 let jsonData = dict["hands"]!.data(using: .utf8)!
                 hands = try! JSONDecoder().decode(Array<String>.self, from: jsonData)
+                canPon = false
+                canRon = false
+                canRiichi = false
+                nextRiichi = false
+                isRiichi = false
+                isWin = false
                 showingScore = true
             }
         }
@@ -144,6 +158,7 @@ struct GameView: View {
                 .listStyle(PlainListStyle())
                 .position(x: width/2, y: height*0.1)
                 
+                Text("\(gameData.yourScore)").position(x: width*0.7, y: height*0.2)
                 Text("\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
             }
             DiscardsView(discards: gameData.yourDiscards, riichiTurn: gameData.yourRiichiTurn)
@@ -160,6 +175,7 @@ struct GameView: View {
             DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
                 .position(x: width/2, y: height*0.6)
             Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
+            Text("\(gameData.myScore)").position(x: width*0.3, y: height*0.75)
             Group {
                 if (canPon && !isRiichi) {
                     Button(action: {
@@ -256,13 +272,18 @@ struct GameView: View {
             .position(x: width/2, y: height*0.9)
             
             NavigationLink(
-                destination: ScoreView(score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
+                destination: ScoreView(showingScore: self.$showingScore, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
                 isActive: self.$showingScore
             ) { EmptyView() }
         }
         .onAppear {
-            addHandler(socket: gameService.socket)
-            gameService.socket.connect(withPayload: ["name": gameData.playerID])
+            if gameService.socket.handlers.count == 0 {
+                addHandler(socket: gameService.socket)
+                let from = gameData.playerID.index(gameData.playerID.startIndex, offsetBy: 0)
+                let to = gameData.playerID.index(gameData.playerID.startIndex, offsetBy: 8)
+                gameData.playerID = String(gameData.playerID[from..<to])
+                gameService.socket.connect(withPayload: ["name": gameData.playerID])
+            }
         }
     }
 }
@@ -271,5 +292,6 @@ struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         GameView()
             .environmentObject(GameData())
+            .environmentObject(GameService())
     }
 }

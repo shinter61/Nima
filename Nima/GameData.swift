@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class GameData: ObservableObject {
     @Published var stockCount: Int = 0
@@ -18,8 +19,14 @@ final class GameData: ObservableObject {
     @Published var myRiichiTurn: Int = -1
     @Published var yourRiichiTurn: Int = -1
     
+    @Published var myScore: Int = 0
+    @Published var yourScore: Int = 0
+    
     @Published var playerID: String = UUID().uuidString
     @Published var opponentID: String = ""
+    
+    @Published var timer: Timer!
+    @Published var countdown: Int = 3
     
     func discard(tile: Tile) -> [Tile] {
         let idx: Int = myTiles.firstIndex(where: {$0.isEqual(tile: tile)})!
@@ -45,7 +52,6 @@ final class GameData: ObservableObject {
             encoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
             let jsonData = try encoder.encode(tiles)
             jsonStr = String(data: jsonData, encoding: .utf8) ?? ""
-            print(jsonStr)
         } catch {
             print(error.localizedDescription)
         }
@@ -68,5 +74,16 @@ final class GameData: ObservableObject {
     
     func isMenzen() -> Bool {
         return myMinkos.isEmpty
+    }
+    
+    func start() {
+        let startTime: Date = Date()
+        self.timer?.invalidate()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
+            let current = Date()
+            let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
+            if diff >= 3 { self.timer?.invalidate() }
+            self.countdown = 3 - diff
+        })
     }
 }
