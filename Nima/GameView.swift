@@ -19,6 +19,7 @@ struct GameView: View {
     @State private var nextRiichi: Bool = false
     @State private var isRiichi: Bool = false
     @State private var showingScore: Bool = false
+    @State private var showingEndGame: Bool = false
     @State private var score: Int = 0
     @State private var hands: [String] = []
     @State private var scoreName: String = ""
@@ -78,6 +79,9 @@ struct GameView: View {
                     gameData.yourDiscards = []
                     gameData.stockCount = 0
                     gameData.myRiichiTurn = -1
+                    gameData.round = Int(dict["round"]!)!
+                    gameData.roundWind = dict["roundWind"]!
+                    gameData.isParent = (dict["isParent"] == "true")
                     
                     if (gameData.myTiles.count == 14) { isMyTurn = true }
                 } else {
@@ -124,6 +128,20 @@ struct GameView: View {
                 showingScore = true
             }
         }
+        socket.on("EndGame") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if dict["winnerID"] == gameData.playerID {
+                    gameData.winnerID = gameData.playerID
+                    gameData.myScore = Int(dict["winnerScore"]!)!
+                    gameData.yourScore = Int(dict["loserScore"]!)!
+                } else {
+                    gameData.winnerID = gameData.opponentID
+                    gameData.yourScore = Int(dict["winnerScore"]!)!
+                    gameData.myScore = Int(dict["loserScore"]!)!
+                }
+                showingEndGame = true
+            }
+        }
     }
     
     func waitExists() -> Bool {
@@ -158,14 +176,20 @@ struct GameView: View {
                 .listStyle(PlainListStyle())
                 .position(x: width/2, y: height*0.1)
                 
-                Text("\(gameData.yourScore)").position(x: width*0.7, y: height*0.2)
-                Text("\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
+                Group {
+                    Text("\(gameData.yourScore)").position(x: width*0.7, y: height*0.2)
+                    Text("\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
+                    Text(!gameData.isParent ? "東" : "南").position(x: width*0.8, y: height*0.25)
+                }
             }
             DiscardsView(discards: gameData.yourDiscards, riichiTurn: gameData.yourRiichiTurn)
                 .rotationEffect(Angle(degrees: 180.0))
                 .position(x: width/2, y: height*0.4)
-            Text("残り \(gameData.stockCount)")
-                .position(x: width*0.2, y: height*0.5)
+            Group {
+                Text(gameData.roundWind).position(x: width*0.12, y: height*0.5)
+                Text("\(gameData.round)").position(x: width*0.15, y: height*0.5)
+                Text("残り \(gameData.stockCount)").position(x: width*0.2, y: height*0.5)
+            }
             Button(action: {
                 gameService.socket.emit("StartGame")
             }) {
@@ -174,8 +198,11 @@ struct GameView: View {
             .position(x: width*0.8, y: height*0.5)
             DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
                 .position(x: width/2, y: height*0.6)
-            Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
-            Text("\(gameData.myScore)").position(x: width*0.3, y: height*0.75)
+            Group {
+                Text(gameData.isParent ? "東" : "南").position(x: width*0.2, y: height*0.7)
+                Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
+                Text("\(gameData.myScore)").position(x: width*0.3, y: height*0.75)
+            }
             Group {
                 if (canPon && !isRiichi) {
                     Button(action: {
@@ -271,10 +298,16 @@ struct GameView: View {
             })
             .position(x: width/2, y: height*0.9)
             
-            NavigationLink(
-                destination: ScoreView(showingScore: self.$showingScore, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
-                isActive: self.$showingScore
-            ) { EmptyView() }
+            Group {
+                NavigationLink(
+                    destination: ScoreView(showingScore: self.$showingScore, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
+                    isActive: self.$showingScore
+                ) { EmptyView() }
+                NavigationLink(
+                    destination: EndGameView().navigationBarHidden(true),
+                    isActive: self.$showingEndGame
+                ) { EmptyView() }
+            }
         }
         .onAppear {
             if gameService.socket.handlers.count == 0 {

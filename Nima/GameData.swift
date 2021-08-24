@@ -25,6 +25,11 @@ final class GameData: ObservableObject {
     @Published var playerID: String = UUID().uuidString
     @Published var opponentID: String = ""
     
+    @Published var round: Int = 0
+    @Published var roundWind: String = ""
+    @Published var isParent: Bool = false
+    @Published var winnerID: String = ""
+    
     @Published var timer: Timer!
     @Published var countdown: Int = 3
     
