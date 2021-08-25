@@ -19,6 +19,8 @@ final class GameData: ObservableObject {
     @Published var myRiichiTurn: Int = -1
     @Published var yourRiichiTurn: Int = -1
     
+    @Published var doraTiles: [Tile] = []
+    
     @Published var myScore: Int = 0
     @Published var yourScore: Int = 0
     

@@ -22,6 +22,7 @@
 		E583A49826C26F0300134067 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = E583A49726C26F0300134067 /* SocketIO */; };
 		E583A49F26C298E900134067 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583A49E26C298E900134067 /* GameService.swift */; };
 		E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8C61C26D495CB00B59318 /* EndGameView.swift */; };
+		E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8C61E26D5D81000B59318 /* DoraView.swift */; };
 		E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62326C901AE00435171 /* ScoreView.swift */; };
 		E5AFD62826CE4C0C00435171 /* MinkoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62726CE4C0C00435171 /* MinkoView.swift */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 		E560096426D2D75D00520816 /* ActionEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEmptyView.swift; sourceTree = "<group>"; };
 		E583A49E26C298E900134067 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
 		E5A8C61C26D495CB00B59318 /* EndGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameView.swift; sourceTree = "<group>"; };
+		E5A8C61E26D5D81000B59318 /* DoraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoraView.swift; sourceTree = "<group>"; };
 		E5AFD62326C901AE00435171 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		E5AFD62726CE4C0C00435171 /* MinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,6 +134,7 @@
 				E5AFD62726CE4C0C00435171 /* MinkoView.swift */,
 				E560096426D2D75D00520816 /* ActionEmptyView.swift */,
 				E5A8C61C26D495CB00B59318 /* EndGameView.swift */,
+				E5A8C61E26D5D81000B59318 /* DoraView.swift */,
 			);
 			path = Nima;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */,
 				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
 				E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */,
+				E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */,
 				E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */,
 				E53BE38426BFD0EC000A45D8 /* MainMenu.swift in Sources */,
 				E583A49F26C298E900134067 /* GameService.swift in Sources */,

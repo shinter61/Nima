@@ -82,6 +82,7 @@ struct GameView: View {
                     gameData.round = Int(dict["round"]!)!
                     gameData.roundWind = dict["roundWind"]!
                     gameData.isParent = (dict["isParent"] == "true")
+                    gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
                     
                     if (gameData.myTiles.count == 14) { isMyTurn = true }
                 } else {
@@ -186,6 +187,7 @@ struct GameView: View {
                 .rotationEffect(Angle(degrees: 180.0))
                 .position(x: width/2, y: height*0.4)
             Group {
+                DoraView().position(x: width*0.2, y: height*0.4)
                 Text(gameData.roundWind).position(x: width*0.12, y: height*0.5)
                 Text("\(gameData.round)").position(x: width*0.15, y: height*0.5)
                 Text("残り \(gameData.stockCount)").position(x: width*0.2, y: height*0.5)
