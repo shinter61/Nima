@@ -15,6 +15,7 @@ struct GameView: View {
     @State private var isWin: Bool = false
     @State private var canRon: Bool = false
     @State private var canPon: Bool = false
+    @State private var canDaiminkan: Bool = false
     @State private var canRiichi: Bool = false
     @State private var nextRiichi: Bool = false
     @State private var isRiichi: Bool = false
@@ -54,11 +55,14 @@ struct GameView: View {
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
                         canPon = true
                     }
+                    if gameData.collectAnko().contains(gameData.yourDiscards.last!.name()) {
+                        canDaiminkan = true
+                    }
                     if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
                         canRon = true
                     }
                     if !(canPon && !isRiichi) && !canRon {
-                        socket.emit("Draw", gameData.playerID)
+                        socket.emit("Draw", gameData.playerID, false)
                     }
                 }
                 if gameData.playerID == dict["id"] {
@@ -75,6 +79,7 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myScore = Int(dict["score"]!)!
                     gameData.myMinkos = []
+                    gameData.myMinkans = []
                     gameData.myDiscards = []
                     gameData.yourDiscards = []
                     gameData.stockCount = 0
@@ -84,7 +89,7 @@ struct GameView: View {
                     gameData.isParent = (dict["isParent"] == "true")
                     gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
                     
-                    if (gameData.myTiles.count == 14) { isMyTurn = true }
+                    if (gameData.isMyTurn()) { isMyTurn = true }
                 } else {
                     gameData.yourScore = Int(dict["score"]!)!
                 }
@@ -93,9 +98,10 @@ struct GameView: View {
         socket.on("Draw") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 gameData.stockCount = Int(dict["stockCount"]!)!
+                gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
-                    if (gameData.myTiles.count + gameData.myMinkos.count*3 == 14) { isMyTurn = true }
+                    if (gameData.isMyTurn()) { isMyTurn = true }
                     if (dict["isWin"] == "true") { isWin = true }
                     waitsCandidate = gameData.decodeWaitsCandidate(str: dict["waitsCandidate"]!)
                     if (waitExists()) { canRiichi = true }
@@ -108,7 +114,19 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
-                    if (gameData.myTiles.count + gameData.myMinkos.count*3 == 14) { isMyTurn = true }
+                    if (gameData.isMyTurn()) { isMyTurn = true }
+                } else {
+                    gameData.myDiscards = gameData.decode(str: dict["discards"]!)
+                }
+            }
+        }
+        socket.on("Daiminkan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if gameData.playerID == dict["id"] {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
+                    gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
+                    socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                 }
@@ -206,6 +224,18 @@ struct GameView: View {
                 Text("\(gameData.myScore)").position(x: width*0.3, y: height*0.75)
             }
             Group {
+                if (canDaiminkan && !isRiichi) {
+                    Button(action: {
+                        gameService.socket.emit("Daiminkan", gameData.playerID)
+                        canDaiminkan = false
+                        canPon = false
+                    }) {
+                        Text("カン")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(.red)
+                    }
+                    .position(x: width*0.55, y: height*0.8)
+                }
                 if (canPon && !isRiichi) {
                     Button(action: {
                         gameService.socket.emit("Pon", gameData.playerID)
@@ -247,7 +277,7 @@ struct GameView: View {
                 }
                 if (canRon || (canPon && !isRiichi)) {
                     Button(action: {
-                        gameService.socket.emit("Draw", gameData.playerID)
+                        gameService.socket.emit("Draw", gameData.playerID, false)
                         canRon = false
                         canPon = false
                         isWin = false
@@ -297,6 +327,7 @@ struct GameView: View {
                 .frame(width: 30*13, height: 70, alignment: .center)
                 .listStyle(PlainListStyle())
                 MinkoView()
+                MinkanView()
             })
             .position(x: width/2, y: height*0.9)
             

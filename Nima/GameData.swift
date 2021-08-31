@@ -12,6 +12,7 @@ final class GameData: ObservableObject {
     @Published var stockCount: Int = 0
     @Published var myTiles: [Tile] = []
     @Published var myMinkos: [Tile] = []
+    @Published var myMinkans: [Tile] = []
     @Published var myDiscards: [Tile] = []
     @Published var myWaits: [Tile] = []
     @Published var yourDiscards: [Tile] = []
@@ -50,6 +51,20 @@ final class GameData: ObservableObject {
         let uniqToitzNames = Array(Set(toitzNames))
         
         return uniqToitzNames
+    }
+    
+    func collectAnko() -> [String] {
+        var ankoNames: [String] = []
+        for i in 0..<(myTiles.count-2) {
+            if myTiles[i].isEqual(tile: myTiles[i+1]) && myTiles[i+1].isEqual(tile: myTiles[i+2]) { ankoNames.append(myTiles[i].name()) }
+        }
+        let uniqAnkoNames = Array(Set(ankoNames))
+        
+        return uniqAnkoNames
+    }
+    
+    func isMyTurn() -> Bool {
+        return myTiles.count + myMinkos.count*3 + myMinkans.count*3 == 14
     }
     
     func encode(tiles: [Tile]) -> String {
