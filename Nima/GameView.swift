@@ -205,6 +205,18 @@ struct GameView: View {
         return exists
     }
     
+    func discardCallback() -> Void {
+        isMyTurn = false
+        isWin = false
+        canRon = false
+        canPon = false
+        canDaiminkan = false
+        canKakan = false
+        nextKakan = false
+        canRiichi = false
+        nextRiichi = false
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -359,7 +371,7 @@ struct GameView: View {
                                     gameData.encode(tiles: [tile]),
                                     isRiichi
                                 )
-                                isMyTurn = false
+                                discardCallback()
                             }) {
                                 Image(tile.name())
                                     .resizable()
