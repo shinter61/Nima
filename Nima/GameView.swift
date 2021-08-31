@@ -16,6 +16,8 @@ struct GameView: View {
     @State private var canRon: Bool = false
     @State private var canPon: Bool = false
     @State private var canDaiminkan: Bool = false
+    @State private var canKakan: Bool = false
+    @State private var nextKakan: Bool = false
     @State private var canRiichi: Bool = false
     @State private var nextRiichi: Bool = false
     @State private var isRiichi: Bool = false
@@ -105,6 +107,7 @@ struct GameView: View {
                     if (dict["isWin"] == "true") { isWin = true }
                     waitsCandidate = gameData.decodeWaitsCandidate(str: dict["waitsCandidate"]!)
                     if (waitExists()) { canRiichi = true }
+                    if (canKakanExists()) { canKakan = true }
                 }
             }
         }
@@ -129,6 +132,16 @@ struct GameView: View {
                     socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
+                }
+            }
+        }
+        socket.on("Kakan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if gameData.playerID == dict["id"] {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
+                    gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
+                    socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
                 }
             }
         }
@@ -174,6 +187,22 @@ struct GameView: View {
     func waitExistsFor(tile: Tile) -> Bool {
         let result: WaitCandidate = waitsCandidate.first(where: { $0.tile.isEqual(tile: tile) })!
         return !result.waitTiles.isEmpty
+    }
+    
+    func canKakanExists() -> Bool {
+        var exists = false
+        for i in 0..<gameData.myTiles.count {
+            if canKakanFor(tile: gameData.myTiles[i]) { exists = true }
+        }
+        return exists
+    }
+    
+    func canKakanFor(tile: Tile) -> Bool {
+        var exists = false
+        for i in 0..<gameData.myMinkos.count {
+            if (gameData.myMinkos[i].isEqual(tile: tile)) { exists = true }
+        }
+        return exists
     }
     
     var body: some View {
@@ -233,6 +262,14 @@ struct GameView: View {
                         Text("カン")
                             .font(.system(size: 24, weight: .bold, design: .serif))
                             .foregroundColor(.red)
+                    }
+                    .position(x: width*0.55, y: height*0.8)
+                }
+                if (canKakan && !isRiichi) {
+                    Button(action: { nextKakan.toggle() }) {
+                        Text("加槓")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(nextKakan ? .blue : .red)
                     }
                     .position(x: width*0.55, y: height*0.8)
                 }
@@ -301,6 +338,16 @@ struct GameView: View {
                     HStack(alignment: .center, spacing: -4, content: {
                         ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
                             Button(action: {
+                                if (nextKakan) {
+                                    nextKakan.toggle()
+                                    canKakan.toggle()
+                                    gameService.socket.emit(
+                                        "Kakan",
+                                        gameData.playerID,
+                                        gameData.encode(tiles: [tile])
+                                    )
+                                    return
+                                }
                                 if (nextRiichi) {
                                     canRiichi.toggle()
                                     nextRiichi.toggle()
@@ -320,7 +367,11 @@ struct GameView: View {
                                     .frame(width: 30, height: 60, alignment: .center)
                             }
                             .buttonStyle(PlainButtonStyle())
-                            .disabled(!isMyTurn || (nextRiichi && !waitExistsFor(tile: tile)) || (isRiichi && index != gameData.myTiles.count - 1))
+                            .disabled(!isMyTurn ||
+                                      (nextRiichi && !waitExistsFor(tile: tile)) ||
+                                      (isRiichi && index != gameData.myTiles.count - 1) ||
+                                      (nextKakan && !canKakanFor(tile: tile))
+                            )
                         }
                     })
                 }

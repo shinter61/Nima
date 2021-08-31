@@ -54,6 +54,8 @@ final class GameData: ObservableObject {
     }
     
     func collectAnko() -> [String] {
+        if myTiles.count <= 1 { return [] }
+        
         var ankoNames: [String] = []
         for i in 0..<(myTiles.count-2) {
             if myTiles[i].isEqual(tile: myTiles[i+1]) && myTiles[i+1].isEqual(tile: myTiles[i+2]) { ankoNames.append(myTiles[i].name()) }
