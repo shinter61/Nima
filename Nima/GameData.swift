@@ -97,7 +97,7 @@ final class GameData: ObservableObject {
     }
     
     func isMenzen() -> Bool {
-        return myMinkos.isEmpty
+        return myMinkos.isEmpty && myMinkans.isEmpty
     }
     
     func start() {
