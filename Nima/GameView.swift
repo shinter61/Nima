@@ -18,6 +18,8 @@ struct GameView: View {
     @State private var canDaiminkan: Bool = false
     @State private var canKakan: Bool = false
     @State private var nextKakan: Bool = false
+    @State private var canAnkan: Bool = false
+    @State private var nextAnkan: Bool = false
     @State private var canRiichi: Bool = false
     @State private var nextRiichi: Bool = false
     @State private var isRiichi: Bool = false
@@ -81,6 +83,7 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myScore = Int(dict["score"]!)!
                     gameData.myMinkos = []
+                    gameData.myAnkans = []
                     gameData.myMinkans = []
                     gameData.myDiscards = []
                     gameData.yourDiscards = []
@@ -106,8 +109,9 @@ struct GameView: View {
                     if (gameData.isMyTurn()) { isMyTurn = true }
                     if (dict["isWin"] == "true") { isWin = true }
                     waitsCandidate = gameData.decodeWaitsCandidate(str: dict["waitsCandidate"]!)
-                    if (waitExists()) { canRiichi = true }
-                    if (canKakanExists()) { canKakan = true }
+                    if waitExists() { canRiichi = true }
+                    if canKakanExists() { canKakan = true }
+                    if canAnkanExists() { canAnkan = true }
                 }
             }
         }
@@ -141,6 +145,15 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
+                    socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
+                }
+            }
+        }
+        socket.on("Ankan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if gameData.playerID == dict["id"] {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                    gameData.myAnkans = gameData.decode(str: dict["ankans"]!)
                     socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
                 }
             }
@@ -205,6 +218,22 @@ struct GameView: View {
         return exists
     }
     
+    func canAnkanExists() -> Bool {
+        var exists = false
+        for i in 0..<gameData.myTiles.count {
+            if canAnkanFor(tile: gameData.myTiles[i]) { exists = true }
+        }
+        return exists
+    }
+    
+    func canAnkanFor(tile: Tile) -> Bool {
+        var count = 0
+        for i in 0..<gameData.myTiles.count {
+            if (gameData.myTiles[i].isEqual(tile: tile)) { count += 1 }
+        }
+        return count == 4
+    }
+    
     func discardCallback() -> Void {
         isMyTurn = false
         isWin = false
@@ -213,6 +242,8 @@ struct GameView: View {
         canDaiminkan = false
         canKakan = false
         nextKakan = false
+        canAnkan = false
+        nextAnkan = false
         canRiichi = false
         nextRiichi = false
     }
@@ -265,6 +296,14 @@ struct GameView: View {
                 Text("\(gameData.myScore)").position(x: width*0.3, y: height*0.75)
             }
             Group {
+                if (canAnkan && !isRiichi) {
+                    Button(action: { nextAnkan.toggle() }) {
+                        Text("暗槓")
+                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .foregroundColor(nextAnkan ? .blue : .red)
+                    }
+                    .position(x: width*0.45, y: height*0.8)
+                }
                 if (canDaiminkan && !isRiichi) {
                     Button(action: {
                         gameService.socket.emit("Daiminkan", gameData.playerID)
@@ -360,6 +399,16 @@ struct GameView: View {
                                     )
                                     return
                                 }
+                                if (nextAnkan) {
+                                    nextAnkan.toggle()
+                                    canAnkan.toggle()
+                                    gameService.socket.emit(
+                                        "Ankan",
+                                        gameData.playerID,
+                                        gameData.encode(tiles: [tile])
+                                    )
+                                    return
+                                }
                                 if (nextRiichi) {
                                     canRiichi.toggle()
                                     nextRiichi.toggle()
@@ -382,7 +431,8 @@ struct GameView: View {
                             .disabled(!isMyTurn ||
                                       (nextRiichi && !waitExistsFor(tile: tile)) ||
                                       (isRiichi && index != gameData.myTiles.count - 1) ||
-                                      (nextKakan && !canKakanFor(tile: tile))
+                                      (nextKakan && !canKakanFor(tile: tile)) ||
+                                      (nextAnkan && !canAnkanFor(tile: tile))
                             )
                         }
                     })
@@ -390,6 +440,7 @@ struct GameView: View {
                 .frame(width: 30*13, height: 70, alignment: .center)
                 .listStyle(PlainListStyle())
                 MinkoView()
+                AnkanView()
                 MinkanView()
             })
             .position(x: width/2, y: height*0.9)

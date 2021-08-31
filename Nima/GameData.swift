@@ -12,6 +12,7 @@ final class GameData: ObservableObject {
     @Published var stockCount: Int = 0
     @Published var myTiles: [Tile] = []
     @Published var myMinkos: [Tile] = []
+    @Published var myAnkans: [Tile] = []
     @Published var myMinkans: [Tile] = []
     @Published var myDiscards: [Tile] = []
     @Published var myWaits: [Tile] = []
