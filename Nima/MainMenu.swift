@@ -13,15 +13,20 @@ struct MainMenu: View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
-            Text("二麻")
-                .font(.largeTitle)
-                .position(x: width/2, y: 0)
+            
+            Image("chikurin")
+                .frame(width: width/2, height: height/2, alignment: .center)
+            
+            CustomText(content: "二麻", size: 48, tracking: 10)
+                .position(x: width*0.3, y: height*0.1)
+            
             Button(action: {
                 showingGame = true
             }) {
-                Text("対戦する")
+                CustomText(content: "対戦する", size: 24, tracking: 2)
+                    .foregroundColor(Color.red)
             }
-            .position(x: width/2, y: height*0.4)
+            .position(x: width*0.3, y: height*0.7)
             
             NavigationLink(
                 destination: GameView().navigationBarHidden(true),
