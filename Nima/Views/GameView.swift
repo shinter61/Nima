@@ -36,21 +36,21 @@ struct GameView: View {
     }
     
     func addHandler(socket: SocketIOClient!) -> Void {
-        socket.on(clientEvent: .connect) { (data, ack) in
-            socket.emit("AddPlayer", gameData.playerID)
-        }
-        socket.on("InformPlayersNames") { (data, ack) in
-            if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["player1"] {
-                    gameData.opponentID = dict["player2"]!
-                }
-            }
-            if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["player2"] {
-                    gameData.opponentID = dict["player1"]!
-                }
-            }
-        }
+//        socket.on(clientEvent: .connect) { (data, ack) in
+//            socket.emit("StartMatching", gameData.playerID)
+//        }
+//        socket.on("InformPlayersNames") { (data, ack) in
+//            if let dict = data[0] as? [String: String] {
+//                if gameData.playerID == dict["player1"] {
+//                    gameData.opponentID = dict["player2"]!
+//                }
+//            }
+//            if let dict = data[0] as? [String: String] {
+//                if gameData.playerID == dict["player2"] {
+//                    gameData.opponentID = dict["player1"]!
+//                }
+//            }
+//        }
         socket.on("InformDiscards") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if gameData.opponentID == dict["id"] {
@@ -457,12 +457,9 @@ struct GameView: View {
             }
         }
         .onAppear {
+            print(gameService.socket.handlers.count)
             if gameService.socket.handlers.count == 0 {
                 addHandler(socket: gameService.socket)
-                let from = gameData.playerID.index(gameData.playerID.startIndex, offsetBy: 0)
-                let to = gameData.playerID.index(gameData.playerID.startIndex, offsetBy: 8)
-                gameData.playerID = String(gameData.playerID[from..<to])
-                gameService.socket.connect(withPayload: ["name": gameData.playerID])
             }
         }
     }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E50A8F4C2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */; };
 		E50A8F5627155FC5000F253A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5527155FC5000F253A /* Colors.swift */; };
+		E50A8F5827158345000F253A /* MatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5727158345000F253A /* MatchingView.swift */; };
 		E51E714D27000E4600292CBB /* ackaisyo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E51E714C27000E4600292CBB /* ackaisyo.ttf */; };
 		E51E714F27000F2800292CBB /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51E714E27000F2800292CBB /* CustomText.swift */; };
 		E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528B8B126C1627200BC4736 /* DiscardsView.swift */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NagomiGokubosoGothic-ExtraLight.otf"; sourceTree = "<group>"; };
 		E50A8F5527155FC5000F253A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		E50A8F5727158345000F253A /* MatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingView.swift; sourceTree = "<group>"; };
 		E51E714C27000E4600292CBB /* ackaisyo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ackaisyo.ttf; sourceTree = "<group>"; };
 		E51E714E27000F2800292CBB /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
 		E528B8B126C1627200BC4736 /* DiscardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardsView.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				E528B8B126C1627200BC4736 /* DiscardsView.swift */,
 				E5A8422A26DE4033003230F6 /* AnkanView.swift */,
 				E53BE38526BFD62B000A45D8 /* GameView.swift */,
+				E50A8F5727158345000F253A /* MatchingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 				E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */,
 				E5A8422726DDB66E003230F6 /* MinkanView.swift in Sources */,
 				E51E714F27000F2800292CBB /* CustomText.swift in Sources */,
+				E50A8F5827158345000F253A /* MatchingView.swift in Sources */,
 				E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */,
 				E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */,
 				E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */,

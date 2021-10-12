@@ -14,7 +14,6 @@ struct MainMenu: View {
             let width = geometry.size.width
             let height = geometry.size.height
             ZStack {
-//                Color(red: 56/255, green: 255/255, blue: 143/255).ignoresSafeArea(.all)
                 Color.white.ignoresSafeArea(.all)
                 CustomText(content: "二麻", size: 48, tracking: 10)
                     .foregroundColor(Colors.init().navy)
@@ -33,7 +32,7 @@ struct MainMenu: View {
 //                .frame(width: width/2, height: height/2, alignment: .center)
             
             NavigationLink(
-                destination: GameView().navigationBarHidden(true),
+                destination: MatchingView().navigationBarHidden(true),
                 isActive: self.$showingGame
             ) { EmptyView() }
         }
