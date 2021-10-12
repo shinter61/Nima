@@ -14,7 +14,7 @@ struct CustomText: View {
     
     var body: some View {
         Text(content)
-            .font(.custom("ackaisyo", size: CGFloat(size)))
+            .font(.custom("NagomiGokubosoGothic-ExtraLight", size: CGFloat(size)))
             .tracking(CGFloat(tracking))
     }
 }

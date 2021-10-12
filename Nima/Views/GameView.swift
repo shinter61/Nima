@@ -18,8 +18,8 @@ struct GameView: View {
     @State private var canDaiminkan: Bool = false
     @State private var canKakan: Bool = false
     @State private var nextKakan: Bool = false
-    @State private var canAnkan: Bool = false
     @State private var nextAnkan: Bool = false
+    @State private var canAnkan: Bool = false
     @State private var canRiichi: Bool = false
     @State private var nextRiichi: Bool = false
     @State private var isRiichi: Bool = false

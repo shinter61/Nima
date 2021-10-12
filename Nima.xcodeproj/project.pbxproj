@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E50A8F4C2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */; };
+		E50A8F5627155FC5000F253A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5527155FC5000F253A /* Colors.swift */; };
 		E51E714D27000E4600292CBB /* ackaisyo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E51E714C27000E4600292CBB /* ackaisyo.ttf */; };
 		E51E714F27000F2800292CBB /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51E714E27000F2800292CBB /* CustomText.swift */; };
 		E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528B8B126C1627200BC4736 /* DiscardsView.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NagomiGokubosoGothic-ExtraLight.otf"; sourceTree = "<group>"; };
+		E50A8F5527155FC5000F253A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E51E714C27000E4600292CBB /* ackaisyo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ackaisyo.ttf; sourceTree = "<group>"; };
 		E51E714E27000F2800292CBB /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
 		E528B8B126C1627200BC4736 /* DiscardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardsView.swift; sourceTree = "<group>"; };
@@ -104,6 +108,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E50A8F4D27155E42000F253A /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */,
+				E51E714C27000E4600292CBB /* ackaisyo.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		E50A8F4E27155E5C000F253A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E50A8F5027155EEE000F253A /* Utils */,
+				E53BE38326BFD0EC000A45D8 /* MainMenu.swift */,
+				E5AFD62326C901AE00435171 /* ScoreView.swift */,
+				E5AFD62726CE4C0C00435171 /* MinkoView.swift */,
+				E560096426D2D75D00520816 /* ActionEmptyView.swift */,
+				E5A8C61C26D495CB00B59318 /* EndGameView.swift */,
+				E5A8C61E26D5D81000B59318 /* DoraView.swift */,
+				E5A8422626DDB66E003230F6 /* MinkanView.swift */,
+				E528B8B126C1627200BC4736 /* DiscardsView.swift */,
+				E5A8422A26DE4033003230F6 /* AnkanView.swift */,
+				E53BE38526BFD62B000A45D8 /* GameView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E50A8F4F27155E9B000F253A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E53BE38726BFDA3E000A45D8 /* GameData.swift */,
+				E53BE38926BFDAE2000A45D8 /* Tile.swift */,
+				E583A49E26C298E900134067 /* GameService.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E50A8F5027155EEE000F253A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E51E714E27000F2800292CBB /* CustomText.swift */,
+				E50A8F5527155FC5000F253A /* Colors.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		E53BE34C26BFCDC1000A45D8 = {
 			isa = PBXGroup;
 			children = (
@@ -129,24 +179,12 @@
 			children = (
 				E53BE35826BFCDC1000A45D8 /* NimaApp.swift */,
 				E53BE35A26BFCDC1000A45D8 /* ContentView.swift */,
+				E50A8F4E27155E5C000F253A /* Views */,
+				E50A8F4F27155E9B000F253A /* Models */,
+				E50A8F4D27155E42000F253A /* Fonts */,
 				E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */,
 				E53BE36126BFCDC2000A45D8 /* Info.plist */,
 				E53BE35E26BFCDC2000A45D8 /* Preview Content */,
-				E53BE38326BFD0EC000A45D8 /* MainMenu.swift */,
-				E53BE38526BFD62B000A45D8 /* GameView.swift */,
-				E53BE38726BFDA3E000A45D8 /* GameData.swift */,
-				E53BE38926BFDAE2000A45D8 /* Tile.swift */,
-				E528B8B126C1627200BC4736 /* DiscardsView.swift */,
-				E583A49E26C298E900134067 /* GameService.swift */,
-				E5AFD62326C901AE00435171 /* ScoreView.swift */,
-				E5AFD62726CE4C0C00435171 /* MinkoView.swift */,
-				E51E714C27000E4600292CBB /* ackaisyo.ttf */,
-				E560096426D2D75D00520816 /* ActionEmptyView.swift */,
-				E5A8C61C26D495CB00B59318 /* EndGameView.swift */,
-				E5A8C61E26D5D81000B59318 /* DoraView.swift */,
-				E5A8422626DDB66E003230F6 /* MinkanView.swift */,
-				E5A8422A26DE4033003230F6 /* AnkanView.swift */,
-				E51E714E27000F2800292CBB /* CustomText.swift */,
 			);
 			path = Nima;
 			sourceTree = "<group>";
@@ -287,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E53BE36026BFCDC2000A45D8 /* Preview Assets.xcassets in Resources */,
+				E50A8F4C2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf in Resources */,
 				E51E714D27000E4600292CBB /* ackaisyo.ttf in Resources */,
 				E53BE35D26BFCDC2000A45D8 /* Assets.xcassets in Resources */,
 			);
@@ -316,6 +355,7 @@
 				E5AFD62826CE4C0C00435171 /* MinkoView.swift in Sources */,
 				E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */,
 				E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */,
+				E50A8F5627155FC5000F253A /* Colors.swift in Sources */,
 				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
 				E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */,
 				E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */,
