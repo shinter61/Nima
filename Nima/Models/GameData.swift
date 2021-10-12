@@ -67,7 +67,7 @@ final class GameData: ObservableObject {
     }
     
     func isMyTurn() -> Bool {
-        return myTiles.count + myMinkos.count*3 + myMinkans.count*3 == 14
+        return myTiles.count + myMinkos.count*3 + myMinkans.count*3 + myAnkans.count*3 == 14
     }
     
     func encode(tiles: [Tile]) -> String {
