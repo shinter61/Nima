@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 final class GameData: ObservableObject {
+    @Published var roomID: String = ""
     @Published var stockCount: Int = 0
     @Published var myTiles: [Tile] = []
     @Published var myMinkos: [Tile] = []
@@ -22,6 +23,7 @@ final class GameData: ObservableObject {
     @Published var yourRiichiTurn: Int = -1
     
     @Published var doraTiles: [Tile] = []
+    @Published var revDoraTiles: [Tile] = []
     
     @Published var myScore: Int = 0
     @Published var yourScore: Int = 0

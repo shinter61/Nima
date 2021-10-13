@@ -36,21 +36,6 @@ struct GameView: View {
     }
     
     func addHandler(socket: SocketIOClient!) -> Void {
-//        socket.on(clientEvent: .connect) { (data, ack) in
-//            socket.emit("StartMatching", gameData.playerID)
-//        }
-//        socket.on("InformPlayersNames") { (data, ack) in
-//            if let dict = data[0] as? [String: String] {
-//                if gameData.playerID == dict["player1"] {
-//                    gameData.opponentID = dict["player2"]!
-//                }
-//            }
-//            if let dict = data[0] as? [String: String] {
-//                if gameData.playerID == dict["player2"] {
-//                    gameData.opponentID = dict["player1"]!
-//                }
-//            }
-//        }
         socket.on("InformDiscards") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if gameData.opponentID == dict["id"] {
@@ -66,7 +51,7 @@ struct GameView: View {
                         canRon = true
                     }
                     if !(canPon && !isRiichi) && !canRon {
-                        socket.emit("Draw", gameData.playerID, false)
+                        socket.emit("Draw", gameData.roomID, gameData.playerID, false)
                     }
                 }
                 if gameData.playerID == dict["id"] {
@@ -133,7 +118,7 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
-                    socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
+                    socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                 }
@@ -145,7 +130,7 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
-                    socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
+                    socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
                 }
             }
         }
@@ -154,16 +139,20 @@ struct GameView: View {
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myAnkans = gameData.decode(str: dict["ankans"]!)
-                    socket.emit("Draw", gameData.playerID, true) // 嶺上牌をツモる
+                    socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
                 }
             }
         }
         socket.on("Win") { (data, ack) in
             if let dict = data[0] as? [String: String] {
+                print("---------------")
+                print(dict["score"]!)
+                print("---------------")
                 score = Int(dict["score"]!)!
                 scoreName = dict["scoreName"]!
                 let jsonData = dict["hands"]!.data(using: .utf8)!
                 hands = try! JSONDecoder().decode(Array<String>.self, from: jsonData)
+                gameData.revDoraTiles = gameData.decode(str: dict["revDoras"]!)
                 canPon = false
                 canRon = false
                 canRiichi = false
@@ -283,7 +272,7 @@ struct GameView: View {
                 Text("残り \(gameData.stockCount)").position(x: width*0.2, y: height*0.5)
             }
             Button(action: {
-                gameService.socket.emit("StartGame")
+                gameService.socket.emit("StartGame", gameData.roomID)
             }) {
                 Text("勝負開始")
             }
@@ -306,7 +295,7 @@ struct GameView: View {
                 }
                 if (canDaiminkan && !isRiichi) {
                     Button(action: {
-                        gameService.socket.emit("Daiminkan", gameData.playerID)
+                        gameService.socket.emit("Daiminkan", gameData.roomID, gameData.playerID)
                         canDaiminkan = false
                         canPon = false
                     }) {
@@ -326,7 +315,7 @@ struct GameView: View {
                 }
                 if (canPon && !isRiichi) {
                     Button(action: {
-                        gameService.socket.emit("Pon", gameData.playerID)
+                        gameService.socket.emit("Pon", gameData.roomID, gameData.playerID)
                         canPon = false
                     }) {
                         Text("ポン")
@@ -337,7 +326,7 @@ struct GameView: View {
                 }
                 if (canRon) {
                     Button(action: {
-                        gameService.socket.emit("Win", gameData.playerID, "ron")
+                        gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "ron")
                     }) {
                         Text("ロン")
                             .font(.system(size: 24, weight: .bold, design: .serif))
@@ -355,7 +344,7 @@ struct GameView: View {
                 }
                 if (isWin) {
                     Button(action: {
-                        gameService.socket.emit("Win", gameData.playerID, "draw")
+                        gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "draw")
                     }) {
                         Text("ツモ")
                             .font(.system(size: 24, weight: .bold, design: .serif))
@@ -365,7 +354,7 @@ struct GameView: View {
                 }
                 if (canRon || (canPon && !isRiichi)) {
                     Button(action: {
-                        gameService.socket.emit("Draw", gameData.playerID, false)
+                        gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
                         canRon = false
                         canPon = false
                         isWin = false
@@ -394,6 +383,7 @@ struct GameView: View {
                                     canKakan.toggle()
                                     gameService.socket.emit(
                                         "Kakan",
+                                        gameData.roomID,
                                         gameData.playerID,
                                         gameData.encode(tiles: [tile])
                                     )
@@ -404,6 +394,7 @@ struct GameView: View {
                                     canAnkan.toggle()
                                     gameService.socket.emit(
                                         "Ankan",
+                                        gameData.roomID,
                                         gameData.playerID,
                                         gameData.encode(tiles: [tile])
                                     )
@@ -416,6 +407,7 @@ struct GameView: View {
                                 }
                                 gameService.socket.emit(
                                     "Discard",
+                                    gameData.roomID,
                                     gameData.playerID,
                                     gameData.encode(tiles: [tile]),
                                     isRiichi
@@ -457,8 +449,7 @@ struct GameView: View {
             }
         }
         .onAppear {
-            print(gameService.socket.handlers.count)
-            if gameService.socket.handlers.count == 0 {
+            if gameService.socket.handlers.count == 2 {
                 addHandler(socket: gameService.socket)
             }
         }
@@ -467,8 +458,11 @@ struct GameView: View {
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView()
-            .environmentObject(GameData())
-            .environmentObject(GameService())
+        if #available(iOS 15.0, *) {
+            GameView()
+                .environmentObject(GameData())
+                .environmentObject(GameService())
+                .previewInterfaceOrientation(.landscapeLeft)
+        }
     }
 }
