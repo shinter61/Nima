@@ -24,6 +24,7 @@ struct MatchingView: View {
                 if gameData.playerID == dict["player2"] {
                     gameData.opponentID = dict["player1"]!
                 }
+                gameData.roomID = dict["roomID"]!
                 matchingFinished = true
             }
         }
