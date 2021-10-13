@@ -25,6 +25,7 @@ struct MatchingView: View {
                     gameData.opponentID = dict["player1"]!
                 }
                 gameData.roomID = dict["roomID"]!
+                gameService.socket.emit("StartGame", gameData.roomID)
                 matchingFinished = true
             }
         }
@@ -61,8 +62,11 @@ struct MatchingView: View {
 
 struct MatchingView_Previews: PreviewProvider {
     static var previews: some View {
-        MatchingView()
-            .environmentObject(GameData())
-            .environmentObject(GameService())
+        if #available(iOS 15.0, *) {
+            MatchingView()
+                .environmentObject(GameData())
+                .environmentObject(GameService())
+                .previewInterfaceOrientation(.landscapeLeft)
+        }
     }
 }

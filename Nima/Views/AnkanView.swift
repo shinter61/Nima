@@ -10,27 +10,27 @@ import SwiftUI
 struct AnkanView: View {
     @EnvironmentObject var gameData: GameData
     var body: some View {
-        HStack(alignment: .center, spacing: 0, content: {
+        HStack(alignment: .center, spacing: -2, content: {
             ForEach(gameData.myAnkans, id: \.self) { tile in
                 Image("back")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 30, height: 60, alignment: .center)
+                    .frame(width: 40, height: 60, alignment: .center)
                     .padding(-2)
                 Image(tile.name())
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 30, height: 60, alignment: .center)
+                    .frame(width: 40, height: 60, alignment: .center)
                     .padding(-2)
                 Image(tile.name())
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 30, height: 60, alignment: .center)
+                    .frame(width: 40, height: 60, alignment: .center)
                     .padding(-2)
                 Image("back")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 30, height: 60, alignment: .center)
+                    .frame(width: 40, height: 60, alignment: .center)
                     .padding(-2)
                     .padding(.trailing, 10)
             }

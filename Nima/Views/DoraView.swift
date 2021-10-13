@@ -11,7 +11,7 @@ struct DoraView: View {
     @EnvironmentObject var gameData: GameData
     var body: some View {
         HStack(alignment: .center, spacing: 0, content: {
-            Text("ドラ：").padding(.trailing, 16)
+            CustomText(content: "ドラ：", size: 16, tracking: 0).padding(.trailing, 16)
             ForEach(gameData.doraTiles, id: \.self) { tile in
                 Image(tile.name())
                     .resizable()

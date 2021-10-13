@@ -10,6 +10,9 @@
 		E50A8F4C2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */; };
 		E50A8F5627155FC5000F253A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5527155FC5000F253A /* Colors.swift */; };
 		E50A8F5827158345000F253A /* MatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5727158345000F253A /* MatchingView.swift */; };
+		E50A8F5C271751FF000F253A /* WindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5B271751FF000F253A /* WindView.swift */; };
+		E50A8F5E27175EFD000F253A /* NameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5D27175EFD000F253A /* NameView.swift */; };
+		E50A8F6027176518000F253A /* GameInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5F27176518000F253A /* GameInfoView.swift */; };
 		E51E714D27000E4600292CBB /* ackaisyo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E51E714C27000E4600292CBB /* ackaisyo.ttf */; };
 		E51E714F27000F2800292CBB /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51E714E27000F2800292CBB /* CustomText.swift */; };
 		E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528B8B126C1627200BC4736 /* DiscardsView.swift */; };
@@ -55,6 +58,9 @@
 		E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NagomiGokubosoGothic-ExtraLight.otf"; sourceTree = "<group>"; };
 		E50A8F5527155FC5000F253A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E50A8F5727158345000F253A /* MatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingView.swift; sourceTree = "<group>"; };
+		E50A8F5B271751FF000F253A /* WindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindView.swift; sourceTree = "<group>"; };
+		E50A8F5D27175EFD000F253A /* NameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameView.swift; sourceTree = "<group>"; };
+		E50A8F5F27176518000F253A /* GameInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoView.swift; sourceTree = "<group>"; };
 		E51E714C27000E4600292CBB /* ackaisyo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ackaisyo.ttf; sourceTree = "<group>"; };
 		E51E714E27000F2800292CBB /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
 		E528B8B126C1627200BC4736 /* DiscardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardsView.swift; sourceTree = "<group>"; };
@@ -134,6 +140,9 @@
 				E5A8422A26DE4033003230F6 /* AnkanView.swift */,
 				E53BE38526BFD62B000A45D8 /* GameView.swift */,
 				E50A8F5727158345000F253A /* MatchingView.swift */,
+				E50A8F5B271751FF000F253A /* WindView.swift */,
+				E50A8F5D27175EFD000F253A /* NameView.swift */,
+				E50A8F5F27176518000F253A /* GameInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -360,6 +369,7 @@
 				E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */,
 				E50A8F5627155FC5000F253A /* Colors.swift in Sources */,
 				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
+				E50A8F5C271751FF000F253A /* WindView.swift in Sources */,
 				E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */,
 				E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */,
 				E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */,
@@ -369,8 +379,10 @@
 				E5A8422726DDB66E003230F6 /* MinkanView.swift in Sources */,
 				E51E714F27000F2800292CBB /* CustomText.swift in Sources */,
 				E50A8F5827158345000F253A /* MatchingView.swift in Sources */,
+				E50A8F6027176518000F253A /* GameInfoView.swift in Sources */,
 				E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */,
 				E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */,
+				E50A8F5E27175EFD000F253A /* NameView.swift in Sources */,
 				E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */,
 				E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */,
 			);

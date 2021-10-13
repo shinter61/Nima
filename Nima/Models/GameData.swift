@@ -11,10 +11,27 @@ import SwiftUI
 final class GameData: ObservableObject {
     @Published var roomID: String = ""
     @Published var stockCount: Int = 0
+//    @Published var myTiles: [Tile] = [
+//                Tile(kind: "", number: 0, character: "red"),
+//                Tile(kind: "", number: 0, character: "red"),
+//                Tile(kind: "", number: 0, character: "red"),
+//                Tile(kind: "", number: 0, character: "red"),
+//                Tile(kind: "", number: 0, character: "red"),
+//    ]
+//    @Published var myMinkos: [Tile] = [
+//                Tile(kind: "", number: 0, character: "red"),
+//    ]
+//    @Published var myAnkans: [Tile] = [
+//                Tile(kind: "", number: 0, character: "red"),
+//    ]
+//    @Published var myMinkans: [Tile] = [
+//                Tile(kind: "", number: 0, character: "red"),
+//    ]
     @Published var myTiles: [Tile] = []
     @Published var myMinkos: [Tile] = []
     @Published var myAnkans: [Tile] = []
     @Published var myMinkans: [Tile] = []
+    
     @Published var myDiscards: [Tile] = []
     @Published var myWaits: [Tile] = []
     @Published var yourDiscards: [Tile] = []
@@ -29,7 +46,7 @@ final class GameData: ObservableObject {
     @Published var yourScore: Int = 0
     
     @Published var playerID: String = UUID().uuidString
-    @Published var opponentID: String = ""
+    @Published var opponentID: String = "ddddd"
     
     @Published var round: Int = 0
     @Published var roundWind: String = ""

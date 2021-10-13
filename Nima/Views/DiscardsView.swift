@@ -10,113 +10,101 @@ import SwiftUI
 struct DiscardsView: View {
     var discards: [Tile]
     var riichiTurn: Int
+    
     var body: some View {
-        let firstDiscards = Array(discards[0..<min(discards.count, 6)])
-        VStack(alignment: .leading, spacing: 0, content: {
-            List {
-                HStack(spacing: 12, content: {
-                    ForEach(Array(firstDiscards.enumerated()), id: \.offset) { index, tile in
-                        if index == riichiTurn - 1 {
-                            Image(tile.name())
-                                .resizable()
-                                .scaledToFit()
-                                .rotationEffect(Angle(degrees: -90.0))
-                                .frame(width: 30, height: 40)
-                                .padding(.top, -6)
-                                .padding(.leading, -18)
-                        } else {
-                            Image(tile.name())
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 40)
-                                .padding(.top, -6)
-                                .padding(.leading, -18)
-                        }
+        let firstDiscards = Array(tileName(discards: discards)[0..<6])
+        VStack(alignment: .leading, spacing: -4, content: {
+            HStack(spacing: -2, content: {
+                ForEach(Array(firstDiscards.enumerated()), id: \.offset) { index, name in
+                    if index == riichiTurn - 1 {
+                        Image(name)
+                            .resizable()
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: -90.0))
+                            .frame(width: 28, height: 28)
+                    } else {
+                        Image(name)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 30)
                     }
-                })
-            }
-            .frame(width: 150, height: 40)
-            .listStyle(PlainListStyle())
+                }
+            })
                 
-            if (discards.count > 6) {
-                let secondDiscards = Array(discards[6..<min(discards.count, 12)])
-                List {
-                    HStack(spacing: 12, content: {
-                        ForEach(Array(secondDiscards.enumerated()), id: \.offset) { index, tile in
-                            if index == riichiTurn - 7 {
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .rotationEffect(Angle(degrees: -90.0))
-                                    .frame(width: 30, height: 40)
-                                    .padding(.top, -6)
-                                    .padding(.leading, -18)
-                            } else {
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 40)
-                                    .padding(.top, -6)
-                                    .padding(.leading, -18)
-                            }
-                        }
-                    })
+            let secondDiscards = Array(tileName(discards: discards)[6..<12])
+            HStack(spacing: -2, content: {
+                ForEach(Array(secondDiscards.enumerated()), id: \.offset) { index, name in
+                    if index == riichiTurn - 7 {
+                        Image(name)
+                            .resizable()
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: -90.0))
+                            .frame(width: 28, height: 28)
+                    } else {
+                        Image(name)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 30)
+                    }
                 }
-                .frame(width: 150, height: 40)
-                .listStyle(PlainListStyle())
-            }
-            
-            if (discards.count > 12) {
-                let secondDiscards = Array(discards[12..<min(discards.count, 18)])
-                List {
-                    HStack(spacing: 12, content: {
-                        ForEach(Array(secondDiscards.enumerated()), id: \.offset) { index, tile in
-                            if index == riichiTurn - 13 {
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .rotationEffect(Angle(degrees: -90.0))
-                                    .frame(width: 30, height: 40)
-                                    .padding(.top, -6)
-                                    .padding(.leading, -18)
-                            } else {
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 40)
-                                    .padding(.top, -6)
-                                    .padding(.leading, -18)
-                            }
-                        }
-                    })
+            })
+        
+            let thirdDiscards = Array(tileName(discards: discards)[12..<18])
+            HStack(spacing: -2, content: {
+                ForEach(Array(thirdDiscards.enumerated()), id: \.offset) { index, name in
+                    if index == riichiTurn - 13 {
+                        Image(name)
+                            .resizable()
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: -90.0))
+                            .frame(width: 28, height: 28)
+                    } else {
+                        Image(name)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 30)
+                    }
                 }
-                .frame(width: 150, height: 40)
-                .listStyle(PlainListStyle())
-            }
+            })
         })
+    }
+    
+    func tileName(discards: [Tile]) -> [String] {
+        let tileCount = discards.count
+        var nameArr: [String] = []
+        for i in 0..<tileCount {
+            nameArr.append(discards[i].name())
+        }
+        for _ in 0..<(18-tileCount) {
+            nameArr.append("")
+        }
+        return nameArr
     }
 }
 
 struct DiscardsView_Previews: PreviewProvider {
     static var previews: some View {
-        DiscardsView(discards: [
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red"),
-            Tile(kind: "", number: 0, character: "red")
-        ], riichiTurn: 14)
+        if #available(iOS 15.0, *) {
+            DiscardsView(discards: [
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red")
+            ], riichiTurn: 14)
+                .previewInterfaceOrientation(.landscapeLeft)
+        }
     }
 }

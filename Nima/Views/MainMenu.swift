@@ -28,9 +28,6 @@ struct MainMenu: View {
                 .position(x: width*0.5, y: height*0.7)
             }
             
-//            Image("chikurin")
-//                .frame(width: width/2, height: height/2, alignment: .center)
-            
             NavigationLink(
                 destination: MatchingView().navigationBarHidden(true),
                 isActive: self.$showingGame
@@ -41,6 +38,9 @@ struct MainMenu: View {
 
 struct MainMenu_Previews: PreviewProvider {
     static var previews: some View {
-        MainMenu()
+        if #available(iOS 15.0, *) {
+            MainMenu()
+                .previewInterfaceOrientation(.landscapeLeft)
+        }
     }
 }

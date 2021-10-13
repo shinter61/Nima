@@ -19,7 +19,10 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-            .environmentObject(GameData())
+        if #available(iOS 15.0, *) {
+            ContentView()
+                .environmentObject(GameData())
+                .previewInterfaceOrientation(.landscapeLeft)
+        }
     }
 }

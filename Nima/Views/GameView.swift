@@ -72,6 +72,7 @@ struct GameView: View {
                     gameData.myMinkans = []
                     gameData.myDiscards = []
                     gameData.yourDiscards = []
+                    gameData.myWaits = []
                     gameData.stockCount = 0
                     gameData.myRiichiTurn = -1
                     gameData.round = Int(dict["round"]!)!
@@ -241,8 +242,9 @@ struct GameView: View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
-            if gameData.opponentID != "" {
-                List {
+            ZStack {
+                Colors.init().lightGray.ignoresSafeArea(.all)
+                if gameData.opponentID != "" {
                     HStack(alignment: .center, spacing: -4, content: {
                         ForEach(0..<13) { _ in
                             Image("back")
@@ -251,191 +253,185 @@ struct GameView: View {
                                 .frame(width: 30, height: 60, alignment: .center)
                         }
                     })
+                    .frame(width: 30*13, height: 70, alignment: .center)
+                    .position(x: width/2, y: height*0.06)
+                    
+                    Group {
+                        NameView(name: "\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
+                        WindView(wind: !gameData.isParent ? "東" : "南").position(x: width*0.8, y: height*0.29)
+                    }
                 }
-                .frame(width: 30*13, height: 70, alignment: .center)
-                .listStyle(PlainListStyle())
-                .position(x: width/2, y: height*0.1)
-                
+                DiscardsView(discards: gameData.yourDiscards, riichiTurn: gameData.yourRiichiTurn)
+                    .rotationEffect(Angle(degrees: 180.0))
+                    .position(x: width/2, y: height*0.28)
                 Group {
-                    Text("\(gameData.yourScore)").position(x: width*0.7, y: height*0.2)
-                    Text("\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
-                    Text(!gameData.isParent ? "東" : "南").position(x: width*0.8, y: height*0.25)
+                    CustomText(content: "\(gameData.yourScore)", size: 24, tracking: 0)
+                        .foregroundColor(Colors.init().navy)
+                        .position(x: width*0.66, y: height*0.44)
+                    DoraView().position(x: width*0.2, y: height*0.4)
+                    GameInfoView(wind: gameData.roundWind == "east" ? "東" : "南", round: gameData.round, stockCount: gameData.stockCount)
+                        .position(x: width*0.5, y: height*0.5)
+                    CustomText(content: "\(gameData.myScore)", size: 24, tracking: 0)
+                        .foregroundColor(Colors.init().red)
+                        .position(x: width*0.66, y: height*0.56)
+                }
+//                Button(action: {
+//                    gameService.socket.emit("StartGame", gameData.roomID)
+//                }) {
+//                    Text("勝負開始")
+//                }
+//                .position(x: width*0.8, y: height*0.5)
+                DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
+                    .position(x: width/2, y: height*0.72)
+                Group {
+                    WindView(wind: gameData.isParent ? "東" : "南").position(x: width*0.2, y: height*0.66)
+                    NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
+                }
+                Group {
+                    if (canAnkan && !isRiichi) {
+                        Button(action: { nextAnkan.toggle() }) {
+                            CustomText(content: "暗槓", size: 24, tracking: 0)
+                                .foregroundColor(nextAnkan ? Colors.init().navy : Colors.init().red)
+                        }
+                        .position(x: width*0.45, y: height*0.8)
+                    }
+                    if (canDaiminkan && !isRiichi) {
+                        Button(action: {
+                            gameService.socket.emit("Daiminkan", gameData.roomID, gameData.playerID)
+                            canDaiminkan = false
+                            canPon = false
+                        }) {
+                            CustomText(content: "カン", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                        }
+                        .position(x: width*0.55, y: height*0.8)
+                    }
+                    if (canKakan && !isRiichi) {
+                        Button(action: { nextKakan.toggle() }) {
+                            CustomText(content: "加槓", size: 24, tracking: 0)
+                                .foregroundColor(nextKakan ? Colors.init().navy : Colors.init().red)
+                        }
+                        .position(x: width*0.55, y: height*0.8)
+                    }
+                    if (canPon && !isRiichi) {
+                        Button(action: {
+                            gameService.socket.emit("Pon", gameData.roomID, gameData.playerID)
+                            canPon = false
+                        }) {
+                            CustomText(content: "ポン", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                        }
+                        .position(x: width*0.65, y: height*0.8)
+                    }
+                    if (canRon) {
+                        Button(action: {
+                            gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "ron")
+                        }) {
+                            CustomText(content: "ロン", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                        }
+                        .position(x: width*0.75, y: height*0.8)
+                    }
+                    if (canRiichi && !isRiichi && gameData.isMenzen()) {
+                        Button(action: { nextRiichi.toggle() }) {
+                            CustomText(content: "立直", size: 24, tracking: 0)
+                                .foregroundColor(nextRiichi ? Colors.init().navy : Colors.init().red)
+                        }
+                        .position(x: width*0.65, y: height*0.8)
+                    }
+                    if (isWin) {
+                        Button(action: {
+                            gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "draw")
+                        }) {
+                            CustomText(content: "ツモ", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                        }
+                        .position(x: width*0.75, y: height*0.8)
+                    }
+                    if (canRon || (canPon && !isRiichi)) {
+                        Button(action: {
+                            gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+                            canRon = false
+                            canPon = false
+                            isWin = false
+                        }) {
+                            CustomText(content: "スキップ", size: 24, tracking: 0)
+                                .foregroundColor(.gray)
+                        }
+                        .position(x: width*0.85, y: height*0.8)
+                    }
+                    if (isRiichi) {
+                        Text("立直中")
+                            .font(.system(size: 16, weight: .bold, design: .serif))
+                            .foregroundColor(.green)
+                            .position(x: width*0.85, y: height*0.75)
+                    }
                 }
             }
-            DiscardsView(discards: gameData.yourDiscards, riichiTurn: gameData.yourRiichiTurn)
-                .rotationEffect(Angle(degrees: 180.0))
-                .position(x: width/2, y: height*0.4)
-            Group {
-                DoraView().position(x: width*0.2, y: height*0.4)
-                Text(gameData.roundWind).position(x: width*0.12, y: height*0.5)
-                Text("\(gameData.round)").position(x: width*0.15, y: height*0.5)
-                Text("残り \(gameData.stockCount)").position(x: width*0.2, y: height*0.5)
-            }
-            Button(action: {
-                gameService.socket.emit("StartGame", gameData.roomID)
-            }) {
-                Text("勝負開始")
-            }
-            .position(x: width*0.8, y: height*0.5)
-            DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
-                .position(x: width/2, y: height*0.6)
-            Group {
-                Text(gameData.isParent ? "東" : "南").position(x: width*0.2, y: height*0.7)
-                Text("\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
-                Text("\(gameData.myScore)").position(x: width*0.3, y: height*0.75)
-            }
-            Group {
-                if (canAnkan && !isRiichi) {
-                    Button(action: { nextAnkan.toggle() }) {
-                        Text("暗槓")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(nextAnkan ? .blue : .red)
-                    }
-                    .position(x: width*0.45, y: height*0.8)
-                }
-                if (canDaiminkan && !isRiichi) {
-                    Button(action: {
-                        gameService.socket.emit("Daiminkan", gameData.roomID, gameData.playerID)
-                        canDaiminkan = false
-                        canPon = false
-                    }) {
-                        Text("カン")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(.red)
-                    }
-                    .position(x: width*0.55, y: height*0.8)
-                }
-                if (canKakan && !isRiichi) {
-                    Button(action: { nextKakan.toggle() }) {
-                        Text("加槓")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(nextKakan ? .blue : .red)
-                    }
-                    .position(x: width*0.55, y: height*0.8)
-                }
-                if (canPon && !isRiichi) {
-                    Button(action: {
-                        gameService.socket.emit("Pon", gameData.roomID, gameData.playerID)
-                        canPon = false
-                    }) {
-                        Text("ポン")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(.red)
-                    }
-                    .position(x: width*0.65, y: height*0.8)
-                }
-                if (canRon) {
-                    Button(action: {
-                        gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "ron")
-                    }) {
-                        Text("ロン")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(.red)
-                    }
-                    .position(x: width*0.75, y: height*0.8)
-                }
-                if (canRiichi && !isRiichi && gameData.isMenzen()) {
-                    Button(action: { nextRiichi.toggle() }) {
-                        Text("立直")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(nextRiichi ? .blue : .red)
-                    }
-                    .position(x: width*0.65, y: height*0.8)
-                }
-                if (isWin) {
-                    Button(action: {
-                        gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "draw")
-                    }) {
-                        Text("ツモ")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(.red)
-                    }
-                    .position(x: width*0.75, y: height*0.8)
-                }
-                if (canRon || (canPon && !isRiichi)) {
-                    Button(action: {
-                        gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
-                        canRon = false
-                        canPon = false
-                        isWin = false
-                    }) {
-                        Text("スキップ")
-                            .font(.system(size: 24, weight: .bold, design: .serif))
-                            .foregroundColor(.gray)
-                    }
-                    .position(x: width*0.85, y: height*0.8)
-                }
-                if (isRiichi) {
-                    Text("立直中")
-                        .font(.system(size: 16, weight: .bold, design: .serif))
-                        .foregroundColor(.green)
-                        .position(x: width*0.85, y: height*0.75)
-                }
-            }
-            
+            .rotation3DEffect(Angle(degrees: 10.0),
+                              axis: (x: 10, y: 0, z: 0),
+                              anchorZ: -30,
+                              perspective: 1)
             HStack(alignment: .center, spacing: 0, content: {
-                List {
-                    HStack(alignment: .center, spacing: -4, content: {
-                        ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
-                            Button(action: {
-                                if (nextKakan) {
-                                    nextKakan.toggle()
-                                    canKakan.toggle()
-                                    gameService.socket.emit(
-                                        "Kakan",
-                                        gameData.roomID,
-                                        gameData.playerID,
-                                        gameData.encode(tiles: [tile])
-                                    )
-                                    return
-                                }
-                                if (nextAnkan) {
-                                    nextAnkan.toggle()
-                                    canAnkan.toggle()
-                                    gameService.socket.emit(
-                                        "Ankan",
-                                        gameData.roomID,
-                                        gameData.playerID,
-                                        gameData.encode(tiles: [tile])
-                                    )
-                                    return
-                                }
-                                if (nextRiichi) {
-                                    canRiichi.toggle()
-                                    nextRiichi.toggle()
-                                    isRiichi = true
-                                }
+                HStack(alignment: .center, spacing: -6, content: {
+                    ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
+                        Button(action: {
+                            if (nextKakan) {
+                                nextKakan.toggle()
+                                canKakan.toggle()
                                 gameService.socket.emit(
-                                    "Discard",
+                                    "Kakan",
                                     gameData.roomID,
                                     gameData.playerID,
-                                    gameData.encode(tiles: [tile]),
-                                    isRiichi
+                                    gameData.encode(tiles: [tile])
                                 )
-                                discardCallback()
-                            }) {
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 60, alignment: .center)
+                                return
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .disabled(!isMyTurn ||
-                                      (nextRiichi && !waitExistsFor(tile: tile)) ||
-                                      (isRiichi && index != gameData.myTiles.count - 1) ||
-                                      (nextKakan && !canKakanFor(tile: tile)) ||
-                                      (nextAnkan && !canAnkanFor(tile: tile))
+                            if (nextAnkan) {
+                                nextAnkan.toggle()
+                                canAnkan.toggle()
+                                gameService.socket.emit(
+                                    "Ankan",
+                                    gameData.roomID,
+                                    gameData.playerID,
+                                    gameData.encode(tiles: [tile])
+                                )
+                                return
+                            }
+                            if (nextRiichi) {
+                                canRiichi.toggle()
+                                nextRiichi.toggle()
+                                isRiichi = true
+                            }
+                            gameService.socket.emit(
+                                "Discard",
+                                gameData.roomID,
+                                gameData.playerID,
+                                gameData.encode(tiles: [tile]),
+                                isRiichi
                             )
+                            discardCallback()
+                        }) {
+                            Image(tile.name())
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 60, alignment: .center)
                         }
-                    })
-                }
-                .frame(width: 30*13, height: 70, alignment: .center)
-                .listStyle(PlainListStyle())
+                        .buttonStyle(PlainButtonStyle())
+                        .disabled(!isMyTurn ||
+                                  (nextRiichi && !waitExistsFor(tile: tile)) ||
+                                  (isRiichi && index != gameData.myTiles.count - 1) ||
+                                  (nextKakan && !canKakanFor(tile: tile)) ||
+                                  (nextAnkan && !canAnkanFor(tile: tile))
+                        )
+                    }
+                })
+                    .padding(.trailing, 6)
                 MinkoView()
                 AnkanView()
                 MinkanView()
             })
-            .position(x: width/2, y: height*0.9)
+            .position(x: width/2, y: height*0.93)
             
             Group {
                 NavigationLink(
