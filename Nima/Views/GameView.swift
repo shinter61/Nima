@@ -60,6 +60,9 @@ struct GameView: View {
                     gameData.myWaits = gameData.decode(str: dict["waits"]!)
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                 }
+                
+                if gameData.stockCount <= 0 {
+                }
             }
         }
         socket.on("DistributeInitTiles") { (data, ack) in
@@ -163,6 +166,17 @@ struct GameView: View {
                 showingScore = true
             }
         }
+        socket.on("ExhaustiveDraw") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                if dict["id1"]! == gameData.playerID {
+                    gameData.myScore = Int(dict["score1"]!)!
+                    gameData.yourScore = Int(dict["score2"]!)!
+                } else if dict["id2"]! == gameData.playerID {
+                    gameData.yourScore = Int(dict["score1"]!)!
+                    gameData.myScore = Int(dict["score2"]!)!
+                }
+            }
+        }
         socket.on("EndGame") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if dict["winnerID"] == gameData.playerID {
@@ -263,7 +277,7 @@ struct GameView: View {
                 }
                 DiscardsView(discards: gameData.yourDiscards, riichiTurn: gameData.yourRiichiTurn)
                     .rotationEffect(Angle(degrees: 180.0))
-                    .position(x: width/2, y: height*0.28)
+                    .position(x: width*0.47, y: height*0.28)
                 Group {
                     CustomText(content: "\(gameData.yourScore)", size: 24, tracking: 0)
                         .foregroundColor(Colors.init().navy)
@@ -275,14 +289,8 @@ struct GameView: View {
                         .foregroundColor(Colors.init().red)
                         .position(x: width*0.66, y: height*0.56)
                 }
-//                Button(action: {
-//                    gameService.socket.emit("StartGame", gameData.roomID)
-//                }) {
-//                    Text("勝負開始")
-//                }
-//                .position(x: width*0.8, y: height*0.5)
                 DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
-                    .position(x: width/2, y: height*0.72)
+                    .position(x: width*0.53, y: height*0.72)
                 Group {
                     WindView(wind: gameData.isParent ? "東" : "南").position(x: width*0.2, y: height*0.66)
                     NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.75)

@@ -49,7 +49,7 @@ struct DiscardsView: View {
                 }
             })
         
-            let thirdDiscards = Array(tileName(discards: discards)[12..<18])
+            let thirdDiscards = Array(tileName(discards: discards)[12..<20])
             HStack(spacing: -2, content: {
                 ForEach(Array(thirdDiscards.enumerated()), id: \.offset) { index, name in
                     if index == riichiTurn - 13 {
@@ -75,7 +75,7 @@ struct DiscardsView: View {
         for i in 0..<tileCount {
             nameArr.append(discards[i].name())
         }
-        for _ in 0..<(18-tileCount) {
+        for _ in 0..<(20-tileCount) {
             nameArr.append("")
         }
         return nameArr
@@ -86,6 +86,9 @@ struct DiscardsView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
             DiscardsView(discards: [
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
+                Tile(kind: "", number: 0, character: "red"),
                 Tile(kind: "", number: 0, character: "red"),
                 Tile(kind: "", number: 0, character: "red"),
                 Tile(kind: "", number: 0, character: "red"),

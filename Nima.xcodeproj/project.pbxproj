@@ -35,6 +35,7 @@
 		E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8C61E26D5D81000B59318 /* DoraView.swift */; };
 		E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62326C901AE00435171 /* ScoreView.swift */; };
 		E5AFD62826CE4C0C00435171 /* MinkoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62726CE4C0C00435171 /* MinkoView.swift */; };
+		E5BD2C152718349E00EDE08F /* ExhaustiveDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		E5A8C61E26D5D81000B59318 /* DoraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoraView.swift; sourceTree = "<group>"; };
 		E5AFD62326C901AE00435171 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		E5AFD62726CE4C0C00435171 /* MinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkoView.swift; sourceTree = "<group>"; };
+		E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhaustiveDrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				E50A8F5B271751FF000F253A /* WindView.swift */,
 				E50A8F5D27175EFD000F253A /* NameView.swift */,
 				E50A8F5F27176518000F253A /* GameInfoView.swift */,
+				E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				E50A8F5C271751FF000F253A /* WindView.swift in Sources */,
 				E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */,
 				E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */,
+				E5BD2C152718349E00EDE08F /* ExhaustiveDrawView.swift in Sources */,
 				E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */,
 				E53BE38426BFD0EC000A45D8 /* MainMenu.swift in Sources */,
 				E583A49F26C298E900134067 /* GameService.swift in Sources */,
