@@ -11,7 +11,7 @@ import SocketIO
 struct ScoreView: View {
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) private var presentationMode
     @Binding var showingScore: Bool
     var score: Int
     var scoreName: String
@@ -69,7 +69,7 @@ struct ScoreView: View {
                 ActionEmptyView(action: pop)
             }
         }
-        .onAppear { gameData.start() }
+        .onAppear { gameData.startTimer() }
     }
 }
 

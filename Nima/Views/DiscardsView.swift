@@ -75,7 +75,7 @@ struct DiscardsView: View {
         for i in 0..<tileCount {
             nameArr.append(discards[i].name())
         }
-        for _ in 0..<(20-tileCount) {
+        for _ in 0..<(21-tileCount) {
             nameArr.append("")
         }
         return nameArr

@@ -25,6 +25,7 @@ struct GameView: View {
     @State private var isRiichi: Bool = false
     @State private var showingScore: Bool = false
     @State private var showingEndGame: Bool = false
+    @State private var showingExhaustive: Bool = false
     @State private var score: Int = 0
     @State private var hands: [String] = []
     @State private var scoreName: String = ""
@@ -50,8 +51,11 @@ struct GameView: View {
                     if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
                         canRon = true
                     }
-                    if !(canPon && !isRiichi) && !canRon {
+                    if !(canPon && !isRiichi) && !canRon && gameData.stockCount > 0 {
                         socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+                    }
+                    if gameData.stockCount <= 0 {
+                        socket.emit("ExhaustiveDraw", gameData.roomID)
                     }
                 }
                 if gameData.playerID == dict["id"] {
@@ -59,9 +63,6 @@ struct GameView: View {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myWaits = gameData.decode(str: dict["waits"]!)
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
-                }
-                
-                if gameData.stockCount <= 0 {
                 }
             }
         }
@@ -76,7 +77,7 @@ struct GameView: View {
                     gameData.myDiscards = []
                     gameData.yourDiscards = []
                     gameData.myWaits = []
-                    gameData.stockCount = 0
+                    gameData.stockCount = Int(dict["stockCount"]!)!
                     gameData.myRiichiTurn = -1
                     gameData.round = Int(dict["round"]!)!
                     gameData.roundWind = dict["roundWind"]!
@@ -149,9 +150,6 @@ struct GameView: View {
         }
         socket.on("Win") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                print("---------------")
-                print(dict["score"]!)
-                print("---------------")
                 score = Int(dict["score"]!)!
                 scoreName = dict["scoreName"]!
                 let jsonData = dict["hands"]!.data(using: .utf8)!
@@ -163,6 +161,7 @@ struct GameView: View {
                 nextRiichi = false
                 isRiichi = false
                 isWin = false
+                
                 showingScore = true
             }
         }
@@ -171,10 +170,26 @@ struct GameView: View {
                 if dict["id1"]! == gameData.playerID {
                     gameData.myScore = Int(dict["score1"]!)!
                     gameData.yourScore = Int(dict["score2"]!)!
+                    gameData.myTiles = gameData.decode(str: dict["tiles1"]!)
+                    gameData.myWaits = gameData.decode(str: dict["waitTiles1"]!)
+                    gameData.yourTiles = gameData.decode(str: dict["tiles2"]!)
+                    gameData.yourWaits = gameData.decode(str: dict["waitTiles2"]!)
                 } else if dict["id2"]! == gameData.playerID {
                     gameData.yourScore = Int(dict["score1"]!)!
                     gameData.myScore = Int(dict["score2"]!)!
+                    gameData.myTiles = gameData.decode(str: dict["tiles2"]!)
+                    gameData.myWaits = gameData.decode(str: dict["waitTiles2"]!)
+                    gameData.yourTiles = gameData.decode(str: dict["tiles1"]!)
+                    gameData.yourWaits = gameData.decode(str: dict["waitTiles1"]!)
                 }
+                canPon = false
+                canRon = false
+                canRiichi = false
+                nextRiichi = false
+                isRiichi = false
+                isWin = false
+                
+                showingExhaustive = true
             }
         }
         socket.on("EndGame") { (data, ack) in
@@ -442,6 +457,10 @@ struct GameView: View {
             .position(x: width/2, y: height*0.93)
             
             Group {
+                NavigationLink(
+                    destination: ExhaustiveDrawView().navigationBarHidden(true),
+                    isActive: self.$showingExhaustive
+                ) { EmptyView() }
                 NavigationLink(
                     destination: ScoreView(showingScore: self.$showingScore, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
                     isActive: self.$showingScore
