@@ -9,13 +9,15 @@ import SwiftUI
 
 struct EndGameView: View {
     @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
     
     var body: some View {
-        VStack {
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let height = geometry.size.height
             CustomText(content: "終局", size: 36, tracking: 0)
-                .padding(.top, 20)
-            Spacer()
+                .position(x: width/2, y: height*0.1)
             HStack {
                 CustomText(content: "勝者", size: 24, tracking: 0)
                     .padding(.trailing, 20)
@@ -24,6 +26,7 @@ struct EndGameView: View {
                 CustomText(content: String(gameData.winnerID == gameData.playerID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
                     .padding(.trailing, 20)
             }
+            .position(x: width/2, y: height*0.4)
             HStack {
                 CustomText(content: "敗者", size: 24, tracking: 0)
                     .padding(.trailing, 20)
@@ -32,13 +35,20 @@ struct EndGameView: View {
                 CustomText(content: String(gameData.winnerID != gameData.playerID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
                     .padding(.trailing, 20)
             }
-            Spacer()
+            .position(x: width/2, y: height*0.5)
+            if gameData.isDisconnected {
+                CustomText(content: "接続切れ", size: 24, tracking: 0)
+                    .position(x: width*0.8, y: height*0.5)
+            }
             
-            Button(action: { rootIsActive = false }) {
+            Button(action: {
+                gameService.socket.disconnect()
+                rootIsActive = false
+            }) {
                 CustomText(content: "戻る", size: 20, tracking: 0)
                     .foregroundColor(Colors.init().navy)
             }
-            .padding(.bottom, 20)
+            .position(x: width/2, y: height*0.8)
         }
     }
 }

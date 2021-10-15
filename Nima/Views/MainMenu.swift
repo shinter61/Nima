@@ -29,9 +29,7 @@ struct MainMenu: View {
             }
             
             NavigationLink(
-                destination: MatchingView(rootIsActive: self.$showingMatching)
-                    .navigationBarHidden(true)
-                    .environment(\.isFirstViewActive, $showingMatching),
+                destination: MatchingView(rootIsActive: self.$showingMatching).navigationBarHidden(true),
                 isActive: self.$showingMatching
             ) { EmptyView() }
         }

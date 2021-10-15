@@ -207,6 +207,7 @@ struct GameView: View {
                     gameData.yourScore = Int(dict["winnerScore"]!)!
                     gameData.myScore = Int(dict["loserScore"]!)!
                 }
+                gameData.isDisconnected = (dict["isDisconnected"] == "true")
                 showingEndGame = true
             }
         }
@@ -468,6 +469,10 @@ struct GameView: View {
                 NavigationLink(
                     destination: ScoreView(rootIsActive: self.$rootIsActive, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
                     isActive: self.$showingScore
+                ) { EmptyView() }
+                NavigationLink(
+                    destination: EndGameView(rootIsActive: self.$rootIsActive).navigationBarHidden(true),
+                    isActive: self.$showingEndGame
                 ) { EmptyView() }
             }
         }

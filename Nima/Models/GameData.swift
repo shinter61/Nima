@@ -44,6 +44,7 @@ final class GameData: ObservableObject {
     @Published var timer: Timer!
     @Published var countdown: Int = 3
     
+    @Published var isDisconnected: Bool = false
     @Published var isGameEnd: Bool = false
     
     func discard(tile: Tile) -> [Tile] {
