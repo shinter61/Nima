@@ -51,6 +51,44 @@ final class GameData: ObservableObject {
     @Published var isDisconnected: Bool = false
     @Published var isGameEnd: Bool = false
     
+    func allReset() -> Void {
+        roomID = ""
+        stockCount = 0
+        myTiles = []
+        myMinkos = []
+        myAnkans = []
+        myMinkans = []
+        myDiscards = []
+        myWaits = []
+        myRiichiTurn = -1
+    
+        yourTiles = []
+        yourMinkos = []
+        yourAnkans = []
+        yourMinkans = []
+        yourDiscards = []
+        yourWaits = []
+        yourRiichiTurn = -1
+    
+        doraTiles = []
+        revDoraTiles = []
+    
+        myScore = 0
+        yourScore = 0
+    
+        opponentID = ""
+    
+        round = 0
+        roundWind = ""
+        honba = 0
+        kyotaku = 0
+        isParent = false
+        winnerID = ""
+        
+        isDisconnected = false
+        isGameEnd = false
+    }
+    
     func discard(tile: Tile) -> [Tile] {
         let idx: Int = myTiles.firstIndex(where: {$0.isEqual(tile: tile)})!
         let removed: Tile = myTiles.remove(at: idx)

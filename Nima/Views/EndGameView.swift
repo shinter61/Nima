@@ -43,6 +43,8 @@ struct EndGameView: View {
             
             Button(action: {
                 gameService.socket.disconnect()
+                gameService.socket.removeAllHandlers()
+                gameData.allReset()
                 rootIsActive = false
             }) {
                 CustomText(content: "戻る", size: 20, tracking: 0)
