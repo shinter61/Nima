@@ -10,7 +10,7 @@ import SwiftUI
 struct ActionEmptyView: View {
     var action: () -> Void
     var body: some View {
-        VStack{ Text("hello") }.onAppear { action() }
+        VStack{ Text("") }.onAppear { action() }
     }
 }
 

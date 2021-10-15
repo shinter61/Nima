@@ -12,14 +12,20 @@ struct ScoreView: View {
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
     @Environment(\.presentationMode) private var presentationMode
-    @Binding var showingScore: Bool
+    @Binding var rootIsActive: Bool
+    @State private var showingEndGame: Bool = false
     var score: Int
     var scoreName: String
     var hands: [String]
     
     func pop() -> Void {
-        gameService.socket.emit("StartGame", gameData.roomID)
-        self.presentationMode.wrappedValue.dismiss()
+        if (gameData.isGameEnd) {
+            gameService.socket.emit("EndGame", gameData.roomID)
+            showingEndGame = true
+        } else {
+            gameService.socket.emit("StartGame", gameData.roomID)
+            self.presentationMode.wrappedValue.dismiss()
+        }
     }
     
     var body: some View {
@@ -68,6 +74,10 @@ struct ScoreView: View {
             if gameData.countdown <= 0 {
                 ActionEmptyView(action: pop)
             }
+            NavigationLink(
+                destination: EndGameView(rootIsActive: self.$rootIsActive).navigationBarHidden(true),
+                isActive: self.$showingEndGame
+            ) { EmptyView() }
         }
         .onAppear { gameData.startTimer() }
     }
@@ -76,7 +86,7 @@ struct ScoreView: View {
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            ScoreView(showingScore: .constant(false), score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
+            ScoreView(rootIsActive: .constant(false), score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
                 .environmentObject(GameData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainMenu: View {
-    @State private var showingGame: Bool = false
+    @State private var showingMatching: Bool = false
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -20,7 +20,7 @@ struct MainMenu: View {
                     .position(x: width*0.5, y: height*0.1)
                 
                 Button(action: {
-                    showingGame = true
+                    showingMatching = true
                 }) {
                     CustomText(content: "対戦する", size: 24, tracking: 2)
                         .foregroundColor(Color.red)
@@ -29,8 +29,10 @@ struct MainMenu: View {
             }
             
             NavigationLink(
-                destination: MatchingView().navigationBarHidden(true),
-                isActive: self.$showingGame
+                destination: MatchingView(rootIsActive: self.$showingMatching)
+                    .navigationBarHidden(true)
+                    .environment(\.isFirstViewActive, $showingMatching),
+                isActive: self.$showingMatching
             ) { EmptyView() }
         }
     }

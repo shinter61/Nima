@@ -11,6 +11,7 @@ import SocketIO
 struct GameView: View {
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
+    @Binding var rootIsActive: Bool
     @State private var isMyTurn: Bool = false
     @State private var isWin: Bool = false
     @State private var canRon: Bool = false
@@ -31,7 +32,8 @@ struct GameView: View {
     @State private var scoreName: String = ""
     @State private var waitsCandidate: [WaitCandidate] = []
     
-    init() {
+    init(rootIsActive: Binding<Bool>) {
+        self._rootIsActive = rootIsActive
         UITableView.appearance().backgroundColor = .clear
         UITableView.appearance().separatorStyle = .none
     }
@@ -155,6 +157,7 @@ struct GameView: View {
                 let jsonData = dict["hands"]!.data(using: .utf8)!
                 hands = try! JSONDecoder().decode(Array<String>.self, from: jsonData)
                 gameData.revDoraTiles = gameData.decode(str: dict["revDoras"]!)
+                gameData.isGameEnd = (dict["isGameEnd"]! == "true")
                 canPon = false
                 canRon = false
                 canRiichi = false
@@ -182,6 +185,7 @@ struct GameView: View {
                     gameData.yourTiles = gameData.decode(str: dict["tiles1"]!)
                     gameData.yourWaits = gameData.decode(str: dict["waitTiles1"]!)
                 }
+                gameData.isGameEnd = (dict["isGameEnd"]! == "true")
                 canPon = false
                 canRon = false
                 canRiichi = false
@@ -458,16 +462,12 @@ struct GameView: View {
             
             Group {
                 NavigationLink(
-                    destination: ExhaustiveDrawView().navigationBarHidden(true),
+                    destination: ExhaustiveDrawView(rootIsActive: self.$rootIsActive).navigationBarHidden(true),
                     isActive: self.$showingExhaustive
                 ) { EmptyView() }
                 NavigationLink(
-                    destination: ScoreView(showingScore: self.$showingScore, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
+                    destination: ScoreView(rootIsActive: self.$rootIsActive, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
                     isActive: self.$showingScore
-                ) { EmptyView() }
-                NavigationLink(
-                    destination: EndGameView().navigationBarHidden(true),
-                    isActive: self.$showingEndGame
                 ) { EmptyView() }
             }
         }
@@ -482,7 +482,7 @@ struct GameView: View {
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            GameView()
+            GameView(rootIsActive: .constant(false))
                 .environmentObject(GameData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)

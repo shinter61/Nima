@@ -9,33 +9,46 @@ import SwiftUI
 
 struct EndGameView: View {
     @EnvironmentObject var gameData: GameData
+    @Binding var rootIsActive: Bool
+    
     var body: some View {
         VStack {
-            Text("終局").font(.title)
-                .padding(.bottom, 20)
+            CustomText(content: "終局", size: 36, tracking: 0)
+                .padding(.top, 20)
+            Spacer()
             HStack {
-                Text("勝者")
+                CustomText(content: "勝者", size: 24, tracking: 0)
                     .padding(.trailing, 20)
-                Text(gameData.winnerID == gameData.playerID ? gameData.playerID : gameData.opponentID)
+                CustomText(content: gameData.winnerID == gameData.playerID ? gameData.playerID : gameData.opponentID, size: 24, tracking: 0)
                     .padding(.trailing, 20)
-                Text(String(gameData.winnerID == gameData.playerID ? gameData.myScore : gameData.yourScore))
+                CustomText(content: String(gameData.winnerID == gameData.playerID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
                     .padding(.trailing, 20)
             }
             HStack {
-                Text("敗者")
+                CustomText(content: "敗者", size: 24, tracking: 0)
                     .padding(.trailing, 20)
-                Text(gameData.winnerID != gameData.playerID ? gameData.playerID : gameData.opponentID)
+                CustomText(content: gameData.winnerID != gameData.playerID ? gameData.playerID : gameData.opponentID, size: 24, tracking: 0)
                     .padding(.trailing, 20)
-                Text(String(gameData.winnerID != gameData.playerID ? gameData.myScore : gameData.yourScore))
+                CustomText(content: String(gameData.winnerID != gameData.playerID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
                     .padding(.trailing, 20)
             }
+            Spacer()
+            
+            Button(action: { rootIsActive = false }) {
+                CustomText(content: "戻る", size: 20, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+            }
+            .padding(.bottom, 20)
         }
     }
 }
 
 struct EndGameView_Previews: PreviewProvider {
     static var previews: some View {
-        EndGameView()
-            .environmentObject(GameData())
+        if #available(iOS 15.0, *) {
+            EndGameView(rootIsActive: .constant(false))
+                .environmentObject(GameData())
+                .previewInterfaceOrientation(.landscapeLeft)
+        }
     }
 }

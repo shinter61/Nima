@@ -11,6 +11,7 @@ import SocketIO
 struct MatchingView: View {
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
+    @Binding var rootIsActive: Bool
     @State private var matchingFinished: Bool = false
     func addHandler(socket: SocketIOClient!) -> Void {
         socket.on(clientEvent: .connect) { (data, ack) in
@@ -46,7 +47,7 @@ struct MatchingView: View {
             }
             
             NavigationLink(
-                destination: GameView().navigationBarHidden(true),
+                destination: GameView(rootIsActive: self.$rootIsActive).navigationBarHidden(true),
                 isActive: self.$matchingFinished
             ) { EmptyView() }
         }
@@ -63,7 +64,7 @@ struct MatchingView: View {
 struct MatchingView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            MatchingView()
+            MatchingView(rootIsActive: .constant(false))
                 .environmentObject(GameData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)
