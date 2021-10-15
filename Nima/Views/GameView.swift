@@ -41,9 +41,11 @@ struct GameView: View {
     func addHandler(socket: SocketIOClient!) -> Void {
         socket.on("InformDiscards") { (data, ack) in
             if let dict = data[0] as? [String: String] {
+                gameData.kyotaku = Int(dict["kyotaku"]!)!
                 if gameData.opponentID == dict["id"] {
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
+                    gameData.yourScore = Int(dict["score"]!)!
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
                         canPon = true
                     }
@@ -65,6 +67,7 @@ struct GameView: View {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myWaits = gameData.decode(str: dict["waits"]!)
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
+                    gameData.myScore = Int(dict["score"]!)!
                 }
             }
         }
@@ -81,8 +84,11 @@ struct GameView: View {
                     gameData.myWaits = []
                     gameData.stockCount = Int(dict["stockCount"]!)!
                     gameData.myRiichiTurn = -1
+                    gameData.yourRiichiTurn = -1
                     gameData.round = Int(dict["round"]!)!
                     gameData.roundWind = dict["roundWind"]!
+                    gameData.honba = Int(dict["honba"]!)!
+                    gameData.kyotaku = Int(dict["kyotaku"]!)!
                     gameData.isParent = (dict["isParent"] == "true")
                     gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
                     
@@ -301,13 +307,15 @@ struct GameView: View {
                 Group {
                     CustomText(content: "\(gameData.yourScore)", size: 24, tracking: 0)
                         .foregroundColor(Colors.init().navy)
-                        .position(x: width*0.66, y: height*0.44)
-                    DoraView().position(x: width*0.2, y: height*0.4)
-                    GameInfoView(wind: gameData.roundWind == "east" ? "東" : "南", round: gameData.round, stockCount: gameData.stockCount)
+                        .position(x: width*0.34, y: height*0.44)
+                    DoraView().position(x: width*0.1, y: height*0.3)
+                    GameInfoView()
                         .position(x: width*0.5, y: height*0.5)
+                    SubGameInfoView()
+                        .position(x: width*0.7, y: height*0.5)
                     CustomText(content: "\(gameData.myScore)", size: 24, tracking: 0)
                         .foregroundColor(Colors.init().red)
-                        .position(x: width*0.66, y: height*0.56)
+                        .position(x: width*0.34, y: height*0.56)
                 }
                 DiscardsView(discards: gameData.myDiscards, riichiTurn: gameData.myRiichiTurn)
                     .position(x: width*0.53, y: height*0.72)
