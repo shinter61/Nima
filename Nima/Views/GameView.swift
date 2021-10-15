@@ -31,6 +31,7 @@ struct GameView: View {
     @State private var hands: [String] = []
     @State private var scoreName: String = ""
     @State private var waitsCandidate: [WaitCandidate] = []
+    @State private var isFuriten: Bool = false
     
     init(rootIsActive: Binding<Bool>) {
         self._rootIsActive = rootIsActive
@@ -68,6 +69,7 @@ struct GameView: View {
                     gameData.myWaits = gameData.decode(str: dict["waits"]!)
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
+                    isFuriten = gameData.isFuriten()
                 }
             }
         }
@@ -339,6 +341,9 @@ struct GameView: View {
                     .position(x: width*0.53, y: height*0.72)
                 Group {
                     WindView(wind: gameData.isParent ? "東" : "南").position(x: width*0.2, y: height*0.66)
+                    if isFuriten {
+                        FuritenView().position(x: width*0.3, y: height*0.66)
+                    }
                     NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
                 }
                 Group {
@@ -377,7 +382,7 @@ struct GameView: View {
                         }
                         .position(x: width*0.65, y: height*0.8)
                     }
-                    if (canRon) {
+                    if (!isFuriten && canRon) {
                         Button(action: {
                             gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "ron")
                         }) {
@@ -402,7 +407,7 @@ struct GameView: View {
                         }
                         .position(x: width*0.75, y: height*0.8)
                     }
-                    if (canRon || (canPon && !isRiichi)) {
+                    if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
                         Button(action: {
                             gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
                             canRon = false
@@ -413,12 +418,6 @@ struct GameView: View {
                                 .foregroundColor(.gray)
                         }
                         .position(x: width*0.85, y: height*0.8)
-                    }
-                    if (isRiichi) {
-                        Text("立直中")
-                            .font(.system(size: 16, weight: .bold, design: .serif))
-                            .foregroundColor(.green)
-                            .position(x: width*0.85, y: height*0.75)
                     }
                 }
             }

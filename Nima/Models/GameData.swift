@@ -167,4 +167,17 @@ final class GameData: ObservableObject {
             self.countdown = 3 - diff
         })
     }
+    
+    func isFuriten() -> Bool {
+        var ans = false
+        for i in 0..<(myWaits.count) {
+            for j in 0..<(myDiscards.count) {
+                if myWaits[i].isEqual(tile: myDiscards[j]) {
+                    ans = true
+                    break
+                }
+            }
+        }
+        return ans
+    }
 }
