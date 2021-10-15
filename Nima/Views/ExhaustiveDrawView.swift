@@ -68,9 +68,9 @@ struct ExhaustiveDrawView: View {
                             }
                         })
                         .padding(.trailing, 6)
-                        MinkoView()
-                        AnkanView()
-                        MinkanView()
+                        MinkoView(playerID: gameData.playerID)
+                        AnkanView(playerID: gameData.playerID)
+                        MinkanView(playerID: gameData.playerID)
                     })
                     .position(x: width*0.5, y: height*0.45)
                 }
@@ -109,9 +109,9 @@ struct ExhaustiveDrawView: View {
                             }
                         })
                         .padding(.trailing, 6)
-                        MinkoView()
-                        AnkanView()
-                        MinkanView()
+                        MinkoView(playerID: gameData.opponentID)
+                        AnkanView(playerID: gameData.opponentID)
+                        MinkanView(playerID: gameData.opponentID)
                     })
                     .position(x: width*0.5, y: height*0.85)
                 }

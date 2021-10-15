@@ -11,19 +11,21 @@ import SwiftUI
 final class GameData: ObservableObject {
     @Published var roomID: String = ""
     @Published var stockCount: Int = 0
+    
     @Published var myTiles: [Tile] = []
     @Published var myMinkos: [Tile] = []
     @Published var myAnkans: [Tile] = []
     @Published var myMinkans: [Tile] = []
-    
     @Published var myDiscards: [Tile] = []
     @Published var myWaits: [Tile] = []
-    @Published var yourDiscards: [Tile] = []
+    @Published var myRiichiTurn: Int = -1
     
     @Published var yourTiles: [Tile] = []
+    @Published var yourMinkos: [Tile] = []
+    @Published var yourAnkans: [Tile] = []
+    @Published var yourMinkans: [Tile] = []
+    @Published var yourDiscards: [Tile] = []
     @Published var yourWaits: [Tile] = []
-    
-    @Published var myRiichiTurn: Int = -1
     @Published var yourRiichiTurn: Int = -1
     
     @Published var doraTiles: [Tile] = []
@@ -80,6 +82,10 @@ final class GameData: ObservableObject {
     
     func isMyTurn() -> Bool {
         return myTiles.count + myMinkos.count*3 + myMinkans.count*3 + myAnkans.count*3 == 14
+    }
+    
+    func yourTileCount() -> Int {
+        return 13 - (yourMinkos.count*3 + yourAnkans.count*3 + yourMinkans.count*3)
     }
     
     func encode(tiles: [Tile]) -> String {

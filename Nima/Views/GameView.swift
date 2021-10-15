@@ -80,6 +80,9 @@ struct GameView: View {
                     gameData.myAnkans = []
                     gameData.myMinkans = []
                     gameData.myDiscards = []
+                    gameData.yourMinkos = []
+                    gameData.yourAnkans = []
+                    gameData.yourMinkans = []
                     gameData.yourDiscards = []
                     gameData.myWaits = []
                     gameData.stockCount = Int(dict["stockCount"]!)!
@@ -122,6 +125,7 @@ struct GameView: View {
                     if (gameData.isMyTurn()) { isMyTurn = true }
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
+                    gameData.yourMinkos = gameData.decode(str: dict["minkos"]!)
                 }
             }
         }
@@ -134,6 +138,7 @@ struct GameView: View {
                     socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
+                    gameData.yourMinkans = gameData.decode(str: dict["minkans"]!)
                 }
             }
         }
@@ -144,6 +149,9 @@ struct GameView: View {
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
                     socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
+                } else {
+                    gameData.yourMinkos = gameData.decode(str: dict["minkos"]!)
+                    gameData.yourMinkans = gameData.decode(str: dict["minkans"]!)
                 }
             }
         }
@@ -153,6 +161,8 @@ struct GameView: View {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myAnkans = gameData.decode(str: dict["ankans"]!)
                     socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
+                } else {
+                    gameData.yourAnkans = gameData.decode(str: dict["ankans"]!)
                 }
             }
         }
@@ -285,15 +295,23 @@ struct GameView: View {
             ZStack {
                 Colors.init().lightGray.ignoresSafeArea(.all)
                 if gameData.opponentID != "" {
-                    HStack(alignment: .center, spacing: -4, content: {
-                        ForEach(0..<13) { _ in
-                            Image("back")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 60, alignment: .center)
-                        }
+                    HStack(alignment: .center, spacing: 0, content: {
+                        MinkoView(playerID: gameData.opponentID)
+                            .rotationEffect(Angle(degrees: 180.0))
+                        AnkanView(playerID: gameData.opponentID)
+                            .rotationEffect(Angle(degrees: 180.0))
+                        MinkanView(playerID: gameData.opponentID)
+                            .rotationEffect(Angle(degrees: 180.0))
+                        HStack(alignment: .center, spacing: -4, content: {
+                            ForEach(0..<gameData.yourTileCount(), id: \.self) { _ in
+                                Image("back")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 60, alignment: .center)
+                            }
+                        })
+                        .frame(width: 30*13, height: 70, alignment: .center)
                     })
-                    .frame(width: 30*13, height: 70, alignment: .center)
                     .position(x: width/2, y: height*0.06)
                     
                     Group {
@@ -308,7 +326,7 @@ struct GameView: View {
                     CustomText(content: "\(gameData.yourScore)", size: 24, tracking: 0)
                         .foregroundColor(Colors.init().navy)
                         .position(x: width*0.34, y: height*0.44)
-                    DoraView().position(x: width*0.1, y: height*0.3)
+                    DoraView().position(x: width*0.2, y: height*0.3)
                     GameInfoView()
                         .position(x: width*0.5, y: height*0.5)
                     SubGameInfoView()
@@ -463,9 +481,9 @@ struct GameView: View {
                     }
                 })
                     .padding(.trailing, 6)
-                MinkoView()
-                AnkanView()
-                MinkanView()
+                MinkoView(playerID: gameData.playerID)
+                AnkanView(playerID: gameData.playerID)
+                MinkanView(playerID: gameData.playerID)
             })
             .position(x: width/2, y: height*0.93)
             
