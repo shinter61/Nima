@@ -10,7 +10,6 @@ import SwiftUI
 struct FuritenView: View {
     var body: some View {
         ZStack {
-            let gradient = LinearGradient(colors: [Colors.init().red, Colors.init().lightGray], startPoint: .leading, endPoint: .trailing)
             RoundedRectangle(cornerRadius: 10)
                 .fill(Colors.init().red)
                 .frame(width: 60, height: 24, alignment: .center)
