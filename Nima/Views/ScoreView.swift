@@ -14,7 +14,6 @@ struct ScoreView: View {
     @Environment(\.presentationMode) private var presentationMode
     @Binding var rootIsActive: Bool
     @State private var showingEndGame: Bool = false
-    var winnerID: String
     var score: Int
     var scoreName: String
     var hands: [String]
@@ -33,8 +32,8 @@ struct ScoreView: View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
-            NameView(name: "\(winnerID)").position(x: width*0.2, y: height*0.15)
-            TilesView(winnerID: winnerID)
+            NameView(name: "\(gameData.roundWinnerID)").position(x: width*0.2, y: height*0.15)
+            TilesView(winnerID: gameData.roundWinnerID)
                 .position(x: width*0.5, y: height*0.27)
             ForEach(Array(hands.enumerated()), id: \.offset) { index, hand in
                 CustomText(content: hand, size: 24, tracking: 0)
@@ -53,15 +52,17 @@ struct ScoreView: View {
                         .frame(width: 30, height: 60, alignment: .center)
                         .position(x: width*0.68 + 40*CGFloat(index), y: height*0.4)
                 }
-                CustomText(content: "裏ドラ", size: 24, tracking: 0)
-                    .foregroundColor(Colors.init().navy)
-                    .position(x: width*0.62, y: height*0.52)
-                ForEach(Array(gameData.revDoraTiles.enumerated()), id: \.offset) { index, tile in
-                    Image(tile.name())
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 60, alignment: .center)
-                        .position(x: width*0.68 + 40*CGFloat(index), y: height*0.52)
+                if (gameData.playerID == gameData.roundWinnerID && gameData.myRiichiTurn != -1) || (gameData.opponentID == gameData.roundWinnerID && gameData.yourRiichiTurn != -1) {
+                    CustomText(content: "裏ドラ", size: 24, tracking: 0)
+                        .foregroundColor(Colors.init().navy)
+                        .position(x: width*0.62, y: height*0.52)
+                    ForEach(Array(gameData.revDoraTiles.enumerated()), id: \.offset) { index, tile in
+                        Image(tile.name())
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 60, alignment: .center)
+                            .position(x: width*0.68 + 40*CGFloat(index), y: height*0.52)
+                    }
                 }
             }
             Group {
@@ -90,7 +91,7 @@ struct ScoreView: View {
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            ScoreView(rootIsActive: .constant(false), winnerID: "", score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
+            ScoreView(rootIsActive: .constant(false), score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
                 .environmentObject(GameData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)

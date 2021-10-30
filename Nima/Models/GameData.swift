@@ -44,6 +44,7 @@ final class GameData: ObservableObject {
     @Published var kyotaku: Int = 0
     @Published var isParent: Bool = false
     @Published var winnerID: String = ""
+    @Published var roundWinnerID: String = ""
     
     @Published var timer: Timer!
     @Published var countdown: Int = 3

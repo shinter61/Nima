@@ -27,7 +27,6 @@ struct GameView: View {
     @State private var showingScore: Bool = false
     @State private var showingEndGame: Bool = false
     @State private var showingExhaustive: Bool = false
-    @State private var winnerID: String = ""
     @State private var score: Int = 0
     @State private var hands: [String] = []
     @State private var scoreName: String = ""
@@ -171,8 +170,8 @@ struct GameView: View {
         }
         socket.on("Win") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                winnerID = dict["id"]!
-                if winnerID == gameData.playerID {
+                gameData.roundWinnerID = dict["id"]!
+                if gameData.roundWinnerID == gameData.playerID {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                 } else {
                     gameData.yourTiles = gameData.decode(str: dict["tiles"]!)
@@ -501,7 +500,7 @@ struct GameView: View {
                     isActive: self.$showingExhaustive
                 ) { EmptyView() }
                 NavigationLink(
-                    destination: ScoreView(rootIsActive: self.$rootIsActive, winnerID: winnerID, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
+                    destination: ScoreView(rootIsActive: self.$rootIsActive, score: score, scoreName: scoreName, hands: hands).navigationBarHidden(true),
                     isActive: self.$showingScore
                 ) { EmptyView() }
                 NavigationLink(
