@@ -36,7 +36,7 @@ final class GameData: ObservableObject {
     
     @Published var playerID: String = UUID().uuidString
 //    @Published var playerID: String = "shinter"
-    @Published var opponentID: String = "droooop"
+    @Published var opponentID: String = ""
     
     @Published var round: Int = 0
     @Published var roundWind: String = ""

@@ -172,6 +172,11 @@ struct GameView: View {
         socket.on("Win") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 winnerID = dict["id"]!
+                if winnerID == gameData.playerID {
+                    gameData.myTiles = gameData.decode(str: dict["tiles"]!)
+                } else {
+                    gameData.yourTiles = gameData.decode(str: dict["tiles"]!)
+                }
                 score = Int(dict["score"]!)!
                 scoreName = dict["scoreName"]!
                 let jsonData = dict["hands"]!.data(using: .utf8)!

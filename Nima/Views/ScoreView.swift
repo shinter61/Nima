@@ -34,21 +34,8 @@ struct ScoreView: View {
             let width = geometry.size.width
             let height = geometry.size.height
             NameView(name: "\(winnerID)").position(x: width*0.2, y: height*0.15)
-            HStack(alignment: .center, spacing: 0, content: {
-                HStack(alignment: .center, spacing: -6, content: {
-                    ForEach(Array((winnerID == gameData.playerID ? gameData.myTiles : gameData.yourTiles).enumerated()), id: \.offset) { index, tile in
-                        Image(tile.name())
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 60, alignment: .center)
-                    }
-                })
-                .padding(.trailing, 6)
-                MinkoView(playerID: winnerID)
-                AnkanView(playerID: winnerID)
-                MinkanView(playerID: winnerID)
-            })
-            .position(x: width*0.5, y: height*0.25)
+            TilesView(winnerID: winnerID)
+                .position(x: width*0.5, y: height*0.27)
             ForEach(Array(hands.enumerated()), id: \.offset) { index, hand in
                 CustomText(content: hand, size: 24, tracking: 0)
                     .foregroundColor(Colors.init().navy)
