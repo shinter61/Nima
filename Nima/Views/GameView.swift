@@ -57,7 +57,7 @@ struct GameView: View {
                     if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
                         canRon = true
                     }
-                    if !(canPon && !isRiichi) && !canRon && gameData.stockCount > 0 {
+                    if !(canPon && !isRiichi) && !(canRon && !isFuriten) && gameData.stockCount > 0 {
                         socket.emit("Draw", gameData.roomID, gameData.playerID, false)
                     }
                     if gameData.stockCount <= 0 {
@@ -184,6 +184,7 @@ struct GameView: View {
                 nextRiichi = false
                 isRiichi = false
                 isWin = false
+                isFuriten = false
                 
                 showingScore = true
             }
@@ -212,6 +213,7 @@ struct GameView: View {
                 nextRiichi = false
                 isRiichi = false
                 isWin = false
+                isFuriten = false
                 
                 showingExhaustive = true
             }
