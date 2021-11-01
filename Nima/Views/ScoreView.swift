@@ -23,7 +23,9 @@ struct ScoreView: View {
             gameService.socket.emit("EndGame", gameData.roomID)
             showingEndGame = true
         } else {
-            gameService.socket.emit("StartGame", gameData.roomID)
+            if gameData.roundWinnerID == gameData.playerID {
+                gameService.socket.emit("StartGame", gameData.roomID)
+            }
             self.presentationMode.wrappedValue.dismiss()
         }
     }

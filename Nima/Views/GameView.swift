@@ -96,6 +96,8 @@ struct GameView: View {
                     gameData.kyotaku = Int(dict["kyotaku"]!)!
                     gameData.isParent = (dict["isParent"] == "true")
                     gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
+                    gameData.roundWinnerID = ""
+                    gameData.countdown = 3
                     
                     if (gameData.isMyTurn()) { isMyTurn = true }
                 } else {
@@ -184,6 +186,11 @@ struct GameView: View {
                 gameData.isGameEnd = (dict["isGameEnd"]! == "true")
                 canPon = false
                 canRon = false
+                canDaiminkan = false
+                canKakan = false
+                nextKakan = false
+                canAnkan = false
+                nextAnkan = false
                 canRiichi = false
                 nextRiichi = false
                 isRiichi = false
