@@ -99,7 +99,6 @@ struct GameView: View {
                     gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
                     gameData.roundWinnerID = ""
                     gameData.roundWinType = ""
-                    gameData.countdown = 3
                     
                     if (gameData.isMyTurn()) { isMyTurn = true }
                 } else {

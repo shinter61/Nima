@@ -89,6 +89,7 @@ struct ScoreView: View {
             ) { EmptyView() }
         }
         .onAppear { gameData.startTimer() }
+        .onDisappear { gameData.countdown = 3 }
     }
 }
 
