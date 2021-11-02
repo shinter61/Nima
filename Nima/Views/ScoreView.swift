@@ -35,6 +35,8 @@ struct ScoreView: View {
             let width = geometry.size.width
             let height = geometry.size.height
             NameView(name: "\(gameData.roundWinnerID)").position(x: width*0.2, y: height*0.15)
+            RoundWinTypeView(content: gameData.roundWinType)
+                .position(x: width*0.8, y: height*0.11)
             TilesView(winnerID: gameData.roundWinnerID)
                 .position(x: width*0.5, y: height*0.27)
             ForEach(Array(hands.enumerated()), id: \.offset) { index, hand in
