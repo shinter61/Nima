@@ -11,7 +11,11 @@ struct ContentView: View {
     @EnvironmentObject var gameData: GameData
     var body: some View {
         NavigationView {
-            MainMenu()
+            if gameData.playerID != "" {
+                MainMenu()
+            } else {
+                RegistPlayerNameView()
+            }
         }
         .navigationBarHidden(true)
     }

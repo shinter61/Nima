@@ -34,8 +34,7 @@ final class GameData: ObservableObject {
     @Published var myScore: Int = 0
     @Published var yourScore: Int = 0
     
-    @Published var playerID: String = UUID().uuidString
-//    @Published var playerID: String = "shinter"
+    @Published var playerID: String = UserDefaults.standard.string(forKey: "playerID") ?? ""
     @Published var opponentID: String = ""
     
     @Published var round: Int = 0

@@ -30,6 +30,7 @@
 		E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38926BFDAE2000A45D8 /* Tile.swift */; };
 		E55DCEEA27308A340005FF07 /* WinNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEE927308A340005FF07 /* WinNoticeView.swift */; };
 		E55DCEEC2730BD970005FF07 /* RoundWinTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */; };
+		E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */; };
 		E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E560096426D2D75D00520816 /* ActionEmptyView.swift */; };
 		E583A49826C26F0300134067 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = E583A49726C26F0300134067 /* SocketIO */; };
 		E583A49F26C298E900134067 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583A49E26C298E900134067 /* GameService.swift */; };
@@ -90,6 +91,7 @@
 		E53BE38926BFDAE2000A45D8 /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		E55DCEE927308A340005FF07 /* WinNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinNoticeView.swift; sourceTree = "<group>"; };
 		E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundWinTypeView.swift; sourceTree = "<group>"; };
+		E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistPlayerNameView.swift; sourceTree = "<group>"; };
 		E560096426D2D75D00520816 /* ActionEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEmptyView.swift; sourceTree = "<group>"; };
 		E583A49E26C298E900134067 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
 		E5856217271A3FA3000F6F9E /* FuritenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuritenView.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				E50F15D6272D44B2002D1371 /* TilesView.swift */,
 				E55DCEE927308A340005FF07 /* WinNoticeView.swift */,
 				E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */,
+				E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				E5A8422726DDB66E003230F6 /* MinkanView.swift in Sources */,
 				E51E714F27000F2800292CBB /* CustomText.swift in Sources */,
 				E50A8F5827158345000F253A /* MatchingView.swift in Sources */,
+				E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */,
 				E50A8F6027176518000F253A /* GameInfoView.swift in Sources */,
 				E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */,
 				E50F15D7272D44B2002D1371 /* TilesView.swift in Sources */,

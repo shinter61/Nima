@@ -55,9 +55,6 @@ struct MatchingView: View {
             if gameService.socket.handlers.count == 0 {
                 addHandler(socket: gameService.socket)
             }
-            let from = gameData.playerID.index(gameData.playerID.startIndex, offsetBy: 0)
-            let to = gameData.playerID.index(gameData.playerID.startIndex, offsetBy: 8)
-            gameData.playerID = String(gameData.playerID[from..<to])
             gameService.socket.connect(withPayload: ["name": gameData.playerID])
         }
     }
