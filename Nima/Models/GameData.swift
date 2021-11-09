@@ -17,7 +17,8 @@ final class GameData: ObservableObject {
     @Published var myAnkans: [Tile] = []
     @Published var myMinkans: [Tile] = []
     @Published var myDiscards: [Tile] = []
-    @Published var myWaits: [Tile] = []
+    @Published var myDrawWaits: [Tile] = []
+    @Published var myRonWaits: [Tile] = []
     @Published var myRiichiTurn: Int = -1
     
     @Published var yourTiles: [Tile] = []
@@ -60,7 +61,8 @@ final class GameData: ObservableObject {
         myAnkans = []
         myMinkans = []
         myDiscards = []
-        myWaits = []
+        myDrawWaits = []
+        myRonWaits = []
         myRiichiTurn = -1
     
         yourTiles = []
@@ -171,9 +173,9 @@ final class GameData: ObservableObject {
     
     func isFuriten() -> Bool {
         var ans = false
-        for i in 0..<(myWaits.count) {
+        for i in 0..<(myRonWaits.count) {
             for j in 0..<(myDiscards.count) {
-                if myWaits[i].isEqual(tile: myDiscards[j]) {
+                if myRonWaits[i].isEqual(tile: myDiscards[j]) {
                     ans = true
                     break
                 }

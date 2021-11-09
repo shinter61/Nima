@@ -54,7 +54,7 @@ struct GameView: View {
                     if gameData.collectAnko().contains(gameData.yourDiscards.last!.name()) {
                         canDaiminkan = true
                     }
-                    if gameData.myWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
+                    if gameData.myRonWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
                         canRon = true
                     }
                     if !(canPon && !isRiichi) && !(canRon && !isFuriten) && gameData.stockCount > 0 {
@@ -67,7 +67,8 @@ struct GameView: View {
                 if gameData.playerID == dict["id"] {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
-                    gameData.myWaits = gameData.decode(str: dict["waits"]!)
+                    gameData.myDrawWaits = gameData.decode(str: dict["drawWaits"]!)
+                    gameData.myRonWaits = gameData.decode(str: dict["ronWaits"]!)
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
                     isFuriten = gameData.isFuriten()
@@ -87,7 +88,8 @@ struct GameView: View {
                     gameData.yourAnkans = []
                     gameData.yourMinkans = []
                     gameData.yourDiscards = []
-                    gameData.myWaits = []
+                    gameData.myDrawWaits = []
+                    gameData.myRonWaits = []
                     gameData.stockCount = Int(dict["stockCount"]!)!
                     gameData.myRiichiTurn = -1
                     gameData.yourRiichiTurn = -1
@@ -208,14 +210,14 @@ struct GameView: View {
                     gameData.myScore = Int(dict["score1"]!)!
                     gameData.yourScore = Int(dict["score2"]!)!
                     gameData.myTiles = gameData.decode(str: dict["tiles1"]!)
-                    gameData.myWaits = gameData.decode(str: dict["waitTiles1"]!)
+                    gameData.myDrawWaits = gameData.decode(str: dict["waitTiles1"]!)
                     gameData.yourTiles = gameData.decode(str: dict["tiles2"]!)
                     gameData.yourWaits = gameData.decode(str: dict["waitTiles2"]!)
                 } else if dict["id2"]! == gameData.playerID {
                     gameData.yourScore = Int(dict["score1"]!)!
                     gameData.myScore = Int(dict["score2"]!)!
                     gameData.myTiles = gameData.decode(str: dict["tiles2"]!)
-                    gameData.myWaits = gameData.decode(str: dict["waitTiles2"]!)
+                    gameData.myDrawWaits = gameData.decode(str: dict["waitTiles2"]!)
                     gameData.yourTiles = gameData.decode(str: dict["tiles1"]!)
                     gameData.yourWaits = gameData.decode(str: dict["waitTiles1"]!)
                 }

@@ -9,8 +9,8 @@ import Foundation
 import SocketIO
 
 final class GameService: ObservableObject {
-    private var manager = SocketManager(socketURL: URL(string: "https://hutarimajan.glitch.me/")!, config: [.log(true), .compress])
-//    private var manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
+//    private var manager = SocketManager(socketURL: URL(string: "https://hutarimajan.glitch.me/")!, config: [.log(true), .compress])
+    private var manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
     
     @Published var socket: SocketIOClient!
     

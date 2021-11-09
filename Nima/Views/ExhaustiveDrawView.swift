@@ -34,12 +34,12 @@ struct ExhaustiveDrawView: View {
                         .foregroundColor(Colors.init().navy)
                         .position(x: width*0.1, y: height*0.1)
                     NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.25)
-                    if gameData.myWaits.count != 0 {
+                    if gameData.myDrawWaits.count != 0 {
                         CustomText(content: "待ち牌：", size: 16, tracking: 0)
                             .foregroundColor(Colors.init().navy)
                             .position(x: width*0.4, y: height*0.25)
                         HStack(alignment: .center, spacing: -6, content: {
-                            ForEach(gameData.myWaits, id: \.self) { tile in
+                            ForEach(gameData.myDrawWaits, id: \.self) { tile in
                                 Image(tile.name())
                                     .resizable()
                                     .scaledToFit()
@@ -49,11 +49,11 @@ struct ExhaustiveDrawView: View {
                         .position(x: width*0.6, y: height*0.25)
                             
                     }
-                    if gameData.myWaits.count != 0 && gameData.yourWaits.count == 0 {
+                    if gameData.myDrawWaits.count != 0 && gameData.yourWaits.count == 0 {
                         CustomText(content: "+1500", size: 24, tracking: 0)
                             .foregroundColor(Colors.init().green)
                             .position(x: width*0.85, y: height*0.25)
-                    } else if gameData.myWaits.count == 0 && gameData.yourWaits.count != 0 {
+                    } else if gameData.myDrawWaits.count == 0 && gameData.yourWaits.count != 0 {
                         CustomText(content: "-1500", size: 24, tracking: 0)
                             .foregroundColor(Colors.init().red)
                             .position(x: width*0.85, y: height*0.25)
@@ -90,11 +90,11 @@ struct ExhaustiveDrawView: View {
                         })
                         .position(x: width*0.6, y: height*0.65)
                     }
-                    if gameData.yourWaits.count != 0 && gameData.myWaits.count == 0 {
+                    if gameData.yourWaits.count != 0 && gameData.myDrawWaits.count == 0 {
                         CustomText(content: "+1500", size: 24, tracking: 0)
                             .foregroundColor(Colors.init().green)
                             .position(x: width*0.85, y: height*0.65)
-                    } else if gameData.yourWaits.count == 0 && gameData.myWaits.count != 0 {
+                    } else if gameData.yourWaits.count == 0 && gameData.myDrawWaits.count != 0 {
                         CustomText(content: "-1500", size: 24, tracking: 0)
                             .foregroundColor(Colors.init().red)
                             .position(x: width*0.85, y: height*0.65)
