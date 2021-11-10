@@ -20,7 +20,6 @@ struct GameView: View {
     @State private var canKakan: Bool = false
     @State private var nextKakan: Bool = false
     @State private var nextAnkan: Bool = false
-    @State private var canAnkan: Bool = false
     @State private var canRiichi: Bool = false
     @State private var nextRiichi: Bool = false
     @State private var isRiichi: Bool = false
@@ -90,6 +89,7 @@ struct GameView: View {
                     gameData.yourDiscards = []
                     gameData.myDrawWaits = []
                     gameData.myRonWaits = []
+                    gameData.canAnkanTiles = []
                     gameData.stockCount = Int(dict["stockCount"]!)!
                     gameData.myRiichiTurn = -1
                     gameData.yourRiichiTurn = -1
@@ -119,7 +119,7 @@ struct GameView: View {
                     waitsCandidate = gameData.decodeWaitsCandidate(str: dict["waitsCandidate"]!)
                     if waitExists() { canRiichi = true }
                     if canKakanExists() { canKakan = true }
-                    if canAnkanExists() { canAnkan = true }
+                    gameData.canAnkanTiles = gameData.decode(str: dict["canAnkanTiles"]!)
                 }
             }
         }
@@ -193,7 +193,6 @@ struct GameView: View {
                 canDaiminkan = false
                 canKakan = false
                 nextKakan = false
-                canAnkan = false
                 nextAnkan = false
                 canRiichi = false
                 nextRiichi = false
@@ -279,20 +278,12 @@ struct GameView: View {
         return exists
     }
     
-    func canAnkanExists() -> Bool {
+    func canAnkanFor(tile: Tile) -> Bool {
         var exists = false
-        for i in 0..<gameData.myTiles.count {
-            if canAnkanFor(tile: gameData.myTiles[i]) { exists = true }
+        for i in 0..<gameData.canAnkanTiles.count {
+            if (gameData.canAnkanTiles[i].isEqual(tile: tile)) { exists = true }
         }
         return exists
-    }
-    
-    func canAnkanFor(tile: Tile) -> Bool {
-        var count = 0
-        for i in 0..<gameData.myTiles.count {
-            if (gameData.myTiles[i].isEqual(tile: tile)) { count += 1 }
-        }
-        return count == 4
     }
     
     func discardCallback() -> Void {
@@ -303,7 +294,6 @@ struct GameView: View {
         canDaiminkan = false
         canKakan = false
         nextKakan = false
-        canAnkan = false
         nextAnkan = false
         canRiichi = false
         nextRiichi = false
@@ -367,7 +357,7 @@ struct GameView: View {
                         NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
                     }
                     Group {
-                        if (canAnkan && !isRiichi) {
+                        if (gameData.canAnkanTiles.count != 0) {
                             Button(action: { nextAnkan.toggle() }) {
                                 CustomText(content: "暗槓", size: 24, tracking: 0)
                                     .foregroundColor(nextAnkan ? Colors.init().navy : Colors.init().red)
@@ -462,7 +452,6 @@ struct GameView: View {
                                 }
                                 if (nextAnkan) {
                                     nextAnkan.toggle()
-                                    canAnkan.toggle()
                                     gameService.socket.emit(
                                         "Ankan",
                                         gameData.roomID,
@@ -493,9 +482,8 @@ struct GameView: View {
                             .buttonStyle(PlainButtonStyle())
                             .disabled(!isMyTurn ||
                                       (nextRiichi && !waitExistsFor(tile: tile)) ||
-                                      (isRiichi && index != gameData.myTiles.count - 1) ||
                                       (nextKakan && !canKakanFor(tile: tile)) ||
-                                      (nextAnkan && !canAnkanFor(tile: tile))
+                                      (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile))))
                             )
                         }
                     })

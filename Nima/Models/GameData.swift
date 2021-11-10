@@ -19,6 +19,7 @@ final class GameData: ObservableObject {
     @Published var myDiscards: [Tile] = []
     @Published var myDrawWaits: [Tile] = []
     @Published var myRonWaits: [Tile] = []
+    @Published var canAnkanTiles: [Tile] = []
     @Published var myRiichiTurn: Int = -1
     
     @Published var yourTiles: [Tile] = []
@@ -63,6 +64,7 @@ final class GameData: ObservableObject {
         myDiscards = []
         myDrawWaits = []
         myRonWaits = []
+        canAnkanTiles = []
         myRiichiTurn = -1
     
         yourTiles = []
