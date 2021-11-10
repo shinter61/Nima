@@ -102,10 +102,13 @@ struct GameView: View {
                     gameData.roundWinnerID = ""
                     gameData.roundWinType = ""
                     
-                    if (gameData.isMyTurn()) { isMyTurn = true }
+                    if (gameData.isParent) {
+                        socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+                    }
                 } else {
                     gameData.yourScore = Int(dict["score"]!)!
                 }
+                
             }
         }
         socket.on("Draw") { (data, ack) in

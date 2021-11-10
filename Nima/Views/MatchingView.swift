@@ -19,14 +19,14 @@ struct MatchingView: View {
         }
         socket.on("InformPlayersNames") { (data, ack) in
             if let dict = data[0] as? [String: String] {
+                gameData.roomID = dict["roomID"]!
                 if gameData.playerID == dict["player1"] {
                     gameData.opponentID = dict["player2"]!
+                    gameService.socket.emit("StartGame", gameData.roomID) // StartGameは2台につき1台からのみ発行
                 }
                 if gameData.playerID == dict["player2"] {
                     gameData.opponentID = dict["player1"]!
                 }
-                gameData.roomID = dict["roomID"]!
-                gameService.socket.emit("StartGame", gameData.roomID)
                 matchingFinished = true
             }
         }
