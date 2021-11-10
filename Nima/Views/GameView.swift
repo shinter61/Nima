@@ -59,7 +59,7 @@ struct GameView: View {
                     if !(canPon && !isRiichi) && !(canRon && !isFuriten) && gameData.stockCount > 0 {
                         socket.emit("Draw", gameData.roomID, gameData.playerID, false)
                     }
-                    if gameData.stockCount <= 0 {
+                    if gameData.stockCount <= 0 && !(canRon && !isFuriten) {
                         socket.emit("ExhaustiveDraw", gameData.roomID)
                     }
                 }
@@ -247,7 +247,6 @@ struct GameView: View {
                     gameData.myScore = Int(dict["loserScore"]!)!
                 }
                 gameData.isDisconnected = (dict["isDisconnected"] == "true")
-                showingEndGame = true
             }
         }
     }
@@ -422,10 +421,14 @@ struct GameView: View {
                         }
                         if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
                             Button(action: {
-                                gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
-                                canRon = false
-                                canPon = false
-                                isWin = false
+                                if gameData.stockCount > 0 {
+                                    gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+                                    canRon = false
+                                    canPon = false
+                                    isWin = false
+                                } else {
+                                    gameService.socket.emit("ExhaustiveDraw", gameData.roomID)
+                                }
                             }) {
                                 CustomText(content: "スキップ", size: 24, tracking: 0)
                                     .foregroundColor(.gray)
