@@ -489,7 +489,8 @@ struct GameView: View {
                             .disabled(!isMyTurn ||
                                       (nextRiichi && !waitExistsFor(tile: tile)) ||
                                       (nextKakan && !canKakanFor(tile: tile)) ||
-                                      (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile))))
+                                      (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
+                                      (!isRiichi && nextAnkan && !canAnkanFor(tile: tile))
                             )
                         }
                     })
