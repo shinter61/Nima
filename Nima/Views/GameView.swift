@@ -247,6 +247,7 @@ struct GameView: View {
                     gameData.myScore = Int(dict["loserScore"]!)!
                 }
                 gameData.isDisconnected = (dict["isDisconnected"] == "true")
+                if gameData.isDisconnected { showingEndGame = true } // 接続切れのみゲーム画面から終局に移行する
             }
         }
     }
