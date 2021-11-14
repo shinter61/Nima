@@ -19,16 +19,30 @@ struct AnkanView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 60, alignment: .center)
                         .padding(-2)
-                    Image(tile.name())
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 60, alignment: .center)
-                        .padding(-2)
-                    Image(tile.name())
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 60, alignment: .center)
-                        .padding(-2)
+                    ZStack {
+                        Image(tile.name())
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 60, alignment: .center)
+                            .padding(-2)
+                        if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.yellow.opacity(0.2))
+                                .frame(width: 30, height: 45, alignment: .center)
+                        }
+                    }
+                    ZStack {
+                        Image(tile.name())
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 60, alignment: .center)
+                            .padding(-2)
+                        if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.yellow.opacity(0.2))
+                                .frame(width: 30, height: 45, alignment: .center)
+                        }
+                    }
                     Image("back")
                         .resizable()
                         .scaledToFit()
@@ -45,16 +59,30 @@ struct AnkanView: View {
                         .scaledToFit()
                         .frame(width: 30, height: 60, alignment: .center)
                         .padding(-2)
-                    Image(tile.name())
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 60, alignment: .center)
-                        .padding(-2)
-                    Image(tile.name())
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 60, alignment: .center)
-                        .padding(-2)
+                    ZStack {
+                        Image(tile.name())
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 60, alignment: .center)
+                            .padding(-2)
+                        if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.yellow.opacity(0.2))
+                                .frame(width: 22, height: 34, alignment: .center)
+                        }
+                    }
+                    ZStack {
+                        Image(tile.name())
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 60, alignment: .center)
+                            .padding(-2)
+                        if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.yellow.opacity(0.2))
+                                .frame(width: 22, height: 34, alignment: .center)
+                        }
+                    }
                     Image("back")
                         .resizable()
                         .scaledToFit()

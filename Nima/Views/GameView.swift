@@ -325,7 +325,7 @@ struct GameView: View {
                                         .frame(width: 30, height: 60, alignment: .center)
                                 }
                             })
-                            .frame(width: 30*13, height: 70, alignment: .center)
+                            .frame(width: CGFloat(30*gameData.yourTileCount()), height: 70, alignment: .center)
                         })
                         .position(x: width/2, y: height*0.06)
                         
@@ -481,10 +481,17 @@ struct GameView: View {
                                 )
                                 discardCallback()
                             }) {
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 40, height: 60, alignment: .center)
+                                ZStack {
+                                    Image(tile.name())
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 40, height: 60, alignment: .center)
+                                    if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
+                                        RoundedRectangle(cornerRadius: 2)
+                                            .fill(Color.yellow.opacity(0.2))
+                                            .frame(width: 30, height: 45, alignment: .center)
+                                    }
+                                }
                             }
                             .buttonStyle(PlainButtonStyle())
                             .disabled(!isMyTurn ||
