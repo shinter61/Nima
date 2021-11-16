@@ -83,10 +83,12 @@ struct GameView: View {
                     gameData.myAnkans = []
                     gameData.myMinkans = []
                     gameData.myDiscards = []
+                    gameData.yourTiles = []
                     gameData.yourMinkos = []
                     gameData.yourAnkans = []
                     gameData.yourMinkans = []
                     gameData.yourDiscards = []
+                    gameData.yourWaits = []
                     gameData.myDrawWaits = []
                     gameData.myRonWaits = []
                     gameData.canAnkanTiles = []
@@ -226,6 +228,10 @@ struct GameView: View {
                 gameData.isGameEnd = (dict["isGameEnd"]! == "true")
                 canPon = false
                 canRon = false
+                canDaiminkan = false
+                canKakan = false
+                nextKakan = false
+                nextAnkan = false
                 canRiichi = false
                 nextRiichi = false
                 isRiichi = false

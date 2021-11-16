@@ -19,7 +19,9 @@ struct ExhaustiveDrawView: View {
             gameService.socket.emit("EndGame", gameData.roomID)
             showingEndGame = true
         } else {
-            gameService.socket.emit("StartGame", gameData.roomID)
+            if gameData.isParent {
+                gameService.socket.emit("StartGame", gameData.roomID)
+            }
             self.presentationMode.wrappedValue.dismiss()
         }
     }
@@ -58,20 +60,7 @@ struct ExhaustiveDrawView: View {
                             .foregroundColor(Colors.init().red)
                             .position(x: width*0.85, y: height*0.25)
                     }
-                    HStack(alignment: .center, spacing: 0, content: {
-                        HStack(alignment: .center, spacing: -6, content: {
-                            ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 40, height: 60, alignment: .center)
-                            }
-                        })
-                        .padding(.trailing, 6)
-                        MinkoView(playerID: gameData.playerID)
-                        AnkanView(playerID: gameData.playerID)
-                        MinkanView(playerID: gameData.playerID)
-                    })
+                    TilesView(winnerID: gameData.playerID)
                     .position(x: width*0.5, y: height*0.45)
                 }
                 Group {
@@ -99,20 +88,7 @@ struct ExhaustiveDrawView: View {
                             .foregroundColor(Colors.init().red)
                             .position(x: width*0.85, y: height*0.65)
                     }
-                    HStack(alignment: .center, spacing: 0, content: {
-                        HStack(alignment: .center, spacing: -6, content: {
-                            ForEach(Array(gameData.yourTiles.enumerated()), id: \.offset) { index, tile in
-                                Image(tile.name())
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 40, height: 60, alignment: .center)
-                            }
-                        })
-                        .padding(.trailing, 6)
-                        MinkoView(playerID: gameData.opponentID)
-                        AnkanView(playerID: gameData.opponentID)
-                        MinkanView(playerID: gameData.opponentID)
-                    })
+                    TilesView(winnerID: gameData.opponentID)
                     .position(x: width*0.5, y: height*0.85)
                 }
                 Group {
