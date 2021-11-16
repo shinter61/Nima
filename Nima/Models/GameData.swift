@@ -131,6 +131,23 @@ final class GameData: ObservableObject {
         return 13 - (yourMinkos.count*3 + yourAnkans.count*3 + yourMinkans.count*3)
     }
     
+    func tedashiIndex() -> Int {
+        switch yourTileCount() {
+        case 13:
+            return 6
+        case 10:
+            return 5
+        case 7:
+            return 3
+        case 4:
+            return 2
+        case 1:
+            return 0
+        default:
+            return 6
+        }
+    }
+    
     func encode(tiles: [Tile]) -> String {
         var jsonStr = ""
         do {

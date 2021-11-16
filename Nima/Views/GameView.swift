@@ -33,6 +33,11 @@ struct GameView: View {
     @State private var waitsCandidate: [WaitCandidate] = []
     @State private var isFuriten: Bool = false
     
+    @State private var isOpponentDraw: Bool = false
+    @State private var opponentDiscardTimer: Timer!
+    @State private var opponentDiscardCountdown: Int = 500
+    @State private var isTedashi: Bool = false
+    
     init(rootIsActive: Binding<Bool>) {
         self._rootIsActive = rootIsActive
         UITableView.appearance().backgroundColor = .clear
@@ -44,6 +49,11 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 gameData.kyotaku = Int(dict["kyotaku"]!)!
                 if gameData.opponentID == dict["id"] {
+                    isOpponentDraw = false
+                    isTedashi = (dict["isTedashi"] == "true")
+                    
+                    startOpponentTimer()
+                    
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.yourScore = Int(dict["score"]!)!
@@ -125,6 +135,8 @@ struct GameView: View {
                     if waitExists() { canRiichi = true }
                     if canKakanExists() { canKakan = true }
                     gameData.canAnkanTiles = gameData.decode(str: dict["canAnkanTiles"]!)
+                } else if gameData.opponentID == dict["id"] {
+                    isOpponentDraw = true
                 }
             }
         }
@@ -308,6 +320,22 @@ struct GameView: View {
         nextRiichi = false
     }
     
+    func startOpponentTimer() -> Void {
+        let startTime: Date = Date()
+        opponentDiscardTimer?.invalidate()
+        opponentDiscardTimer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
+            let current = Date()
+            let diff = (Calendar.current.dateComponents([.nanosecond], from: startTime, to: current)).nanosecond! / 1000000
+            if diff >= 500 { self.opponentDiscardTimer?.invalidate() }
+            self.opponentDiscardCountdown = 500 - diff
+        })
+    }
+    
+    func callBackOpponentTimer() -> Void {
+        opponentDiscardCountdown = 500
+        isTedashi = false
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -323,15 +351,28 @@ struct GameView: View {
                                 .rotationEffect(Angle(degrees: 180.0))
                             MinkanView(playerID: gameData.opponentID)
                                 .rotationEffect(Angle(degrees: 180.0))
+                            if isOpponentDraw {
+                                Image("back")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 60, alignment: .center)
+                                    .padding(.leading, 10)
+                            }
                             HStack(alignment: .center, spacing: -4, content: {
-                                ForEach(0..<gameData.yourTileCount(), id: \.self) { _ in
-                                    Image("back")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 30, height: 60, alignment: .center)
+                                ForEach(0..<gameData.yourTileCount(), id: \.self) { index in
+                                    if isTedashi && index == gameData.tedashiIndex() && opponentDiscardCountdown > 0 {
+                                        Rectangle()
+                                            .foregroundColor(Colors.init().lightGray)
+                                            .frame(width: 30, height: 60, alignment: .center)
+                                    } else {
+                                        Image("back")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 30, height: 60, alignment: .center)
+                                    }
                                 }
                             })
-                            .frame(width: CGFloat(30*gameData.yourTileCount()), height: 70, alignment: .center)
+                            .frame(width: CGFloat(28*gameData.yourTileCount()), height: 70, alignment: .center)
                         })
                         .position(x: width/2, y: height*0.06)
                         
@@ -526,6 +567,9 @@ struct GameView: View {
                         x: width/2,
                         y: gameData.roundWinnerID == gameData.playerID ?  height*0.7 : height*0.3
                     )
+                }
+                if self.opponentDiscardCountdown <= 0 {
+                    ActionEmptyView(action: callBackOpponentTimer)
                 }
             }
             
