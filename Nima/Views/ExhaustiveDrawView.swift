@@ -106,6 +106,7 @@ struct ExhaustiveDrawView: View {
             }
         }
         .onAppear { gameData.startTimer() }
+        .onDisappear { gameData.countdown = 3 }
     }
 }
 
