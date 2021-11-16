@@ -432,6 +432,7 @@ struct GameView: View {
                                     gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
                                     canRon = false
                                     canPon = false
+                                    canDaiminkan = false
                                     isWin = false
                                 } else {
                                     gameService.socket.emit("ExhaustiveDraw", gameData.roomID)
