@@ -366,7 +366,7 @@ struct GameView: View {
                         NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
                     }
                     Group {
-                        if (gameData.canAnkanTiles.count != 0) {
+                        if (isMyTurn && gameData.canAnkanTiles.count != 0) {
                             Button(action: { nextAnkan.toggle() }) {
                                 CustomText(content: "暗槓", size: 24, tracking: 0)
                                     .foregroundColor(nextAnkan ? Colors.init().navy : Colors.init().red)
