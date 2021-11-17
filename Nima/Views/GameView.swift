@@ -38,6 +38,9 @@ struct GameView: View {
     @State private var opponentDiscardCountdown: Int = 500
     @State private var isTedashi: Bool = false
     
+    @State private var myActionTimer: Timer!
+    @State private var myActionCountdown: Int = 5
+    
     init(rootIsActive: Binding<Bool>) {
         self._rootIsActive = rootIsActive
         UITableView.appearance().backgroundColor = .clear
@@ -68,9 +71,10 @@ struct GameView: View {
                     }
                     if !(canPon && !isRiichi) && !(canRon && !isFuriten) && gameData.stockCount > 0 {
                         socket.emit("Draw", gameData.roomID, gameData.playerID, false)
-                    }
-                    if gameData.stockCount <= 0 && !(canRon && !isFuriten) {
+                    } else if gameData.stockCount <= 0 && !(canRon && !isFuriten) {
                         socket.emit("ExhaustiveDraw", gameData.roomID)
+                    } else {
+                        startMyActionTimer()
                     }
                 }
                 if gameData.playerID == dict["id"] {
@@ -320,6 +324,18 @@ struct GameView: View {
         nextRiichi = false
     }
     
+    func skipAction() -> Void {
+        if gameData.stockCount > 0 {
+            gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+            canRon = false
+            canPon = false
+            canDaiminkan = false
+            isWin = false
+        } else {
+            gameService.socket.emit("ExhaustiveDraw", gameData.roomID)
+        }
+    }
+    
     func startOpponentTimer() -> Void {
         let startTime: Date = Date()
         opponentDiscardTimer?.invalidate()
@@ -334,6 +350,22 @@ struct GameView: View {
     func callBackOpponentTimer() -> Void {
         opponentDiscardCountdown = 500
         isTedashi = false
+    }
+    
+    func startMyActionTimer() -> Void {
+        let startTime: Date = Date()
+        myActionTimer?.invalidate()
+        myActionTimer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
+            let current = Date()
+            let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
+            if diff >= 5 { self.myActionTimer?.invalidate() }
+            self.myActionCountdown = 5 - diff
+        })
+    }
+    
+    func callBackMyActionTimer() -> Void {
+        myActionCountdown = 5
+        skipAction()
     }
     
     var body: some View {
@@ -468,22 +500,18 @@ struct GameView: View {
                             .position(x: width*0.75, y: height*0.8)
                         }
                         if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
-                            Button(action: {
-                                if gameData.stockCount > 0 {
-                                    gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
-                                    canRon = false
-                                    canPon = false
-                                    canDaiminkan = false
-                                    isWin = false
-                                } else {
-                                    gameService.socket.emit("ExhaustiveDraw", gameData.roomID)
-                                }
-                            }) {
+                            Button(action: { skipAction() }) {
                                 CustomText(content: "スキップ", size: 24, tracking: 0)
                                     .foregroundColor(.gray)
                             }
                             .position(x: width*0.85, y: height*0.8)
                         }
+                    }
+                    
+                    if !isMyTurn && myActionCountdown > 0 {
+                        CustomText(content: "\(myActionCountdown)", size: 28, tracking: 0)
+                            .foregroundColor(Colors.init().navy)
+                            .position(x: width*0.85, y: height*0.65)
                     }
                 }
                 .rotation3DEffect(Angle(degrees: 10.0),
@@ -570,6 +598,9 @@ struct GameView: View {
                 }
                 if self.opponentDiscardCountdown <= 0 {
                     ActionEmptyView(action: callBackOpponentTimer)
+                }
+                if self.myActionCountdown <= 0 {
+                    ActionEmptyView(action: callBackMyActionTimer)
                 }
             }
             
