@@ -86,7 +86,7 @@ struct GameView: View {
                     gameData.myRonWaits = gameData.decode(str: dict["ronWaits"]!)
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
-                    isFuriten = gameData.isFuriten()
+                    if !isFuriten { isFuriten = gameData.isFuriten() }
                 }
             }
         }
@@ -544,6 +544,7 @@ struct GameView: View {
                         }
                         if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
                             Button(action: {
+                                if canRon { isFuriten = true }
                                 resetMyActionTimer()
                                 skipAction()
                             }) {
