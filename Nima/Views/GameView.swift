@@ -40,6 +40,8 @@ struct GameView: View {
     
     @State private var myActionTimer: Timer!
     @State private var myActionCountdown: Int = 5
+    @State private var myDiscardTimer: Timer!
+    @State private var myDiscardCountdown: Int = 20
     
     init(rootIsActive: Binding<Bool>) {
         self._rootIsActive = rootIsActive
@@ -139,6 +141,8 @@ struct GameView: View {
                     if waitExists() { canRiichi = true }
                     if canKakanExists() { canKakan = true }
                     gameData.canAnkanTiles = gameData.decode(str: dict["canAnkanTiles"]!)
+                    
+                    startMyDiscardTimer()
                 } else if gameData.opponentID == dict["id"] {
                     isOpponentDraw = true
                 }
@@ -364,8 +368,43 @@ struct GameView: View {
     }
     
     func callBackMyActionTimer() -> Void {
-        myActionCountdown = 5
+        resetMyActionTimer()
         skipAction()
+    }
+    
+    func resetMyActionTimer() -> Void {
+        myActionTimer?.invalidate()
+        myActionCountdown = 5
+    }
+    
+    func resetMyDiscardTimer() -> Void {
+        myDiscardTimer?.invalidate()
+        myDiscardCountdown = 20
+    }
+    
+    func startMyDiscardTimer() -> Void {
+        let startTime: Date = Date()
+        myDiscardTimer?.invalidate()
+        myDiscardTimer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
+            let current = Date()
+            let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
+            if diff >= 20 { self.myDiscardTimer?.invalidate() }
+            self.myDiscardCountdown = 20 - diff
+        })
+    }
+    
+    func callBackMyDiscardTimer() -> Void {
+        resetMyDiscardTimer()
+        
+        let lastTile: Tile = gameData.myTiles[gameData.myTiles.count - 1]
+        gameService.socket.emit(
+            "Discard",
+            gameData.roomID,
+            gameData.playerID,
+            gameData.encode(tiles: [lastTile]),
+            isRiichi
+        )
+        discardCallback()
     }
     
     var body: some View {
@@ -448,6 +487,7 @@ struct GameView: View {
                         }
                         if (canDaiminkan && !isRiichi) {
                             Button(action: {
+                                resetMyActionTimer()
                                 gameService.socket.emit("Daiminkan", gameData.roomID, gameData.playerID)
                                 canDaiminkan = false
                                 canPon = false
@@ -466,6 +506,7 @@ struct GameView: View {
                         }
                         if (canPon && !isRiichi) {
                             Button(action: {
+                                resetMyActionTimer()
                                 gameService.socket.emit("Pon", gameData.roomID, gameData.playerID)
                                 canPon = false
                             }) {
@@ -476,6 +517,7 @@ struct GameView: View {
                         }
                         if (!isFuriten && canRon) {
                             Button(action: {
+                                resetMyActionTimer()
                                 gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "ron")
                             }) {
                                 CustomText(content: "ロン", size: 24, tracking: 0)
@@ -492,6 +534,7 @@ struct GameView: View {
                         }
                         if (isWin) {
                             Button(action: {
+                                resetMyDiscardTimer()
                                 gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "draw")
                             }) {
                                 CustomText(content: "ツモ", size: 24, tracking: 0)
@@ -500,16 +543,22 @@ struct GameView: View {
                             .position(x: width*0.75, y: height*0.8)
                         }
                         if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
-                            Button(action: { skipAction() }) {
+                            Button(action: {
+                                resetMyActionTimer()
+                                skipAction()
+                            }) {
                                 CustomText(content: "スキップ", size: 24, tracking: 0)
                                     .foregroundColor(.gray)
                             }
                             .position(x: width*0.85, y: height*0.8)
                         }
                     }
-                    
-                    if !isMyTurn && myActionCountdown > 0 {
+                    if ((canPon && !isRiichi) || (canRon && !isFuriten)) && !isMyTurn && myActionCountdown > 0 {
                         CustomText(content: "\(myActionCountdown)", size: 28, tracking: 0)
+                            .foregroundColor(Colors.init().navy)
+                            .position(x: width*0.85, y: height*0.65)
+                    } else if isMyTurn && myDiscardCountdown > 0 {
+                        CustomText(content: "\(myDiscardCountdown)", size: 28, tracking: 0)
                             .foregroundColor(Colors.init().navy)
                             .position(x: width*0.85, y: height*0.65)
                     }
@@ -548,6 +597,7 @@ struct GameView: View {
                                     nextRiichi.toggle()
                                     isRiichi = true
                                 }
+                                resetMyDiscardTimer()
                                 gameService.socket.emit(
                                     "Discard",
                                     gameData.roomID,
@@ -601,6 +651,9 @@ struct GameView: View {
                 }
                 if self.myActionCountdown <= 0 {
                     ActionEmptyView(action: callBackMyActionTimer)
+                }
+                if self.myDiscardCountdown <= 0 {
+                    ActionEmptyView(action: callBackMyDiscardTimer)
                 }
             }
             
