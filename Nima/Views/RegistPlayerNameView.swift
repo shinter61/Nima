@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KeychainAccess
 
 extension UIApplication {
     func closeKeyboard() {
@@ -19,6 +20,35 @@ struct RegistPlayerNameView: View {
     @State private var errorMessage: String = ""
     @State private var keyboardOpened: Bool = false
     @State private var showingMainMenu: Bool = false
+    
+    func randomString(of length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        var s = ""
+        for _ in 0 ..< length {
+            s.append(letters.randomElement()!)
+        }
+        return s
+    }
+    
+    @available(iOS 15.0.0, *)
+    func registUser() async {
+        if name.count < 2 || name.count > 8 {
+            errorMessage = "2~8文字以内で入力してください"
+            return
+        }
+        
+        let newPassword = randomString(of: 16)
+        do {
+            let user: User = try await UserService().signUp(name: name, password: newPassword)
+            UserDefaults.standard.set(user.id, forKey: "userID")
+            let keychain = Keychain(service: "nima.password")
+            keychain[String(user.id)] = newPassword
+            showingMainMenu = true
+        } catch(let error) {
+            debugPrint(error)
+        }
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -41,15 +71,11 @@ struct RegistPlayerNameView: View {
                     .position(x: width/2, y: height*0.7)
                 
                 if !keyboardOpened {
-                    Button(action: {
-                        if name.count < 2 || name.count > 8 {
-                            errorMessage = "2~8文字以内で入力してください"
-                            return
+                    Button {
+                        if #available(iOS 15.0, *) {
+                            Task { await registUser() }
                         }
-                        UserDefaults.standard.set(name, forKey: "playerID")
-                        gameData.playerID = name
-                        showingMainMenu = true
-                    }) {
+                    } label: {
                         CustomText(content: "登録", size: 24, tracking: 2)
                     }
                     .position(x: width/2, y: height*0.85)

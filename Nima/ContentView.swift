@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var userData: UserData
     var body: some View {
         NavigationView {
-            if gameData.playerID != "" {
+            if userData.userID != 0 {
                 MainMenu()
+                    .navigationBarHidden(true)
             } else {
                 RegistPlayerNameView()
+                    .navigationBarHidden(true)
             }
         }
-        .navigationBarHidden(true)
     }
 }
 
@@ -25,7 +26,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
             ContentView()
-                .environmentObject(GameData())
+                .environmentObject(UserData())
                 .previewInterfaceOrientation(.landscapeLeft)
         }
     }

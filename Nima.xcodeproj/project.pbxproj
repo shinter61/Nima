@@ -35,6 +35,8 @@
 		E583A49826C26F0300134067 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = E583A49726C26F0300134067 /* SocketIO */; };
 		E583A49F26C298E900134067 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583A49E26C298E900134067 /* GameService.swift */; };
 		E5856218271A3FA3000F6F9E /* FuritenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5856217271A3FA3000F6F9E /* FuritenView.swift */; };
+		E58B88A2275C55C800424B96 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58B88A1275C55C800424B96 /* UserService.swift */; };
+		E58B88A4275D727600424B96 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58B88A3275D727600424B96 /* UserData.swift */; };
 		E5A8422726DDB66E003230F6 /* MinkanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8422626DDB66E003230F6 /* MinkanView.swift */; };
 		E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8422A26DE4033003230F6 /* AnkanView.swift */; };
 		E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8C61C26D495CB00B59318 /* EndGameView.swift */; };
@@ -42,6 +44,9 @@
 		E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62326C901AE00435171 /* ScoreView.swift */; };
 		E5AFD62826CE4C0C00435171 /* MinkoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62726CE4C0C00435171 /* MinkoView.swift */; };
 		E5BD2C152718349E00EDE08F /* ExhaustiveDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */; };
+		E5EFA565275AE49600D23066 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E5EFA564275AE49600D23066 /* Alamofire */; };
+		E5EFA56A275B175700D23066 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EFA569275B175700D23066 /* User.swift */; };
+		E5EFA56D275B1E2E00D23066 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E5EFA56C275B1E2E00D23066 /* KeychainAccess */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +100,8 @@
 		E560096426D2D75D00520816 /* ActionEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEmptyView.swift; sourceTree = "<group>"; };
 		E583A49E26C298E900134067 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
 		E5856217271A3FA3000F6F9E /* FuritenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuritenView.swift; sourceTree = "<group>"; };
+		E58B88A1275C55C800424B96 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		E58B88A3275D727600424B96 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		E5A8422626DDB66E003230F6 /* MinkanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkanView.swift; sourceTree = "<group>"; };
 		E5A8422A26DE4033003230F6 /* AnkanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkanView.swift; sourceTree = "<group>"; };
 		E5A8C61C26D495CB00B59318 /* EndGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameView.swift; sourceTree = "<group>"; };
@@ -102,6 +109,7 @@
 		E5AFD62326C901AE00435171 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		E5AFD62726CE4C0C00435171 /* MinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkoView.swift; sourceTree = "<group>"; };
 		E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhaustiveDrawView.swift; sourceTree = "<group>"; };
+		E5EFA569275B175700D23066 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +118,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E583A49826C26F0300134067 /* SocketIO in Frameworks */,
+				E5EFA565275AE49600D23066 /* Alamofire in Frameworks */,
+				E5EFA56D275B1E2E00D23066 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,8 +182,9 @@
 			isa = PBXGroup;
 			children = (
 				E53BE38726BFDA3E000A45D8 /* GameData.swift */,
+				E58B88A3275D727600424B96 /* UserData.swift */,
 				E53BE38926BFDAE2000A45D8 /* Tile.swift */,
-				E583A49E26C298E900134067 /* GameService.swift */,
+				E5EFA569275B175700D23066 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,6 +223,7 @@
 			children = (
 				E53BE35826BFCDC1000A45D8 /* NimaApp.swift */,
 				E53BE35A26BFCDC1000A45D8 /* ContentView.swift */,
+				E5EFA568275B0D8D00D23066 /* Services */,
 				E50A8F4E27155E5C000F253A /* Views */,
 				E50A8F4F27155E9B000F253A /* Models */,
 				E50A8F4D27155E42000F253A /* Fonts */,
@@ -248,6 +260,15 @@
 			path = NimaUITests;
 			sourceTree = "<group>";
 		};
+		E5EFA568275B0D8D00D23066 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E583A49E26C298E900134067 /* GameService.swift */,
+				E58B88A1275C55C800424B96 /* UserService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -266,6 +287,8 @@
 			name = Nima;
 			packageProductDependencies = (
 				E583A49726C26F0300134067 /* SocketIO */,
+				E5EFA564275AE49600D23066 /* Alamofire */,
+				E5EFA56C275B1E2E00D23066 /* KeychainAccess */,
 			);
 			productName = Nima;
 			productReference = E53BE35526BFCDC1000A45D8 /* Nima.app */;
@@ -340,6 +363,8 @@
 			mainGroup = E53BE34C26BFCDC1000A45D8;
 			packageReferences = (
 				E583A49626C26F0300134067 /* XCRemoteSwiftPackageReference "socket" */,
+				E5EFA563275AE49600D23066 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				E5EFA56B275B1E2E00D23066 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = E53BE35626BFCDC1000A45D8 /* Products */;
 			projectDirPath = "";
@@ -393,6 +418,7 @@
 				E5856218271A3FA3000F6F9E /* FuritenView.swift in Sources */,
 				E50A8F5627155FC5000F253A /* Colors.swift in Sources */,
 				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
+				E5EFA56A275B175700D23066 /* User.swift in Sources */,
 				E50A8F5C271751FF000F253A /* WindView.swift in Sources */,
 				E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */,
 				E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */,
@@ -403,6 +429,7 @@
 				E583A49F26C298E900134067 /* GameService.swift in Sources */,
 				E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */,
 				E5A8422726DDB66E003230F6 /* MinkanView.swift in Sources */,
+				E58B88A4275D727600424B96 /* UserData.swift in Sources */,
 				E51E714F27000F2800292CBB /* CustomText.swift in Sources */,
 				E50A8F5827158345000F253A /* MatchingView.swift in Sources */,
 				E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */,
@@ -410,6 +437,7 @@
 				E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */,
 				E50F15D7272D44B2002D1371 /* TilesView.swift in Sources */,
 				E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */,
+				E58B88A2275C55C800424B96 /* UserService.swift in Sources */,
 				E50A8F5E27175EFD000F253A /* NameView.swift in Sources */,
 				E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */,
 				E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */,
@@ -742,6 +770,22 @@
 				kind = branch;
 			};
 		};
+		E5EFA563275AE49600D23066 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		E5EFA56B275B1E2E00D23066 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -749,6 +793,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E583A49626C26F0300134067 /* XCRemoteSwiftPackageReference "socket" */;
 			productName = SocketIO;
+		};
+		E5EFA564275AE49600D23066 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5EFA563275AE49600D23066 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		E5EFA56C275B1E2E00D23066 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5EFA56B275B1E2E00D23066 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

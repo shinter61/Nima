@@ -10,10 +10,12 @@ import SocketIO
 
 struct MatchingView: View {
     @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
     @State private var matchingFinished: Bool = false
     func addHandler(socket: SocketIOClient!) -> Void {
+        gameData.playerID = userData.playerID
         socket.on(clientEvent: .connect) { (data, ack) in
             socket.emit("StartMatching", gameData.playerID)
         }
