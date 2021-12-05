@@ -13,6 +13,11 @@ struct SignUp: Encodable {
     let password: String
 }
 
+struct SignIn: Encodable {
+    let id: Int
+    let password: String
+}
+
 final class UserService {
     @available(iOS 15.0.0, *)
     func signUp(name: String, password: String) async throws -> User {
@@ -21,6 +26,27 @@ final class UserService {
             AF.request("http://localhost:3000/users/sign_up",
                        method: .post,
                        parameters: signUp,
+                       encoder: JSONParameterEncoder.default)
+                .responseDecodable(of: User.self) { response in
+                    switch response.result {
+                    case .success(let user):
+                        continuation.resume(returning: user)
+                        return
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                }
+        }
+    }
+    
+    @available(iOS 15.0.0, *)
+    func signIn(id: Int, password: String) async throws -> User {
+        try await withUnsafeThrowingContinuation { continuation in
+            let signIn = SignIn(id: id, password: password)
+            AF.request("http://localhost:3000/users/sign_in",
+                       method: .post,
+                       parameters: signIn,
                        encoder: JSONParameterEncoder.default)
                 .responseDecodable(of: User.self) { response in
                     switch response.result {
