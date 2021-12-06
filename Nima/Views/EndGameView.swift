@@ -8,49 +8,66 @@
 import SwiftUI
 
 struct EndGameView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
     
+    
+    @available(iOS 15.0.0, *)
+    func updateRate() async {
+        do {
+            var winnerID = -1, loserID = -1
+            let ratingResponse: RatingResponse = try await UserService().updateRate(winnerID: winnerID, loserID: loserID)
+        } catch(let error) {
+            debugPrint(error)
+        }
+    }
+    
     var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            let height = geometry.size.height
-            CustomText(content: "終局", size: 36, tracking: 0)
-                .position(x: width/2, y: height*0.1)
-            HStack {
-                CustomText(content: "勝者", size: 24, tracking: 0)
-                    .padding(.trailing, 20)
-                CustomText(content: gameData.winnerID == gameData.playerID ? gameData.playerID : gameData.opponentID, size: 24, tracking: 0)
-                    .padding(.trailing, 20)
-                CustomText(content: String(gameData.winnerID == gameData.playerID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
-                    .padding(.trailing, 20)
+        if #available(iOS 15.0, *) {
+            GeometryReader { geometry in
+                let width = geometry.size.width
+                let height = geometry.size.height
+                CustomText(content: "終局", size: 36, tracking: 0)
+                    .position(x: width/2, y: height*0.1)
+                HStack {
+                    CustomText(content: "勝者", size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                    CustomText(content: gameData.winnerID == userData.userID ? userData.userName : gameData.opponentName, size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                    CustomText(content: String(gameData.winnerID == userData.userID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                }
+                .position(x: width/2, y: height*0.4)
+                HStack {
+                    CustomText(content: "敗者", size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                    CustomText(content: gameData.winnerID != userData.userID ? userData.userName : gameData.opponentName, size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                    CustomText(content: String(gameData.winnerID != userData.userID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                }
+                .position(x: width/2, y: height*0.5)
+                if gameData.isDisconnected {
+                    CustomText(content: "接続切れ", size: 24, tracking: 0)
+                        .position(x: width*0.8, y: height*0.5)
+                }
+                
+                Button(action: {
+                    gameService.socket.disconnect()
+                    gameService.socket.removeAllHandlers()
+                    gameData.allReset()
+                    rootIsActive = false
+                }) {
+                    CustomText(content: "戻る", size: 20, tracking: 0)
+                        .foregroundColor(Colors.init().navy)
+                }
+                .position(x: width/2, y: height*0.8)
             }
-            .position(x: width/2, y: height*0.4)
-            HStack {
-                CustomText(content: "敗者", size: 24, tracking: 0)
-                    .padding(.trailing, 20)
-                CustomText(content: gameData.winnerID != gameData.playerID ? gameData.playerID : gameData.opponentID, size: 24, tracking: 0)
-                    .padding(.trailing, 20)
-                CustomText(content: String(gameData.winnerID != gameData.playerID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
-                    .padding(.trailing, 20)
+            .task {
+                
             }
-            .position(x: width/2, y: height*0.5)
-            if gameData.isDisconnected {
-                CustomText(content: "接続切れ", size: 24, tracking: 0)
-                    .position(x: width*0.8, y: height*0.5)
-            }
-            
-            Button(action: {
-                gameService.socket.disconnect()
-                gameService.socket.removeAllHandlers()
-                gameData.allReset()
-                rootIsActive = false
-            }) {
-                CustomText(content: "戻る", size: 20, tracking: 0)
-                    .foregroundColor(Colors.init().navy)
-            }
-            .position(x: width/2, y: height*0.8)
         }
     }
 }
@@ -60,6 +77,7 @@ struct EndGameView_Previews: PreviewProvider {
         if #available(iOS 15.0, *) {
             EndGameView(rootIsActive: .constant(false))
                 .environmentObject(GameData())
+                .environmentObject(UserData())
                 .previewInterfaceOrientation(.landscapeLeft)
         }
     }

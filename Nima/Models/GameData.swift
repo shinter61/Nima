@@ -36,16 +36,16 @@ final class GameData: ObservableObject {
     @Published var myScore: Int = 0
     @Published var yourScore: Int = 0
     
-    @Published var playerID: String = ""
-    @Published var opponentID: String = ""
+    @Published var opponentID: Int = -1
+    @Published var opponentName: String = ""
     
     @Published var round: Int = 0
     @Published var roundWind: String = ""
     @Published var honba: Int = 0
     @Published var kyotaku: Int = 0
     @Published var isParent: Bool = false
-    @Published var winnerID: String = ""
-    @Published var roundWinnerID: String = ""
+    @Published var winnerID: Int = -1
+    @Published var roundWinnerID: Int = -1
     @Published var roundWinType: String = ""
     
     @Published var timer: Timer!
@@ -81,14 +81,15 @@ final class GameData: ObservableObject {
         myScore = 0
         yourScore = 0
     
-        opponentID = ""
+        opponentID = -1
+        opponentName = ""
     
         round = 0
         roundWind = ""
         honba = 0
         kyotaku = 0
         isParent = false
-        winnerID = ""
+        winnerID = -1
         
         isDisconnected = false
         isGameEnd = false

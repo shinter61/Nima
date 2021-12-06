@@ -18,6 +18,18 @@ struct SignIn: Encodable {
     let password: String
 }
 
+struct UpdateRating: Encodable {
+    let winnerID: Int
+    let loserID: Int
+}
+
+struct RatingResponse: Decodable {
+    let winnerID: Int
+    let loserID: Int
+    let winnerRating: Int
+    let loserRating: Int
+}
+
 final class UserService {
     @available(iOS 15.0.0, *)
     func signUp(name: String, password: String) async throws -> User {
@@ -52,6 +64,27 @@ final class UserService {
                     switch response.result {
                     case .success(let user):
                         continuation.resume(returning: user)
+                        return
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                }
+        }
+    }
+    
+    @available(iOS 15.0.0, *)
+    func updateRate(winnerID: Int, loserID: Int) async throws -> RatingResponse {
+        try await withUnsafeThrowingContinuation { continuation in
+            let updateRating = UpdateRating(winnerID: winnerID, loserID: loserID)
+            AF.request("http://localhost:3000/users/rating",
+                       method: .put,
+                       parameters: updateRating,
+                       encoder: JSONParameterEncoder.default)
+                .responseDecodable(of: RatingResponse.self) { response in
+                    switch response.result {
+                    case .success(let res):
+                        continuation.resume(returning: res)
                         return
                     case .failure(let error):
                         continuation.resume(throwing: error)

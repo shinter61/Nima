@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct AnkanView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
-    var playerID: String
+    var playerID: Int
     var body: some View {
-        if gameData.playerID == playerID {
+        if userData.userID == playerID {
             HStack(alignment: .center, spacing: -2, content: {
                 ForEach(gameData.myAnkans, id: \.self) { tile in
                     Image("back")
@@ -97,7 +98,8 @@ struct AnkanView: View {
 
 struct AnkanView_Previews: PreviewProvider {
     static var previews: some View {
-        AnkanView(playerID: "")
+        AnkanView(playerID: -1)
             .environmentObject(GameData())
+            .environmentObject(UserData())
     }
 }

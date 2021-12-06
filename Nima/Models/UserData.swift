@@ -11,5 +11,5 @@ import SwiftUI
 final class UserData: ObservableObject {
     @Published var userID: Int = UserDefaults.standard.integer(forKey: "userID")
     @Published var rating: Int = -1
-    @Published var playerID: String = ""
+    @Published var userName: String = ""
 }

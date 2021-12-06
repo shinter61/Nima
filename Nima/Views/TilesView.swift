@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct TilesView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
-    var winnerID: String
+    var winnerID: Int
     var body: some View {
         HStack(alignment: .center, spacing: 0, content: {
             HStack(alignment: .center, spacing: -6, content: {
-                ForEach(Array((winnerID == gameData.playerID ? gameData.myTiles : gameData.yourTiles).enumerated()), id: \.offset) { index, tile in
+                ForEach(Array((winnerID == userData.userID ? gameData.myTiles : gameData.yourTiles).enumerated()), id: \.offset) { index, tile in
                     Image(tile.name())
                         .resizable()
                         .scaledToFit()
@@ -23,7 +24,7 @@ struct TilesView: View {
             .padding(.trailing, 6)
             
             HStack(alignment: .center, spacing: -2, content: {
-                ForEach(winnerID == gameData.playerID ? gameData.myMinkos : gameData.yourMinkos, id: \.self) { tile in
+                ForEach(winnerID == userData.userID ? gameData.myMinkos : gameData.yourMinkos, id: \.self) { tile in
                     Image(tile.name())
                         .resizable()
                         .scaledToFit()
@@ -46,7 +47,7 @@ struct TilesView: View {
             })
             
             HStack(alignment: .center, spacing: -2, content: {
-                ForEach(gameData.playerID == winnerID ? gameData.myAnkans : gameData.yourAnkans, id: \.self) { tile in
+                ForEach(userData.userID == winnerID ? gameData.myAnkans : gameData.yourAnkans, id: \.self) { tile in
                     Image("back")
                         .resizable()
                         .scaledToFit()
@@ -72,7 +73,7 @@ struct TilesView: View {
             })
             
             HStack(alignment: .center, spacing: -2, content: {
-                ForEach(gameData.playerID == winnerID ? gameData.myMinkans : gameData.yourMinkans, id: \.self) { tile in
+                ForEach(userData.userID == winnerID ? gameData.myMinkans : gameData.yourMinkans, id: \.self) { tile in
                     Image(tile.name())
                         .resizable()
                         .scaledToFit()
@@ -105,8 +106,9 @@ struct TilesView: View {
 struct TilesView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            TilesView(winnerID: "")
+            TilesView(winnerID: -1)
                 .environmentObject(GameData())
+                .environmentObject(UserData())
                 .previewInterfaceOrientation(.landscapeLeft)
         }
     }

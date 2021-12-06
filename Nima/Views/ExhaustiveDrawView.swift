@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ExhaustiveDrawView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
     @Environment(\.presentationMode) private var presentationMode
@@ -35,7 +36,7 @@ struct ExhaustiveDrawView: View {
                     CustomText(content: "流局", size: 36, tracking: 0)
                         .foregroundColor(Colors.init().navy)
                         .position(x: width*0.1, y: height*0.1)
-                    NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.25)
+                    NameView(name: "\(userData.userName)").position(x: width*0.2, y: height*0.25)
                     if gameData.myDrawWaits.count != 0 {
                         CustomText(content: "待ち牌：", size: 16, tracking: 0)
                             .foregroundColor(Colors.init().navy)
@@ -60,11 +61,11 @@ struct ExhaustiveDrawView: View {
                             .foregroundColor(Colors.init().red)
                             .position(x: width*0.85, y: height*0.25)
                     }
-                    TilesView(winnerID: gameData.playerID)
+                    TilesView(winnerID: userData.userID)
                     .position(x: width*0.5, y: height*0.45)
                 }
                 Group {
-                    NameView(name: "\(gameData.opponentID)").position(x: width*0.2, y: height*0.65)
+                    NameView(name: "\(gameData.opponentName)").position(x: width*0.2, y: height*0.65)
                     if gameData.yourWaits.count != 0 {
                         CustomText(content: "待ち牌：", size: 16, tracking: 0)
                             .foregroundColor(Colors.init().navy)
@@ -115,6 +116,7 @@ struct ExhaustiveDrawView_Previews: PreviewProvider {
         if #available(iOS 15.0, *) {
             ExhaustiveDrawView(rootIsActive: .constant(false))
                 .environmentObject(GameData())
+                .environmentObject(UserData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)
         }

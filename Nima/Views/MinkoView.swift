@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct MinkoView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
-    var playerID: String
+    var playerID: Int
     var body: some View {
-        if gameData.playerID == playerID {
+        if userData.userID == playerID {
             HStack(alignment: .center, spacing: -2, content: {
                 ForEach(gameData.myMinkos, id: \.self) { tile in
                     ZStack {
@@ -108,7 +109,8 @@ struct MinkoView: View {
 
 struct MinkoView_Previews: PreviewProvider {
     static var previews: some View {
-        MinkoView(playerID: "")
+        MinkoView(playerID: -1)
             .environmentObject(GameData())
+            .environmentObject(UserData())
     }
 }

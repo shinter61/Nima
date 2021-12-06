@@ -9,6 +9,7 @@ import SwiftUI
 import SocketIO
 
 struct GameView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
@@ -53,7 +54,7 @@ struct GameView: View {
         socket.on("InformDiscards") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 gameData.kyotaku = Int(dict["kyotaku"]!)!
-                if gameData.opponentID == dict["id"] {
+                if gameData.opponentID == Int(dict["id"]!) {
                     isOpponentDraw = false
                     isTedashi = (dict["isTedashi"] == "true")
                     
@@ -72,14 +73,14 @@ struct GameView: View {
                         canRon = true
                     }
                     if !(canPon && !isRiichi) && !(canRon && !isFuriten) && gameData.stockCount > 0 {
-                        socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+                        socket.emit("Draw", gameData.roomID, userData.userID, false)
                     } else if gameData.stockCount <= 0 && !(canRon && !isFuriten) {
                         socket.emit("ExhaustiveDraw", gameData.roomID)
                     } else {
                         startMyActionTimer()
                     }
                 }
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myDrawWaits = gameData.decode(str: dict["drawWaits"]!)
@@ -92,7 +93,7 @@ struct GameView: View {
         }
         socket.on("DistributeInitTiles") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myScore = Int(dict["score"]!)!
                     gameData.myMinkos = []
@@ -117,11 +118,11 @@ struct GameView: View {
                     gameData.kyotaku = Int(dict["kyotaku"]!)!
                     gameData.isParent = (dict["isParent"] == "true")
                     gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
-                    gameData.roundWinnerID = ""
+                    gameData.roundWinnerID = -1
                     gameData.roundWinType = ""
                     
                     if (gameData.isParent) {
-                        socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+                        socket.emit("Draw", gameData.roomID, userData.userID, false)
                     }
                 } else {
                     gameData.yourScore = Int(dict["score"]!)!
@@ -133,7 +134,7 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 gameData.stockCount = Int(dict["stockCount"]!)!
                 gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     if (gameData.isMyTurn()) { isMyTurn = true }
                     if (dict["isWin"] == "true") { isWin = true }
@@ -143,14 +144,14 @@ struct GameView: View {
                     gameData.canAnkanTiles = gameData.decode(str: dict["canAnkanTiles"]!)
                     
                     startMyDiscardTimer()
-                } else if gameData.opponentID == dict["id"] {
+                } else if gameData.opponentID == Int(dict["id"]!) {
                     isOpponentDraw = true
                 }
             }
         }
         socket.on("Pon") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
@@ -163,11 +164,11 @@ struct GameView: View {
         }
         socket.on("Daiminkan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
-                    socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
+                    socket.emit("Draw", gameData.roomID, userData.userID, true) // 嶺上牌をツモる
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.yourMinkans = gameData.decode(str: dict["minkans"]!)
@@ -176,11 +177,11 @@ struct GameView: View {
         }
         socket.on("Kakan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
-                    socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
+                    socket.emit("Draw", gameData.roomID, userData.userID, true) // 嶺上牌をツモる
                 } else {
                     gameData.yourMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.yourMinkans = gameData.decode(str: dict["minkans"]!)
@@ -189,10 +190,10 @@ struct GameView: View {
         }
         socket.on("Ankan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if gameData.playerID == dict["id"] {
+                if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myAnkans = gameData.decode(str: dict["ankans"]!)
-                    socket.emit("Draw", gameData.roomID, gameData.playerID, true) // 嶺上牌をツモる
+                    socket.emit("Draw", gameData.roomID, userData.userID, true) // 嶺上牌をツモる
                 } else {
                     gameData.yourAnkans = gameData.decode(str: dict["ankans"]!)
                 }
@@ -200,8 +201,8 @@ struct GameView: View {
         }
         socket.on("Win") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                gameData.roundWinnerID = dict["id"]!
-                if gameData.roundWinnerID == gameData.playerID {
+                gameData.roundWinnerID = Int(dict["id"]!)!
+                if gameData.roundWinnerID == userData.userID {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                 } else {
                     gameData.yourTiles = gameData.decode(str: dict["tiles"]!)
@@ -230,14 +231,14 @@ struct GameView: View {
         }
         socket.on("ExhaustiveDraw") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if dict["id1"]! == gameData.playerID {
+                if Int(dict["id1"]!) == userData.userID {
                     gameData.myScore = Int(dict["score1"]!)!
                     gameData.yourScore = Int(dict["score2"]!)!
                     gameData.myTiles = gameData.decode(str: dict["tiles1"]!)
                     gameData.myDrawWaits = gameData.decode(str: dict["waitTiles1"]!)
                     gameData.yourTiles = gameData.decode(str: dict["tiles2"]!)
                     gameData.yourWaits = gameData.decode(str: dict["waitTiles2"]!)
-                } else if dict["id2"]! == gameData.playerID {
+                } else if Int(dict["id2"]!) == userData.userID {
                     gameData.yourScore = Int(dict["score1"]!)!
                     gameData.myScore = Int(dict["score2"]!)!
                     gameData.myTiles = gameData.decode(str: dict["tiles2"]!)
@@ -263,8 +264,8 @@ struct GameView: View {
         }
         socket.on("EndGame") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                if dict["winnerID"] == gameData.playerID {
-                    gameData.winnerID = gameData.playerID
+                if Int(dict["winnerID"]!) == userData.userID {
+                    gameData.winnerID = userData.userID
                     gameData.myScore = Int(dict["winnerScore"]!)!
                     gameData.yourScore = Int(dict["loserScore"]!)!
                 } else {
@@ -330,7 +331,7 @@ struct GameView: View {
     
     func skipAction() -> Void {
         if gameData.stockCount > 0 {
-            gameService.socket.emit("Draw", gameData.roomID, gameData.playerID, false)
+            gameService.socket.emit("Draw", gameData.roomID, userData.userID, false)
             canRon = false
             canPon = false
             canDaiminkan = false
@@ -400,7 +401,7 @@ struct GameView: View {
         gameService.socket.emit(
             "Discard",
             gameData.roomID,
-            gameData.playerID,
+            userData.userID,
             gameData.encode(tiles: [lastTile]),
             isRiichi
         )
@@ -414,7 +415,7 @@ struct GameView: View {
             ZStack {
                 ZStack {
                     Colors.init().lightGray.ignoresSafeArea(.all)
-                    if gameData.opponentID != "" {
+                    if gameData.opponentID != -1 {
                         HStack(alignment: .center, spacing: 0, content: {
                             MinkoView(playerID: gameData.opponentID)
                                 .rotationEffect(Angle(degrees: 180.0))
@@ -448,7 +449,7 @@ struct GameView: View {
                         .position(x: width/2, y: height*0.06)
                         
                         Group {
-                            NameView(name: "\(gameData.opponentID)").position(x: width*0.8, y: height*0.2)
+                            NameView(name: gameData.opponentName).position(x: width*0.8, y: height*0.2)
                             WindView(wind: !gameData.isParent ? "東" : "南").position(x: width*0.8, y: height*0.29)
                         }
                     }
@@ -475,7 +476,7 @@ struct GameView: View {
                         if isFuriten {
                             FuritenView().position(x: width*0.3, y: height*0.66)
                         }
-                        NameView(name: "\(gameData.playerID)").position(x: width*0.2, y: height*0.75)
+                        NameView(name: userData.userName).position(x: width*0.2, y: height*0.75)
                     }
                     Group {
                         if (isMyTurn && gameData.canAnkanTiles.count != 0) {
@@ -488,7 +489,7 @@ struct GameView: View {
                         if (canDaiminkan && !isRiichi) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Daiminkan", gameData.roomID, gameData.playerID)
+                                gameService.socket.emit("Daiminkan", gameData.roomID, userData.userID)
                                 canDaiminkan = false
                                 canPon = false
                             }) {
@@ -507,7 +508,7 @@ struct GameView: View {
                         if (canPon && !isRiichi) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Pon", gameData.roomID, gameData.playerID)
+                                gameService.socket.emit("Pon", gameData.roomID, userData.userID)
                                 canPon = false
                             }) {
                                 CustomText(content: "ポン", size: 24, tracking: 0)
@@ -518,7 +519,7 @@ struct GameView: View {
                         if (!isFuriten && canRon) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "ron")
+                                gameService.socket.emit("Win", gameData.roomID, userData.userID, "ron")
                             }) {
                                 CustomText(content: "ロン", size: 24, tracking: 0)
                                     .foregroundColor(Colors.init().red)
@@ -535,7 +536,7 @@ struct GameView: View {
                         if (isWin) {
                             Button(action: {
                                 resetMyDiscardTimer()
-                                gameService.socket.emit("Win", gameData.roomID, gameData.playerID, "draw")
+                                gameService.socket.emit("Win", gameData.roomID, userData.userID, "draw")
                             }) {
                                 CustomText(content: "ツモ", size: 24, tracking: 0)
                                     .foregroundColor(Colors.init().red)
@@ -578,7 +579,7 @@ struct GameView: View {
                                     gameService.socket.emit(
                                         "Kakan",
                                         gameData.roomID,
-                                        gameData.playerID,
+                                        userData.userID,
                                         gameData.encode(tiles: [tile])
                                     )
                                     return
@@ -588,7 +589,7 @@ struct GameView: View {
                                     gameService.socket.emit(
                                         "Ankan",
                                         gameData.roomID,
-                                        gameData.playerID,
+                                        userData.userID,
                                         gameData.encode(tiles: [tile])
                                     )
                                     return
@@ -602,7 +603,7 @@ struct GameView: View {
                                 gameService.socket.emit(
                                     "Discard",
                                     gameData.roomID,
-                                    gameData.playerID,
+                                    userData.userID,
                                     gameData.encode(tiles: [tile]),
                                     isRiichi
                                 )
@@ -630,9 +631,9 @@ struct GameView: View {
                         }
                     })
                         .padding(.trailing, 6)
-                    MinkoView(playerID: gameData.playerID)
-                    AnkanView(playerID: gameData.playerID)
-                    MinkanView(playerID: gameData.playerID)
+                    MinkoView(playerID: userData.userID)
+                    AnkanView(playerID: userData.userID)
+                    MinkanView(playerID: userData.userID)
                 })
                 .position(x: width/2, y: height*0.93)
                 
@@ -644,7 +645,7 @@ struct GameView: View {
                     )
                     .position(
                         x: width/2,
-                        y: gameData.roundWinnerID == gameData.playerID ?  height*0.7 : height*0.3
+                        y: gameData.roundWinnerID == userData.userID ?  height*0.7 : height*0.3
                     )
                 }
                 if self.opponentDiscardCountdown <= 0 {
@@ -686,6 +687,7 @@ struct GameView_Previews: PreviewProvider {
         if #available(iOS 15.0, *) {
             GameView(rootIsActive: .constant(false))
                 .environmentObject(GameData())
+                .environmentObject(UserData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)
         }

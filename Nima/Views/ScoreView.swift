@@ -9,6 +9,7 @@ import SwiftUI
 import SocketIO
 
 struct ScoreView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
     @Environment(\.presentationMode) private var presentationMode
@@ -23,7 +24,7 @@ struct ScoreView: View {
             gameService.socket.emit("EndGame", gameData.roomID)
             showingEndGame = true
         } else {
-            if gameData.roundWinnerID == gameData.playerID {
+            if gameData.roundWinnerID == userData.userID {
                 gameService.socket.emit("StartGame", gameData.roomID)
             }
             self.presentationMode.wrappedValue.dismiss()
@@ -34,7 +35,8 @@ struct ScoreView: View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
-            NameView(name: "\(gameData.roundWinnerID)").position(x: width*0.2, y: height*0.15)
+            NameView(name: "\(gameData.roundWinnerID == userData.userID ? userData.userName : gameData.opponentName)")
+                .position(x: width*0.2, y: height*0.15)
             RoundWinTypeView(content: gameData.roundWinType)
                 .position(x: width*0.8, y: height*0.11)
             TilesView(winnerID: gameData.roundWinnerID)
@@ -56,7 +58,7 @@ struct ScoreView: View {
                         .frame(width: 30, height: 60, alignment: .center)
                         .position(x: width*0.68 + 40*CGFloat(index), y: height*0.4)
                 }
-                if (gameData.playerID == gameData.roundWinnerID && gameData.myRiichiTurn != -1) || (gameData.opponentID == gameData.roundWinnerID && gameData.yourRiichiTurn != -1) {
+                if (userData.userID == gameData.roundWinnerID && gameData.myRiichiTurn != -1) || (gameData.opponentID == gameData.roundWinnerID && gameData.yourRiichiTurn != -1) {
                     CustomText(content: "裏ドラ", size: 24, tracking: 0)
                         .foregroundColor(Colors.init().navy)
                         .position(x: width*0.62, y: height*0.52)
@@ -98,6 +100,7 @@ struct ScoreView_Previews: PreviewProvider {
         if #available(iOS 15.0, *) {
             ScoreView(rootIsActive: .constant(false), score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
                 .environmentObject(GameData())
+                .environmentObject(UserData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)
         }

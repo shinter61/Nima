@@ -19,7 +19,7 @@ struct MainMenu: View {
         let userID = UserDefaults.standard.integer(forKey: "userID")
         do {
             let user: User = try await UserService().signIn(id: userID, password: keychain["\(String(userID))"]!)
-            userData.playerID = user.name
+            userData.userName = user.name
             userData.rating = user.rating
         } catch(let error) {
             debugPrint(error)
@@ -37,7 +37,7 @@ struct MainMenu: View {
                         .foregroundColor(Colors.init().navy)
                         .position(x: width*0.3, y: height*0.3)
                     VStack(alignment: .leading, spacing: 20) {
-                        CustomText(content: "プレイヤー名: \(userData.playerID)", size: 20, tracking: 0)
+                        CustomText(content: "プレイヤー名: \(userData.userName)", size: 20, tracking: 0)
                             .foregroundColor(Colors.init().navy)
                         CustomText(content: "レーティング: \(userData.rating)", size: 20, tracking: 0)
                             .foregroundColor(Colors.init().navy)

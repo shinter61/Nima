@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct MinkanView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
-    var playerID: String
+    var playerID: Int
     var body: some View {
-        if gameData.playerID == playerID {
+        if userData.userID == playerID {
             HStack(alignment: .center, spacing: -2, content: {
-                ForEach(gameData.playerID == playerID ? gameData.myMinkans : gameData.yourMinkans, id: \.self) { tile in
+                ForEach(userData.userID == playerID ? gameData.myMinkans : gameData.yourMinkans, id: \.self) { tile in
                     ZStack {
                         Image(tile.name())
                             .resizable()
@@ -70,7 +71,7 @@ struct MinkanView: View {
             })
         } else {
             HStack(alignment: .center, spacing: 4, content: {
-                ForEach(gameData.playerID == playerID ? gameData.myMinkans : gameData.yourMinkans, id: \.self) { tile in
+                ForEach(userData.userID == playerID ? gameData.myMinkans : gameData.yourMinkans, id: \.self) { tile in
                     ZStack {
                         Image(tile.name())
                             .resizable()
@@ -131,7 +132,8 @@ struct MinkanView: View {
 
 struct MinkanView_Previews: PreviewProvider {
     static var previews: some View {
-        MinkanView(playerID: "")
+        MinkanView(playerID: -1)
             .environmentObject(GameData())
+            .environmentObject(UserData())
     }
 }
