@@ -33,16 +33,16 @@ struct MainMenu: View {
                 let height = geometry.size.height
                 ZStack {
                     Color.white.ignoresSafeArea(.all)
-                    VStack(alignment: .leading, spacing: 10) {
+                    CustomText(content: "二麻", size: 48, tracking: 10)
+                        .foregroundColor(Colors.init().navy)
+                        .position(x: width*0.3, y: height*0.3)
+                    VStack(alignment: .leading, spacing: 20) {
                         CustomText(content: "プレイヤー名: \(userData.playerID)", size: 20, tracking: 0)
                             .foregroundColor(Colors.init().navy)
                         CustomText(content: "レーティング: \(userData.rating)", size: 20, tracking: 0)
                             .foregroundColor(Colors.init().navy)
                     }
-                    .position(x: width*0.17, y: height*0.15)
-                    CustomText(content: "二麻", size: 48, tracking: 10)
-                        .foregroundColor(Colors.init().navy)
-                        .position(x: width*0.5, y: height*0.2)
+                    .position(x: width*0.3, y: height*0.7)
                     
                     Button(action: {
                         showingMatching = true
@@ -50,7 +50,7 @@ struct MainMenu: View {
                         CustomText(content: "対戦する", size: 24, tracking: 2)
                             .foregroundColor(Color.red)
                     }
-                    .position(x: width*0.5, y: height*0.8)
+                    .position(x: width*0.73, y: height*0.5)
                 }
                 
                 NavigationLink(
