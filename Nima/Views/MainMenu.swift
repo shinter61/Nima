@@ -12,6 +12,7 @@ import KeychainAccess
 struct MainMenu: View {
     @EnvironmentObject var userData: UserData
     @State private var showingMatching: Bool = false
+    @State private var interstitial: Interstitial!
     
     @available(iOS 15.0.0, *)
     func loginUser() async {
@@ -59,6 +60,10 @@ struct MainMenu: View {
                 ) { EmptyView() }
             }
             .task { await loginUser() }
+            .onAppear {
+                interstitial?.showAd()
+                interstitial = Interstitial()
+            }
         }
     }
     

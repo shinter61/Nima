@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D71BCC9DB87967256C50088 /* Pods_Nima.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 215352035EF8EFDF5389CA35 /* Pods_Nima.framework */; };
+		6B9B3C00BEED8E9AFE4878DA /* Pods_Nima_NimaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270B9249D4D25B31708AC425 /* Pods_Nima_NimaUITests.framework */; };
+		7B456C0988837C982448976A /* Pods_NimaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 060C2BFED392535D454728B3 /* Pods_NimaTests.framework */; };
 		E50A8F4C2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */; };
 		E50A8F5627155FC5000F253A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5527155FC5000F253A /* Colors.swift */; };
 		E50A8F5827158345000F253A /* MatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5727158345000F253A /* MatchingView.swift */; };
@@ -28,6 +31,7 @@
 		E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38526BFD62B000A45D8 /* GameView.swift */; };
 		E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38726BFDA3E000A45D8 /* GameData.swift */; };
 		E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE38926BFDAE2000A45D8 /* Tile.swift */; };
+		E55C62CA275FEED200B467A3 /* Interstitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55C62C9275FEED200B467A3 /* Interstitial.swift */; };
 		E55DCEEA27308A340005FF07 /* WinNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEE927308A340005FF07 /* WinNoticeView.swift */; };
 		E55DCEEC2730BD970005FF07 /* RoundWinTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */; };
 		E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */; };
@@ -67,6 +71,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		060C2BFED392535D454728B3 /* Pods_NimaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NimaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		215352035EF8EFDF5389CA35 /* Pods_Nima.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nima.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		270B9249D4D25B31708AC425 /* Pods_Nima_NimaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nima_NimaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5470B8B0EFD6708045228D76 /* Pods-Nima-NimaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima-NimaUITests.debug.xcconfig"; path = "Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B317D9F2F3F96033EB568B07 /* Pods-Nima.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima.release.xcconfig"; path = "Target Support Files/Pods-Nima/Pods-Nima.release.xcconfig"; sourceTree = "<group>"; };
+		B6F76B3F307F9F4C9770C3C1 /* Pods-Nima-NimaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima-NimaUITests.release.xcconfig"; path = "Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		C59E231C1E07B60A70B5EC85 /* Pods-Nima.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nima.debug.xcconfig"; path = "Target Support Files/Pods-Nima/Pods-Nima.debug.xcconfig"; sourceTree = "<group>"; };
+		DD3A2520BE53A9CD892076A6 /* Pods-NimaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NimaTests.debug.xcconfig"; path = "Target Support Files/Pods-NimaTests/Pods-NimaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NagomiGokubosoGothic-ExtraLight.otf"; sourceTree = "<group>"; };
 		E50A8F5527155FC5000F253A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E50A8F5727158345000F253A /* MatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingView.swift; sourceTree = "<group>"; };
@@ -94,6 +106,7 @@
 		E53BE38526BFD62B000A45D8 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		E53BE38726BFDA3E000A45D8 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		E53BE38926BFDAE2000A45D8 /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		E55C62C9275FEED200B467A3 /* Interstitial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interstitial.swift; sourceTree = "<group>"; };
 		E55DCEE927308A340005FF07 /* WinNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinNoticeView.swift; sourceTree = "<group>"; };
 		E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundWinTypeView.swift; sourceTree = "<group>"; };
 		E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistPlayerNameView.swift; sourceTree = "<group>"; };
@@ -110,6 +123,7 @@
 		E5AFD62726CE4C0C00435171 /* MinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkoView.swift; sourceTree = "<group>"; };
 		E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhaustiveDrawView.swift; sourceTree = "<group>"; };
 		E5EFA569275B175700D23066 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		EB77A43C1F434C40ADA209ED /* Pods-NimaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NimaTests.release.xcconfig"; path = "Target Support Files/Pods-NimaTests/Pods-NimaTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +134,7 @@
 				E583A49826C26F0300134067 /* SocketIO in Frameworks */,
 				E5EFA565275AE49600D23066 /* Alamofire in Frameworks */,
 				E5EFA56D275B1E2E00D23066 /* KeychainAccess in Frameworks */,
+				3D71BCC9DB87967256C50088 /* Pods_Nima.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B456C0988837C982448976A /* Pods_NimaTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,12 +150,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B9B3C00BEED8E9AFE4878DA /* Pods_Nima_NimaUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D7328B7DED812E651D000F0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				215352035EF8EFDF5389CA35 /* Pods_Nima.framework */,
+				270B9249D4D25B31708AC425 /* Pods_Nima_NimaUITests.framework */,
+				060C2BFED392535D454728B3 /* Pods_NimaTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D561F9FB7F73B190EE02F003 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C59E231C1E07B60A70B5EC85 /* Pods-Nima.debug.xcconfig */,
+				B317D9F2F3F96033EB568B07 /* Pods-Nima.release.xcconfig */,
+				5470B8B0EFD6708045228D76 /* Pods-Nima-NimaUITests.debug.xcconfig */,
+				B6F76B3F307F9F4C9770C3C1 /* Pods-Nima-NimaUITests.release.xcconfig */,
+				DD3A2520BE53A9CD892076A6 /* Pods-NimaTests.debug.xcconfig */,
+				EB77A43C1F434C40ADA209ED /* Pods-NimaTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		E50A8F4D27155E42000F253A /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +225,7 @@
 				E58B88A3275D727600424B96 /* UserData.swift */,
 				E53BE38926BFDAE2000A45D8 /* Tile.swift */,
 				E5EFA569275B175700D23066 /* User.swift */,
+				E55C62C9275FEED200B467A3 /* Interstitial.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -205,6 +246,8 @@
 				E53BE36926BFCDC2000A45D8 /* NimaTests */,
 				E53BE37426BFCDC2000A45D8 /* NimaUITests */,
 				E53BE35626BFCDC1000A45D8 /* Products */,
+				D561F9FB7F73B190EE02F003 /* Pods */,
+				4D7328B7DED812E651D000F0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -276,9 +319,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E53BE37A26BFCDC2000A45D8 /* Build configuration list for PBXNativeTarget "Nima" */;
 			buildPhases = (
+				3C1674635FC562DF9601D6F5 /* [CP] Check Pods Manifest.lock */,
 				E53BE35126BFCDC1000A45D8 /* Sources */,
 				E53BE35226BFCDC1000A45D8 /* Frameworks */,
 				E53BE35326BFCDC1000A45D8 /* Resources */,
+				82375DFB413A5955779F0A4C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -298,6 +343,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E53BE37D26BFCDC2000A45D8 /* Build configuration list for PBXNativeTarget "NimaTests" */;
 			buildPhases = (
+				69D6DD2482EBD33322D351E9 /* [CP] Check Pods Manifest.lock */,
 				E53BE36226BFCDC2000A45D8 /* Sources */,
 				E53BE36326BFCDC2000A45D8 /* Frameworks */,
 				E53BE36426BFCDC2000A45D8 /* Resources */,
@@ -316,9 +362,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E53BE38026BFCDC2000A45D8 /* Build configuration list for PBXNativeTarget "NimaUITests" */;
 			buildPhases = (
+				B06165B2173DF545239D1B8B /* [CP] Check Pods Manifest.lock */,
 				E53BE36D26BFCDC2000A45D8 /* Sources */,
 				E53BE36E26BFCDC2000A45D8 /* Frameworks */,
 				E53BE36F26BFCDC2000A45D8 /* Resources */,
+				6B707ADB19BB85FF3A9746F4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -405,6 +453,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3C1674635FC562DF9601D6F5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nima-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		69D6DD2482EBD33322D351E9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NimaTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6B707ADB19BB85FF3A9746F4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nima-NimaUITests/Pods-Nima-NimaUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		82375DFB413A5955779F0A4C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima/Pods-Nima-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nima/Pods-Nima-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nima/Pods-Nima-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B06165B2173DF545239D1B8B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nima-NimaUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E53BE35126BFCDC1000A45D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -435,6 +586,7 @@
 				E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */,
 				E50A8F6027176518000F253A /* GameInfoView.swift in Sources */,
 				E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */,
+				E55C62CA275FEED200B467A3 /* Interstitial.swift in Sources */,
 				E50F15D7272D44B2002D1371 /* TilesView.swift in Sources */,
 				E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */,
 				E58B88A2275C55C800424B96 /* UserService.swift in Sources */,
@@ -594,6 +746,7 @@
 		};
 		E53BE37B26BFCDC2000A45D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C59E231C1E07B60A70B5EC85 /* Pods-Nima.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -616,6 +769,7 @@
 		};
 		E53BE37C26BFCDC2000A45D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B317D9F2F3F96033EB568B07 /* Pods-Nima.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -638,6 +792,7 @@
 		};
 		E53BE37E26BFCDC2000A45D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DD3A2520BE53A9CD892076A6 /* Pods-NimaTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -660,6 +815,7 @@
 		};
 		E53BE37F26BFCDC2000A45D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB77A43C1F434C40ADA209ED /* Pods-NimaTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -682,6 +838,7 @@
 		};
 		E53BE38126BFCDC2000A45D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5470B8B0EFD6708045228D76 /* Pods-Nima-NimaUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -702,6 +859,7 @@
 		};
 		E53BE38226BFCDC2000A45D8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B6F76B3F307F9F4C9770C3C1 /* Pods-Nima-NimaUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
