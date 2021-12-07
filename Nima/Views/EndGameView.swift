@@ -13,12 +13,24 @@ struct EndGameView: View {
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
     
+    @State private var winnerRate: Int = -1
+    @State private var loserRate: Int = -1
     
     @available(iOS 15.0.0, *)
     func updateRate() async {
         do {
             var winnerID = -1, loserID = -1
+            if gameData.winnerID == userData.userID {
+                winnerID = userData.userID
+                loserID = gameData.opponentID
+            } else {
+                winnerID = gameData.opponentID
+                loserID = userData.userID
+            }
             let ratingResponse: RatingResponse = try await UserService().updateRate(winnerID: winnerID, loserID: loserID)
+            
+            winnerRate = ratingResponse.winnerRating
+            loserRate = ratingResponse.loserRating
         } catch(let error) {
             debugPrint(error)
         }
@@ -38,6 +50,8 @@ struct EndGameView: View {
                         .padding(.trailing, 20)
                     CustomText(content: String(gameData.winnerID == userData.userID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
                         .padding(.trailing, 20)
+                    CustomText(content: String(winnerRate), size: 24, tracking: 0)
+                        .padding(.trailing, 20)
                 }
                 .position(x: width/2, y: height*0.4)
                 HStack {
@@ -46,6 +60,8 @@ struct EndGameView: View {
                     CustomText(content: gameData.winnerID != userData.userID ? userData.userName : gameData.opponentName, size: 24, tracking: 0)
                         .padding(.trailing, 20)
                     CustomText(content: String(gameData.winnerID != userData.userID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
+                        .padding(.trailing, 20)
+                    CustomText(content: String(loserRate), size: 24, tracking: 0)
                         .padding(.trailing, 20)
                 }
                 .position(x: width/2, y: height*0.5)
@@ -65,9 +81,7 @@ struct EndGameView: View {
                 }
                 .position(x: width/2, y: height*0.8)
             }
-            .task {
-                
-            }
+            .task { await updateRate() }
         }
     }
 }
