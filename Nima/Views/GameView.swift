@@ -143,6 +143,8 @@ struct GameView: View {
                     if canKakanExists() { canKakan = true }
                     gameData.canAnkanTiles = gameData.decode(str: dict["canAnkanTiles"]!)
                     
+                    if isRiichi && !isWin && gameData.canAnkanTiles.count == 0 { myDiscardCountdown = 1 }
+                    
                     startMyDiscardTimer()
                 } else if gameData.opponentID == Int(dict["id"]!) {
                     isOpponentDraw = true
@@ -380,17 +382,18 @@ struct GameView: View {
     
     func resetMyDiscardTimer() -> Void {
         myDiscardTimer?.invalidate()
-        myDiscardCountdown = 20
+        myDiscardCountdown = isRiichi && !isWin && gameData.canAnkanTiles.count == 0 ? 1 : 20
     }
     
     func startMyDiscardTimer() -> Void {
+        let myDiscardLimit = isRiichi && !isWin && gameData.canAnkanTiles.count == 0 ? 1 : 20
         let startTime: Date = Date()
         myDiscardTimer?.invalidate()
         myDiscardTimer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
             let current = Date()
             let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
-            if diff >= 20 { self.myDiscardTimer?.invalidate() }
-            self.myDiscardCountdown = 20 - diff
+            if diff >= myDiscardLimit { self.myDiscardTimer?.invalidate() }
+            self.myDiscardCountdown = myDiscardLimit - diff
         })
     }
     
