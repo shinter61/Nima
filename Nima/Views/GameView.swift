@@ -139,7 +139,7 @@ struct GameView: View {
                     if (gameData.isMyTurn()) { isMyTurn = true }
                     if (dict["isWin"] == "true") { isWin = true }
                     waitsCandidate = gameData.decodeWaitsCandidate(str: dict["waitsCandidate"]!)
-                    if waitExists() { canRiichi = true }
+                    if waitExists() && gameData.myScore >= 1000 { canRiichi = true }
                     if canKakanExists() { canKakan = true }
                     gameData.canAnkanTiles = gameData.decode(str: dict["canAnkanTiles"]!)
                     
