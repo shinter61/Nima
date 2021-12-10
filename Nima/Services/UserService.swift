@@ -30,12 +30,15 @@ struct RatingResponse: Decodable {
     let loserRating: Int
 }
 
+let baseURL = "http://localhost:3000"
+//let baseURL = "https://nima-server.herokuapp.com"
+
 final class UserService {
     @available(iOS 15.0.0, *)
     func signUp(name: String, password: String) async throws -> User {
         try await withUnsafeThrowingContinuation { continuation in
             let signUp = SignUp(name: name, password: password)
-            AF.request("https://nima-server.herokuapp.com/users/sign_up",
+            AF.request("\(baseURL)/users/sign_up",
                        method: .post,
                        parameters: signUp,
                        encoder: JSONParameterEncoder.default)
@@ -56,7 +59,7 @@ final class UserService {
     func signIn(id: Int, password: String) async throws -> User {
         try await withUnsafeThrowingContinuation { continuation in
             let signIn = SignIn(id: id, password: password)
-            AF.request("https://nima-server.herokuapp.com/users/sign_in",
+            AF.request("\(baseURL)/users/sign_in",
                        method: .post,
                        parameters: signIn,
                        encoder: JSONParameterEncoder.default)
@@ -77,7 +80,7 @@ final class UserService {
     func updateRate(winnerID: Int, loserID: Int) async throws -> RatingResponse {
         try await withUnsafeThrowingContinuation { continuation in
             let updateRating = UpdateRating(winnerID: winnerID, loserID: loserID)
-            AF.request("https://nima-server.herokuapp.com/users/rating",
+            AF.request("\(baseURL)/users/rating",
                        method: .put,
                        parameters: updateRating,
                        encoder: JSONParameterEncoder.default)
