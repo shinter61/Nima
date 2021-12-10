@@ -13,24 +13,13 @@ struct EndGameView: View {
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
     
-    @State private var winnerRate: Int = -1
-    @State private var loserRate: Int = -1
-    
     @available(iOS 15.0.0, *)
     func updateRate() async {
+        if (gameData.winnerID != userData.userID) { return }
         do {
-            var winnerID = -1, loserID = -1
-            if gameData.winnerID == userData.userID {
-                winnerID = userData.userID
-                loserID = gameData.opponentID
-            } else {
-                winnerID = gameData.opponentID
-                loserID = userData.userID
-            }
-            let ratingResponse: RatingResponse = try await UserService().updateRate(winnerID: winnerID, loserID: loserID)
-            
-            winnerRate = ratingResponse.winnerRating
-            loserRate = ratingResponse.loserRating
+            let winnerID = userData.userID
+            let loserID = gameData.opponentID
+            try await UserService().updateRate(winnerID: winnerID, loserID: loserID)
         } catch(let error) {
             debugPrint(error)
         }
@@ -43,14 +32,14 @@ struct EndGameView: View {
                 let height = geometry.size.height
                 CustomText(content: "終局", size: 36, tracking: 0)
                     .position(x: width/2, y: height*0.1)
+                CustomText(content: "\(gameData.winnerID) \(userData.userID)", size: 36, tracking: 0)
+                    .position(x: width/2, y: height*0.2)
                 HStack {
                     CustomText(content: "勝者", size: 24, tracking: 0)
                         .padding(.trailing, 20)
                     CustomText(content: gameData.winnerID == userData.userID ? userData.userName : gameData.opponentName, size: 24, tracking: 0)
                         .padding(.trailing, 20)
                     CustomText(content: String(gameData.winnerID == userData.userID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
-                        .padding(.trailing, 20)
-                    CustomText(content: String(winnerRate), size: 24, tracking: 0)
                         .padding(.trailing, 20)
                 }
                 .position(x: width/2, y: height*0.4)
@@ -61,8 +50,6 @@ struct EndGameView: View {
                         .padding(.trailing, 20)
                     CustomText(content: String(gameData.winnerID != userData.userID ? gameData.myScore : gameData.yourScore), size: 24, tracking: 0)
                         .padding(.trailing, 20)
-                    CustomText(content: String(loserRate), size: 24, tracking: 0)
-                        .padding(.trailing, 20)
                 }
                 .position(x: width/2, y: height*0.5)
                 if gameData.isDisconnected {
@@ -71,17 +58,19 @@ struct EndGameView: View {
                 }
                 
                 Button(action: {
-                    gameService.socket.disconnect()
-                    gameService.socket.removeAllHandlers()
-                    gameData.allReset()
-                    rootIsActive = false
+                    Task {
+                        await updateRate()
+                        gameService.socket.disconnect()
+                        gameService.socket.removeAllHandlers()
+                        gameData.allReset()
+                        rootIsActive = false
+                    }
                 }) {
                     CustomText(content: "戻る", size: 20, tracking: 0)
                         .foregroundColor(Colors.init().navy)
                 }
                 .position(x: width/2, y: height*0.8)
             }
-            .task { await updateRate() }
         }
     }
 }
