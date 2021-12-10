@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Alamofire
 import KeychainAccess
 
 struct MainMenu: View {
