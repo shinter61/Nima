@@ -30,8 +30,8 @@ struct RatingResponse: Decodable {
     let loserRating: Int
 }
 
-let baseURL = "http://localhost:3000"
-//let baseURL = "https://nima-server.herokuapp.com"
+//let baseURL = "http://localhost:3000"
+let baseURL = "https://nima-server.herokuapp.com"
 
 final class UserService {
     @available(iOS 15.0.0, *)
