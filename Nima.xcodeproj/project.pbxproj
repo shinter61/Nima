@@ -45,6 +45,7 @@
 		E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8422A26DE4033003230F6 /* AnkanView.swift */; };
 		E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8C61C26D495CB00B59318 /* EndGameView.swift */; };
 		E5A8C61F26D5D81000B59318 /* DoraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A8C61E26D5D81000B59318 /* DoraView.swift */; };
+		E5A96EBB27682262006D4C89 /* libswift_Concurrency.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A96EBA27682262006D4C89 /* libswift_Concurrency.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E5AFD62426C901AE00435171 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62326C901AE00435171 /* ScoreView.swift */; };
 		E5AFD62826CE4C0C00435171 /* MinkoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFD62726CE4C0C00435171 /* MinkoView.swift */; };
 		E5BD2C152718349E00EDE08F /* ExhaustiveDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */; };
@@ -119,6 +120,7 @@
 		E5A8422A26DE4033003230F6 /* AnkanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkanView.swift; sourceTree = "<group>"; };
 		E5A8C61C26D495CB00B59318 /* EndGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameView.swift; sourceTree = "<group>"; };
 		E5A8C61E26D5D81000B59318 /* DoraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoraView.swift; sourceTree = "<group>"; };
+		E5A96EBA27682262006D4C89 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		E5AFD62326C901AE00435171 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		E5AFD62726CE4C0C00435171 /* MinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkoView.swift; sourceTree = "<group>"; };
 		E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhaustiveDrawView.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5A96EBB27682262006D4C89 /* libswift_Concurrency.tbd in Frameworks */,
 				E583A49826C26F0300134067 /* SocketIO in Frameworks */,
 				E5EFA565275AE49600D23066 /* Alamofire in Frameworks */,
 				E5EFA56D275B1E2E00D23066 /* KeychainAccess in Frameworks */,
@@ -160,6 +163,7 @@
 		4D7328B7DED812E651D000F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E5A96EBA27682262006D4C89 /* libswift_Concurrency.tbd */,
 				215352035EF8EFDF5389CA35 /* Pods_Nima.framework */,
 				270B9249D4D25B31708AC425 /* Pods_Nima_NimaUITests.framework */,
 				060C2BFED392535D454728B3 /* Pods_NimaTests.framework */,
@@ -760,6 +764,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Matsumoto-Shintaro.Nima";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -782,6 +790,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Matsumoto-Shintaro.Nima";
 				PRODUCT_NAME = "$(TARGET_NAME)";
