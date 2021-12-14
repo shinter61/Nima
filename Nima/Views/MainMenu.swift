@@ -19,8 +19,10 @@ struct MainMenu: View {
         let userID = UserDefaults.standard.integer(forKey: "userID")
         do {
             let user: User = try await UserService().signIn(id: userID, password: keychain["\(String(userID))"]!)
-            userData.userName = user.name
-            userData.rating = user.rating
+            DispatchQueue.main.async {
+                userData.userName = user.name
+                userData.rating = user.rating
+            }
         } catch(let error) {
             debugPrint(error)
         }

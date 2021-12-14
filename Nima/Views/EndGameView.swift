@@ -32,8 +32,6 @@ struct EndGameView: View {
                 let height = geometry.size.height
                 CustomText(content: "終局", size: 36, tracking: 0)
                     .position(x: width/2, y: height*0.1)
-                CustomText(content: "\(gameData.winnerID) \(userData.userID)", size: 36, tracking: 0)
-                    .position(x: width/2, y: height*0.2)
                 HStack {
                     CustomText(content: "勝者", size: 24, tracking: 0)
                         .padding(.trailing, 20)
