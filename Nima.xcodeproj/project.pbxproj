@@ -760,7 +760,7 @@
 				DEVELOPMENT_TEAM = AKQMM94SB8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Nima/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -773,7 +773,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Matsumoto-Shintaro.Nima";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -789,7 +789,7 @@
 				DEVELOPMENT_TEAM = AKQMM94SB8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Nima/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -802,7 +802,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Matsumoto-Shintaro.Nima";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
