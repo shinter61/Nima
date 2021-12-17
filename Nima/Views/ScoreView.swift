@@ -17,7 +17,7 @@ struct ScoreView: View {
     @State private var showingEndGame: Bool = false
     var score: Int
     var scoreName: String
-    var hands: [String]
+    var hands: [Hand]
     
     func pop() -> Void {
         if (gameData.isGameEnd) {
@@ -42,10 +42,15 @@ struct ScoreView: View {
             TilesView(winnerID: gameData.roundWinnerID)
                 .position(x: width*0.5, y: height*0.27)
             ForEach(Array(hands.enumerated()), id: \.offset) { index, hand in
-                CustomText(content: hand, size: 24, tracking: 0)
-                    .foregroundColor(Colors.init().navy)
-                    .frame(width: 200, height: 30, alignment: .leading)
-                    .position(x: width*0.25, y: height*0.4 + 40*CGFloat(index))
+                HStack {
+                    CustomText(content: hand.name, size: 24, tracking: 0)
+                        .foregroundColor(Colors.init().navy)
+                    if hand.han < 100 {
+                        CustomText(content: "\(String(hand.han))飜", size: 16, tracking: 0)
+                            .foregroundColor(Colors.init().navy)
+                    }
+                }
+                .position(x: width*0.25, y: height*0.4 + 40*CGFloat(index))
             }
             Group {
                 CustomText(content: "ドラ", size: 24, tracking: 0)
@@ -98,7 +103,12 @@ struct ScoreView: View {
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            ScoreView(rootIsActive: .constant(false), score: 12000, scoreName: "満貫", hands: ["立直", "自摸", "混一色"])
+            ScoreView(
+                rootIsActive: .constant(false),
+                score: 12000,
+                scoreName: "満貫",
+                hands: [Hand(name: "立直", han: 1), Hand(name: "自摸", han: 1), Hand(name: "混一色", han: 3)]
+            )
                 .environmentObject(GameData())
                 .environmentObject(UserData())
                 .environmentObject(GameService())

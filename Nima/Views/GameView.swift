@@ -8,6 +8,11 @@
 import SwiftUI
 import SocketIO
 
+struct Hand: Hashable, Codable {
+    var name: String
+    var han: Int
+}
+
 struct GameView: View {
     @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
@@ -29,7 +34,7 @@ struct GameView: View {
     @State private var showingExhaustive: Bool = false
     @State private var showingWinNotice: Bool = false
     @State private var score: Int = 0
-    @State private var hands: [String] = []
+    @State private var hands: [Hand] = []
     @State private var scoreName: String = ""
     @State private var waitsCandidate: [WaitCandidate] = []
     @State private var isFuriten: Bool = false
@@ -212,7 +217,7 @@ struct GameView: View {
                 score = Int(dict["score"]!)!
                 scoreName = dict["scoreName"]!
                 let jsonData = dict["hands"]!.data(using: .utf8)!
-                hands = try! JSONDecoder().decode(Array<String>.self, from: jsonData)
+                hands = try! JSONDecoder().decode(Array<Hand>.self, from: jsonData)
                 gameData.revDoraTiles = gameData.decode(str: dict["revDoras"]!)
                 gameData.roundWinType = (dict["winType"]! == "draw" ? "ツモ" : "ロン")
                 gameData.isGameEnd = (dict["isGameEnd"]! == "true")
