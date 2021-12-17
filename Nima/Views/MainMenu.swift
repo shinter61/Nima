@@ -53,6 +53,17 @@ struct MainMenu: View {
                             .foregroundColor(Color.red)
                     }
                     .position(x: width*0.73, y: height*0.5)
+                    
+                    if userData.userName == "" {
+                        Colors().lightGray.opacity(0.85).ignoresSafeArea(.all)
+                        CustomText(content: "ログイン中", size: 28, tracking: 0)
+                            .foregroundColor(Colors.init().navy)
+                            .position(x: width*0.5, y: height*0.3)
+                        ProgressView()
+                            .scaleEffect(x: 2, y: 2, anchor: .center)
+                            .progressViewStyle(CircularProgressViewStyle(tint: Colors().navy))
+                            .position(x: width*0.5, y: height*0.7)
+                    }
                 }
                 
                 NavigationLink(

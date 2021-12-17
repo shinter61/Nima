@@ -20,6 +20,7 @@ struct RegistPlayerNameView: View {
     @State private var errorMessage: String = ""
     @State private var keyboardOpened: Bool = false
     @State private var showingMainMenu: Bool = false
+    @State private var showingProgress: Bool = false
     
     func randomString(of length: Int) -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -32,6 +33,8 @@ struct RegistPlayerNameView: View {
     
     @available(iOS 15.0.0, *)
     func registUser() async {
+        showingProgress = true
+        
         if name.count < 2 || name.count > 8 {
             errorMessage = "2~8文字以内で入力してください"
             return
@@ -43,8 +46,11 @@ struct RegistPlayerNameView: View {
             UserDefaults.standard.set(user.id, forKey: "userID")
             let keychain = Keychain(service: "nima.password")
             keychain[String(user.id)] = newPassword
+            showingProgress = false
             showingMainMenu = true
         } catch(let error) {
+            showingProgress = false
+            errorMessage = "登録失敗"
             debugPrint(error)
         }
     }
@@ -79,6 +85,18 @@ struct RegistPlayerNameView: View {
                         CustomText(content: "登録", size: 24, tracking: 2)
                     }
                     .position(x: width/2, y: height*0.85)
+                }
+                
+                
+                if showingProgress {
+                    Colors().lightGray.opacity(0.85).ignoresSafeArea(.all)
+                    CustomText(content: "登録中", size: 28, tracking: 0)
+                        .foregroundColor(Colors.init().navy)
+                        .position(x: width*0.5, y: height*0.3)
+                    ProgressView()
+                        .scaleEffect(x: 2, y: 2, anchor: .center)
+                        .progressViewStyle(CircularProgressViewStyle(tint: Colors().navy))
+                        .position(x: width*0.5, y: height*0.7)
                 }
             }.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
                 keyboardOpened = true
