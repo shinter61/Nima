@@ -7,11 +7,14 @@
 
 import SwiftUI
 import KeychainAccess
+import AppTrackingTransparency
+import GoogleMobileAds
 
 struct MainMenu: View {
     @EnvironmentObject var userData: UserData
     @State private var showingMatching: Bool = false
     @State private var interstitial: Interstitial!
+    @State private var trackingAuthorized: Bool?
     
     @available(iOS 15.0.0, *)
     func loginUser() async {
@@ -26,6 +29,45 @@ struct MainMenu: View {
         } catch(let error) {
             debugPrint(error)
         }
+    }
+    
+    func checkTrackingAuthorizationStatus() {
+        switch ATTrackingManager.trackingAuthorizationStatus {
+        case .notDetermined:
+            requestTrackingAuthorization()
+        case .restricted:
+            updateTrackingAuthorizationStatus(false)
+        case .denied:
+            updateTrackingAuthorizationStatus(false)
+        case .authorized:
+            updateTrackingAuthorizationStatus(true)
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    func requestTrackingAuthorization() {
+        ATTrackingManager.requestTrackingAuthorization { status in
+            switch status {
+            case .notDetermined: break
+            case .restricted:
+                self.updateTrackingAuthorizationStatus(false)
+            case .denied:
+                self.updateTrackingAuthorizationStatus(false)
+            case .authorized:
+                self.updateTrackingAuthorizationStatus(true)
+            @unknown default:
+                fatalError()
+            }
+        }
+    }
+    
+    func updateTrackingAuthorizationStatus(_ b: Bool) {
+        GADMobileAds.sharedInstance().start { status in
+            self.trackingAuthorized = b
+        }
+        interstitial?.showAd()
+        interstitial = Interstitial()
     }
     
     var body: some View {
@@ -73,8 +115,7 @@ struct MainMenu: View {
             }
             .task { await loginUser() }
             .onAppear {
-                interstitial?.showAd()
-                interstitial = Interstitial()
+                checkTrackingAuthorizationStatus()
             }
         }
     }
