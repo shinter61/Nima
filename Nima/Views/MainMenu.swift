@@ -16,6 +16,12 @@ struct MainMenu: View {
     @State private var interstitial: Interstitial!
     @State private var trackingAuthorized: Bool?
     
+    @State private var showingRule: Bool = false
+    @State private var showingRecords: Bool = false
+    @State private var showingRanking: Bool = false
+    @State private var showingMyPage: Bool = false
+    @State private var isAdTiming: Bool = true
+    
     @available(iOS 15.0.0, *)
     func loginUser() async {
         let keychain = Keychain(service: "nima.password")
@@ -89,12 +95,41 @@ struct MainMenu: View {
                     .position(x: width*0.3, y: height*0.7)
                     
                     Button(action: {
+                        isAdTiming = true
                         showingMatching = true
                     }) {
                         CustomText(content: "対戦する", size: 24, tracking: 2)
                             .foregroundColor(Color.red)
                     }
                     .position(x: width*0.73, y: height*0.5)
+                    
+                    HStack(alignment: .center, spacing: 36.0, content: {
+                        Button(action: { showingRule = true }) {
+                            Image(systemName: "book.closed")
+                                .resizable()
+                                .frame(width: 32.0, height: 32.0, alignment: .center)
+                                .foregroundColor(Colors().navy)
+                        }
+                        Button(action: { showingRecords = true }) {
+                            Image(systemName: "folder")
+                                .resizable()
+                                .frame(width: 32.0, height: 32.0, alignment: .center)
+                                .foregroundColor(Colors().navy)
+                        }
+                        Button(action: { showingRanking = true }) {
+                            Image(systemName: "crown")
+                                .resizable()
+                                .frame(width: 32.0, height: 28.0, alignment: .center)
+                                .foregroundColor(Colors().navy)
+                        }
+                        Button(action: { showingMyPage = true }) {
+                            Image(systemName: "house")
+                                .resizable()
+                                .frame(width: 32.0, height: 32.0, alignment: .center)
+                                .foregroundColor(Colors().navy)
+                        }
+                    })
+                    .position(x: width*0.73, y: height*0.9)
                     
                     if userData.userName == "" {
                         Colors().lightGray.opacity(0.85).ignoresSafeArea(.all)
@@ -108,14 +143,38 @@ struct MainMenu: View {
                     }
                 }
                 
-                NavigationLink(
-                    destination: MatchingView(rootIsActive: self.$showingMatching).navigationBarHidden(true),
-                    isActive: self.$showingMatching
-                ) { EmptyView() }
+                Group {
+                    NavigationLink(
+                        destination: MatchingView(rootIsActive: self.$showingMatching).navigationBarHidden(true),
+                        isActive: self.$showingMatching
+                    ) { EmptyView() }
+                    
+                    NavigationLink(
+                        destination: RuleView(showingRule: self.$showingRule, isAdTiming: self.$isAdTiming).navigationBarHidden(true),
+                        isActive: self.$showingRule
+                    ) { EmptyView() }
+                    
+                    NavigationLink(
+                        destination: RecordsView(showingRecords: self.$showingRecords, isAdTiming: self.$isAdTiming).navigationBarHidden(true),
+                        isActive: self.$showingRecords
+                    ) { EmptyView() }
+                    
+                    NavigationLink(
+                        destination: RankingView(showingRanking: self.$showingRanking, isAdTiming: self.$isAdTiming).navigationBarHidden(true),
+                        isActive: self.$showingRanking
+                    ) { EmptyView() }
+                    
+                    NavigationLink(
+                        destination: MyPageView(showingMyPage: self.$showingMyPage, isAdTiming: self.$isAdTiming).navigationBarHidden(true),
+                        isActive: self.$showingMyPage
+                    ) { EmptyView() }
+                }
             }
             .task { await loginUser() }
             .onAppear {
-                checkTrackingAuthorizationStatus()
+                if isAdTiming {
+                    checkTrackingAuthorizationStatus()
+                }
             }
         }
     }
