@@ -21,6 +21,10 @@
 		E51E714F27000F2800292CBB /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51E714E27000F2800292CBB /* CustomText.swift */; };
 		E528B8B226C1627200BC4736 /* DiscardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528B8B126C1627200BC4736 /* DiscardsView.swift */; };
 		E52C0C482719F805009A53B1 /* SubGameInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52C0C472719F805009A53B1 /* SubGameInfoView.swift */; };
+		E53422A1276C1515007FA044 /* RuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A0276C1515007FA044 /* RuleView.swift */; };
+		E53422A3276C20F8007FA044 /* RankingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A2276C20F8007FA044 /* RankingView.swift */; };
+		E53422A5276C229F007FA044 /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A4276C229F007FA044 /* RecordsView.swift */; };
+		E53422A7276C236F007FA044 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A6276C236F007FA044 /* MyPageView.swift */; };
 		E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35826BFCDC1000A45D8 /* NimaApp.swift */; };
 		E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35A26BFCDC1000A45D8 /* ContentView.swift */; };
 		E53BE35D26BFCDC2000A45D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */; };
@@ -91,6 +95,10 @@
 		E51E714E27000F2800292CBB /* CustomText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
 		E528B8B126C1627200BC4736 /* DiscardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardsView.swift; sourceTree = "<group>"; };
 		E52C0C472719F805009A53B1 /* SubGameInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGameInfoView.swift; sourceTree = "<group>"; };
+		E53422A0276C1515007FA044 /* RuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleView.swift; sourceTree = "<group>"; };
+		E53422A2276C20F8007FA044 /* RankingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingView.swift; sourceTree = "<group>"; };
+		E53422A4276C229F007FA044 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
+		E53422A6276C236F007FA044 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		E53BE35526BFCDC1000A45D8 /* Nima.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nima.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53BE35826BFCDC1000A45D8 /* NimaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimaApp.swift; sourceTree = "<group>"; };
 		E53BE35A26BFCDC1000A45D8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -218,6 +226,10 @@
 				E55DCEE927308A340005FF07 /* WinNoticeView.swift */,
 				E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */,
 				E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */,
+				E53422A0276C1515007FA044 /* RuleView.swift */,
+				E53422A2276C20F8007FA044 /* RankingView.swift */,
+				E53422A4276C229F007FA044 /* RecordsView.swift */,
+				E53422A6276C236F007FA044 /* MyPageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -570,6 +582,7 @@
 				E52C0C482719F805009A53B1 /* SubGameInfoView.swift in Sources */,
 				E55DCEEC2730BD970005FF07 /* RoundWinTypeView.swift in Sources */,
 				E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */,
+				E53422A7276C236F007FA044 /* MyPageView.swift in Sources */,
 				E5856218271A3FA3000F6F9E /* FuritenView.swift in Sources */,
 				E50A8F5627155FC5000F253A /* Colors.swift in Sources */,
 				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
@@ -587,14 +600,17 @@
 				E58B88A4275D727600424B96 /* UserData.swift in Sources */,
 				E51E714F27000F2800292CBB /* CustomText.swift in Sources */,
 				E50A8F5827158345000F253A /* MatchingView.swift in Sources */,
+				E53422A5276C229F007FA044 /* RecordsView.swift in Sources */,
 				E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */,
 				E50A8F6027176518000F253A /* GameInfoView.swift in Sources */,
 				E5A8422B26DE4033003230F6 /* AnkanView.swift in Sources */,
 				E55C62CA275FEED200B467A3 /* Interstitial.swift in Sources */,
 				E50F15D7272D44B2002D1371 /* TilesView.swift in Sources */,
+				E53422A1276C1515007FA044 /* RuleView.swift in Sources */,
 				E53BE38A26BFDAE2000A45D8 /* Tile.swift in Sources */,
 				E58B88A2275C55C800424B96 /* UserService.swift in Sources */,
 				E50A8F5E27175EFD000F253A /* NameView.swift in Sources */,
+				E53422A3276C20F8007FA044 /* RankingView.swift in Sources */,
 				E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */,
 				E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */,
 			);
