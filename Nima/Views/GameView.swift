@@ -16,6 +16,7 @@ struct Hand: Hashable, Codable {
 struct GameView: View {
     @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var soundData: SoundData
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
     @State private var isMyTurn: Bool = false
@@ -58,6 +59,7 @@ struct GameView: View {
     func addHandler(socket: SocketIOClient!) -> Void {
         socket.on("InformDiscards") { (data, ack) in
             if let dict = data[0] as? [String: String] {
+                soundData.discardSound.play()
                 gameData.kyotaku = Int(dict["kyotaku"]!)!
                 if gameData.opponentID == Int(dict["id"]!) {
                     isOpponentDraw = false
@@ -66,6 +68,9 @@ struct GameView: View {
                     startOpponentTimer()
                     
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
+                    if gameData.yourRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
+                        soundData.riichiSound.play()
+                    }
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.yourScore = Int(dict["score"]!)!
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
@@ -90,6 +95,9 @@ struct GameView: View {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myDrawWaits = gameData.decode(str: dict["drawWaits"]!)
                     gameData.myRonWaits = gameData.decode(str: dict["ronWaits"]!)
+                    if gameData.myRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
+                        soundData.riichiSound.play()
+                    }
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
                     if !isFuriten { isFuriten = gameData.isFuriten() }

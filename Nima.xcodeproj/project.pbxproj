@@ -40,6 +40,7 @@
 		E55DCEEC2730BD970005FF07 /* RoundWinTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */; };
 		E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */; };
 		E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E560096426D2D75D00520816 /* ActionEmptyView.swift */; };
+		E569639F276E4ECB005704CB /* SoundData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E569639E276E4ECB005704CB /* SoundData.swift */; };
 		E583A49826C26F0300134067 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = E583A49726C26F0300134067 /* SocketIO */; };
 		E583A49F26C298E900134067 /* GameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583A49E26C298E900134067 /* GameService.swift */; };
 		E5856218271A3FA3000F6F9E /* FuritenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5856217271A3FA3000F6F9E /* FuritenView.swift */; };
@@ -120,6 +121,7 @@
 		E55DCEEB2730BD970005FF07 /* RoundWinTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundWinTypeView.swift; sourceTree = "<group>"; };
 		E55DCEED2730EC300005FF07 /* RegistPlayerNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistPlayerNameView.swift; sourceTree = "<group>"; };
 		E560096426D2D75D00520816 /* ActionEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEmptyView.swift; sourceTree = "<group>"; };
+		E569639E276E4ECB005704CB /* SoundData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundData.swift; sourceTree = "<group>"; };
 		E583A49E26C298E900134067 /* GameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameService.swift; sourceTree = "<group>"; };
 		E5856217271A3FA3000F6F9E /* FuritenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuritenView.swift; sourceTree = "<group>"; };
 		E58B88A1275C55C800424B96 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				E53BE38926BFDAE2000A45D8 /* Tile.swift */,
 				E5EFA569275B175700D23066 /* User.swift */,
 				E55C62C9275FEED200B467A3 /* Interstitial.swift */,
+				E569639E276E4ECB005704CB /* SoundData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -282,11 +285,11 @@
 			children = (
 				E53BE35826BFCDC1000A45D8 /* NimaApp.swift */,
 				E53BE35A26BFCDC1000A45D8 /* ContentView.swift */,
+				E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */,
 				E5EFA568275B0D8D00D23066 /* Services */,
 				E50A8F4E27155E5C000F253A /* Views */,
 				E50A8F4F27155E9B000F253A /* Models */,
 				E50A8F4D27155E42000F253A /* Fonts */,
-				E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */,
 				E53BE36126BFCDC2000A45D8 /* Info.plist */,
 				E53BE35E26BFCDC2000A45D8 /* Preview Content */,
 			);
@@ -581,6 +584,7 @@
 				E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */,
 				E52C0C482719F805009A53B1 /* SubGameInfoView.swift in Sources */,
 				E55DCEEC2730BD970005FF07 /* RoundWinTypeView.swift in Sources */,
+				E569639F276E4ECB005704CB /* SoundData.swift in Sources */,
 				E560096526D2D75D00520816 /* ActionEmptyView.swift in Sources */,
 				E53422A7276C236F007FA044 /* MyPageView.swift in Sources */,
 				E5856218271A3FA3000F6F9E /* FuritenView.swift in Sources */,

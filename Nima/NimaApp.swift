@@ -11,6 +11,7 @@ import SwiftUI
 struct NimaApp: App {
     @StateObject private var gameData = GameData()
     @StateObject private var userData = UserData()
+    @StateObject private var soundData = SoundData()
     @StateObject private var gameService = GameService()
 
     var body: some Scene {
@@ -18,6 +19,7 @@ struct NimaApp: App {
             ContentView()
                 .environmentObject(gameData)
                 .environmentObject(userData)
+                .environmentObject(soundData)
                 .environmentObject(gameService)
         }
     }
