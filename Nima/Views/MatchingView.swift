@@ -13,6 +13,7 @@ struct MatchingView: View {
     @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameService: GameService
     @Binding var rootIsActive: Bool
+    @Binding var isAdTiming: Bool
     @State private var matchingFinished: Bool = false
     func addHandler(socket: SocketIOClient!) -> Void {
         socket.on(clientEvent: .connect) { (data, ack) in
@@ -46,6 +47,17 @@ struct MatchingView: View {
                     .scaleEffect(x: 2, y: 2, anchor: .center)
                     .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
                     .position(x: width*0.5, y: height*0.7)
+                Button(action: {
+                    gameService.socket.disconnect()
+                    gameService.socket.removeAllHandlers()
+                    gameData.allReset()
+                    isAdTiming = false
+                    rootIsActive = false
+                }) {
+                    CustomText(content: "キャンセル", size: 20, tracking: 0)
+                        .foregroundColor(Colors().lightGray)
+                }
+                .position(x: width*0.85, y: height*0.85)
             }
             
             NavigationLink(
@@ -65,7 +77,7 @@ struct MatchingView: View {
 struct MatchingView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            MatchingView(rootIsActive: .constant(false))
+            MatchingView(rootIsActive: .constant(false), isAdTiming: .constant(false))
                 .environmentObject(GameData())
                 .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)

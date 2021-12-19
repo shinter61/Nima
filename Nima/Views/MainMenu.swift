@@ -145,7 +145,7 @@ struct MainMenu: View {
                 
                 Group {
                     NavigationLink(
-                        destination: MatchingView(rootIsActive: self.$showingMatching).navigationBarHidden(true),
+                        destination: MatchingView(rootIsActive: self.$showingMatching, isAdTiming: self.$isAdTiming).navigationBarHidden(true),
                         isActive: self.$showingMatching
                     ) { EmptyView() }
                     
