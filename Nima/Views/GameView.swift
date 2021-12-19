@@ -21,6 +21,7 @@ struct GameView: View {
     @Binding var rootIsActive: Bool
     @State private var isMyTurn: Bool = false
     @State private var isWin: Bool = false
+    @State private var isWon: Bool = false
     @State private var canRon: Bool = false
     @State private var canPon: Bool = false
     @State private var canDaiminkan: Bool = false
@@ -134,6 +135,7 @@ struct GameView: View {
                     gameData.doraTiles = gameData.decode(str: dict["doraTiles"]!)
                     gameData.roundWinnerID = -1
                     gameData.roundWinType = ""
+                    isWon = false
                     
                     if (gameData.isParent) {
                         socket.emit("Draw", gameData.roomID, userData.userID, false)
@@ -543,6 +545,7 @@ struct GameView: View {
                             Button(action: {
                                 resetMyActionTimer()
                                 gameService.socket.emit("Win", gameData.roomID, userData.userID, "ron")
+                                isWon = true
                             }) {
                                 CustomText(content: "ロン", size: 24, tracking: 0)
                                     .foregroundColor(Colors.init().red)
@@ -560,6 +563,7 @@ struct GameView: View {
                             Button(action: {
                                 resetMyDiscardTimer()
                                 gameService.socket.emit("Win", gameData.roomID, userData.userID, "draw")
+                                isWon = true
                             }) {
                                 CustomText(content: "ツモ", size: 24, tracking: 0)
                                     .foregroundColor(Colors.init().red)
@@ -649,7 +653,8 @@ struct GameView: View {
                                       (nextRiichi && !waitExistsFor(tile: tile)) ||
                                       (nextKakan && !canKakanFor(tile: tile)) ||
                                       (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
-                                      (!isRiichi && nextAnkan && !canAnkanFor(tile: tile))
+                                      (!isRiichi && nextAnkan && !canAnkanFor(tile: tile) ||
+                                      isWon)
                             )
                             .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
                         }
