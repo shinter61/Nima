@@ -107,6 +107,7 @@ struct GameView: View {
         socket.on("DistributeInitTiles") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if userData.userID == Int(dict["id"]!) {
+                    soundData.ripaiSound.play()
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myScore = Int(dict["score"]!)!
                     gameData.myMinkos = []
