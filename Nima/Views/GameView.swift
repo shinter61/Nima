@@ -651,12 +651,17 @@ struct GameView: View {
                                       (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
                                       (!isRiichi && nextAnkan && !canAnkanFor(tile: tile))
                             )
+                            .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
                         }
                     })
-                        .padding(.trailing, 6)
-                    MinkoView(playerID: userData.userID)
-                    AnkanView(playerID: userData.userID)
-                    MinkanView(playerID: userData.userID)
+                        .padding(.leading, width*0.1)
+                    Spacer()
+                    Group {
+                        MinkoView(playerID: userData.userID)
+                        AnkanView(playerID: userData.userID)
+                        MinkanView(playerID: userData.userID)
+                    }
+                        .padding(.trailing, width*0.03)
                 })
                 .position(x: width/2, y: height*0.93)
                 
