@@ -242,6 +242,8 @@ struct GameView: View {
                 isFuriten = false
                 
                 showingWinNotice = true
+                
+                dict["winType"]! == "draw" ? soundData.tsumoSound.play() : soundData.ronSound.play()
             }
         }
         socket.on("ExhaustiveDraw") { (data, ack) in

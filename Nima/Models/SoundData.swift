@@ -12,4 +12,6 @@ import AVFoundation
 final class SoundData: ObservableObject {
    @Published var riichiSound = try! AVAudioPlayer(data: NSDataAsset(name: "riichi")!.data)
    @Published var discardSound = try! AVAudioPlayer(data: NSDataAsset(name: "discard")!.data)
+   @Published var tsumoSound = try! AVAudioPlayer(data: NSDataAsset(name: "tsumo")!.data)
+   @Published var ronSound = try! AVAudioPlayer(data: NSDataAsset(name: "ron")!.data)
 }
