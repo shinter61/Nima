@@ -651,6 +651,7 @@ struct GameView: View {
                                       (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
                                       (!isRiichi && nextAnkan && !canAnkanFor(tile: tile))
                             )
+                            .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
                         }
                     })
                         .padding(.leading, width*0.1)
