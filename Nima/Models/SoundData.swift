@@ -14,4 +14,5 @@ final class SoundData: ObservableObject {
    @Published var discardSound = try! AVAudioPlayer(data: NSDataAsset(name: "discard")!.data)
    @Published var tsumoSound = try! AVAudioPlayer(data: NSDataAsset(name: "tsumo")!.data)
    @Published var ronSound = try! AVAudioPlayer(data: NSDataAsset(name: "ron")!.data)
+   @Published var ponSound = try! AVAudioPlayer(data: NSDataAsset(name: "pon")!.data)
 }

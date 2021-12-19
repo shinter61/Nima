@@ -166,6 +166,7 @@ struct GameView: View {
         }
         socket.on("Pon") { (data, ack) in
             if let dict = data[0] as? [String: String] {
+                soundData.ponSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
