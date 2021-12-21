@@ -671,9 +671,7 @@ struct GameView: View {
                                 }
                             }
                             .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
-                            .onTapGesture(count: 3) { discard(tile: tile, index: index) }
                             .onTapGesture(count: 2) { discard(tile: tile, index: index) }
-                            .onTapGesture(count: 1) { discard(tile: tile, index: index) }
                         }
                     })
                         .padding(.leading, width*0.1)
