@@ -561,7 +561,7 @@ struct GameView: View {
                         NameView(name: userData.userName).position(x: width*0.2, y: height*0.75)
                     }
                     Group {
-                        if (isMyTurn && gameData.canAnkanTiles.count != 0) {
+                        if (isMyTurn && gameData.canAnkanTiles.count != 0 && gameData.stockCount >= 1) {
                             Button(action: { nextAnkan.toggle() }) {
                                 CustomText(content: "暗槓", size: 24, tracking: 0)
                                     .foregroundColor(nextAnkan ? Colors.init().navy : Colors.init().red)
@@ -606,7 +606,7 @@ struct GameView: View {
                                 .onTapGesture(count: 1) { ron() }
                                 .position(x: width*0.75, y: height*0.8)
                         }
-                        if (canRiichi && !isRiichi && gameData.isMenzen()) {
+                        if (canRiichi && !isRiichi && gameData.isMenzen() && gameData.stockCount >= 1) {
                             Button(action: { nextRiichi.toggle() }) {
                                 CustomText(content: "立直", size: 24, tracking: 0)
                                     .foregroundColor(nextRiichi ? Colors.init().navy : Colors.init().red)
