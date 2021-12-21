@@ -15,6 +15,7 @@ extension UIApplication {
 }
 
 struct RegistPlayerNameView: View {
+    @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
     @State private var name: String = ""
     @State private var errorMessage: String = ""
@@ -44,6 +45,7 @@ struct RegistPlayerNameView: View {
         do {
             let user: User = try await UserService().signUp(name: name, password: newPassword)
             UserDefaults.standard.set(user.id, forKey: "userID")
+            userData.userID = user.id
             let keychain = Keychain(service: "nima.password")
             keychain[String(user.id)] = newPassword
             showingProgress = false
@@ -117,6 +119,7 @@ struct RegistPlayerNameView_Previews: PreviewProvider {
         if #available(iOS 15.0, *) {
             RegistPlayerNameView()
                 .environmentObject(GameData())
+                .environmentObject(UserData())
                 .previewInterfaceOrientation(.landscapeLeft)
         }
     }
