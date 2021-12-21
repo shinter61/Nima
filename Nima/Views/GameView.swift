@@ -433,6 +433,62 @@ struct GameView: View {
         discardCallback()
     }
     
+    func ron() -> Void {
+        resetMyActionTimer()
+        gameService.socket.emit("Win", gameData.roomID, userData.userID, "ron")
+        isWon = true
+    }
+    
+    func draw() -> Void {
+        resetMyDiscardTimer()
+        gameService.socket.emit("Win", gameData.roomID, userData.userID, "draw")
+        isWon = true
+    }
+    
+    func discard(tile: Tile, index: Int) -> Void {
+        if (!isMyTurn ||
+           (nextRiichi && !waitExistsFor(tile: tile)) ||
+           (nextKakan && !canKakanFor(tile: tile)) ||
+           (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
+           (!isRiichi && nextAnkan && !canAnkanFor(tile: tile)) ||
+            isWon) { return }
+        if (nextKakan) {
+            nextKakan.toggle()
+            canKakan.toggle()
+            gameService.socket.emit(
+                "Kakan",
+                gameData.roomID,
+                userData.userID,
+                gameData.encode(tiles: [tile])
+            )
+            return
+        }
+        if (nextAnkan) {
+            nextAnkan.toggle()
+            gameService.socket.emit(
+                "Ankan",
+                gameData.roomID,
+                userData.userID,
+                gameData.encode(tiles: [tile])
+            )
+            return
+        }
+        if (nextRiichi) {
+            canRiichi.toggle()
+            nextRiichi.toggle()
+            isRiichi = true
+        }
+        resetMyDiscardTimer()
+        gameService.socket.emit(
+            "Discard",
+            gameData.roomID,
+            userData.userID,
+            gameData.encode(tiles: [tile]),
+            isRiichi
+        )
+        discardCallback()
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
@@ -542,15 +598,12 @@ struct GameView: View {
                             .position(x: width*0.65, y: height*0.8)
                         }
                         if (!isFuriten && canRon) {
-                            Button(action: {
-                                resetMyActionTimer()
-                                gameService.socket.emit("Win", gameData.roomID, userData.userID, "ron")
-                                isWon = true
-                            }) {
-                                CustomText(content: "ロン", size: 24, tracking: 0)
-                                    .foregroundColor(Colors.init().red)
-                            }
-                            .position(x: width*0.75, y: height*0.8)
+                            CustomText(content: "ロン", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                                .onTapGesture(count: 3) { ron() }
+                                .onTapGesture(count: 2) { ron() }
+                                .onTapGesture(count: 1) { ron() }
+                                .position(x: width*0.75, y: height*0.8)
                         }
                         if (canRiichi && !isRiichi && gameData.isMenzen()) {
                             Button(action: { nextRiichi.toggle() }) {
@@ -560,15 +613,12 @@ struct GameView: View {
                             .position(x: width*0.65, y: height*0.8)
                         }
                         if (isWin) {
-                            Button(action: {
-                                resetMyDiscardTimer()
-                                gameService.socket.emit("Win", gameData.roomID, userData.userID, "draw")
-                                isWon = true
-                            }) {
-                                CustomText(content: "ツモ", size: 24, tracking: 0)
-                                    .foregroundColor(Colors.init().red)
-                            }
-                            .position(x: width*0.75, y: height*0.8)
+                            CustomText(content: "ツモ", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                                .onTapGesture(count: 3) { draw() }
+                                .onTapGesture(count: 2) { draw() }
+                                .onTapGesture(count: 1) { draw() }
+                                .position(x: width*0.75, y: height*0.8)
                         }
                         if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
                             Button(action: {
@@ -599,64 +649,31 @@ struct GameView: View {
                 HStack(alignment: .center, spacing: 0, content: {
                     HStack(alignment: .center, spacing: -6, content: {
                         ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
-                            Button(action: {
-                                if (nextKakan) {
-                                    nextKakan.toggle()
-                                    canKakan.toggle()
-                                    gameService.socket.emit(
-                                        "Kakan",
-                                        gameData.roomID,
-                                        userData.userID,
-                                        gameData.encode(tiles: [tile])
-                                    )
-                                    return
+                            ZStack {
+                                Image(tile.name())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 40, height: 60, alignment: .center)
+                                if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(Color.yellow.opacity(0.2))
+                                        .frame(width: 30, height: 45, alignment: .center)
                                 }
-                                if (nextAnkan) {
-                                    nextAnkan.toggle()
-                                    gameService.socket.emit(
-                                        "Ankan",
-                                        gameData.roomID,
-                                        userData.userID,
-                                        gameData.encode(tiles: [tile])
-                                    )
-                                    return
-                                }
-                                if (nextRiichi) {
-                                    canRiichi.toggle()
-                                    nextRiichi.toggle()
-                                    isRiichi = true
-                                }
-                                resetMyDiscardTimer()
-                                gameService.socket.emit(
-                                    "Discard",
-                                    gameData.roomID,
-                                    userData.userID,
-                                    gameData.encode(tiles: [tile]),
-                                    isRiichi
-                                )
-                                discardCallback()
-                            }) {
-                                ZStack {
-                                    Image(tile.name())
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40, height: 60, alignment: .center)
-                                    if gameData.doraTiles.map { $0.next().name() }.contains(tile.name()) {
-                                        RoundedRectangle(cornerRadius: 2)
-                                            .fill(Color.yellow.opacity(0.2))
-                                            .frame(width: 30, height: 45, alignment: .center)
-                                    }
+                                if (!isMyTurn ||
+                                   (nextRiichi && !waitExistsFor(tile: tile)) ||
+                                   (nextKakan && !canKakanFor(tile: tile)) ||
+                                   (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
+                                   (!isRiichi && nextAnkan && !canAnkanFor(tile: tile)) ||
+                                    isWon) {
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(Colors().lightGray.opacity(0.7))
+                                        .frame(width: 32, height: 47, alignment: .center)
                                 }
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .disabled(!isMyTurn ||
-                                      (nextRiichi && !waitExistsFor(tile: tile)) ||
-                                      (nextKakan && !canKakanFor(tile: tile)) ||
-                                      (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
-                                      (!isRiichi && nextAnkan && !canAnkanFor(tile: tile) ||
-                                      isWon)
-                            )
                             .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
+                            .onTapGesture(count: 3) { discard(tile: tile, index: index) }
+                            .onTapGesture(count: 2) { discard(tile: tile, index: index) }
+                            .onTapGesture(count: 1) { discard(tile: tile, index: index) }
                         }
                     })
                         .padding(.leading, width*0.1)
