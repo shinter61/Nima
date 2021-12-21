@@ -175,6 +175,7 @@ struct GameView: View {
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
                     if (gameData.isMyTurn()) { isMyTurn = true }
+                    startMyDiscardTimer()
                 } else {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.yourMinkos = gameData.decode(str: dict["minkos"]!)
