@@ -101,7 +101,7 @@ struct GameView: View {
                     }
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
-                    if !isFuriten { isFuriten = gameData.isFuriten() }
+                    isFuriten = gameData.isFuriten()
                 }
             }
         }
