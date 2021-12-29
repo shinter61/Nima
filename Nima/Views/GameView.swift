@@ -51,6 +51,8 @@ struct GameView: View {
     @State private var myDiscardTimer: Timer!
     @State private var myDiscardCountdown: Int = 20
     
+    @State private var selectedTileIdx: Int = -1
+    
     init(rootIsActive: Binding<Bool>) {
         self._rootIsActive = rootIsActive
         UITableView.appearance().backgroundColor = .clear
@@ -102,6 +104,7 @@ struct GameView: View {
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
                     isFuriten = gameData.isFuriten()
+                    selectedTileIdx = -1
                 }
             }
         }
@@ -672,7 +675,14 @@ struct GameView: View {
                                 }
                             }
                             .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
-                            .onTapGesture(count: 2) { discard(tile: tile, index: index) }
+                            .padding(.bottom, index == selectedTileIdx ? 12.0 : 0.0)
+                            .onTapGesture {
+                                if (selectedTileIdx == index) {
+                                    discard(tile: tile, index: index)
+                                } else {
+                                    selectedTileIdx = index
+                                }
+                            }
                         }
                     })
                         .padding(.leading, width*0.1)
