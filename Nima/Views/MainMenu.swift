@@ -69,11 +69,13 @@ struct MainMenu: View {
     }
     
     func updateTrackingAuthorizationStatus(_ b: Bool) {
-        GADMobileAds.sharedInstance().start { status in
-            self.trackingAuthorized = b
-        }
-        interstitial?.showAd()
-        interstitial = Interstitial()
+        #if !DEBUG
+            GADMobileAds.sharedInstance().start { status in
+                self.trackingAuthorized = b
+            }
+            interstitial?.showAd()
+            interstitial = Interstitial()
+        #endif
     }
     
     var body: some View {
