@@ -17,7 +17,7 @@ enum ShowingActionContent: String {
     case riichi = "立直"
     case pon = "ポン"
     case ankan = "暗カン"
-    case kakan = "明カン"
+    case kakan = "加カン"
     case daiminkan = "大明カン"
 }
 
@@ -49,6 +49,7 @@ struct GameView: View {
     @State private var actionUserID: Int = -1
     @State private var riichiDiscardTile: Tile!
     @State private var ankanDiscardTile: Tile!
+    @State private var kakanDiscardTile: Tile!
     @State private var isInforming: Bool = false
     
     @State private var score: Int = 0
@@ -139,6 +140,14 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 soundData.kanSound.play()
                 showingActionContent = .ankan
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
+        socket.on("InformKakan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.kanSound.play()
+                showingActionContent = .kakan
                 actionUserID = Int(dict["id"]!)!
                 showingActionNotice = true
             }
@@ -235,7 +244,6 @@ struct GameView: View {
         }
         socket.on("Kakan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.kanSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
@@ -493,12 +501,10 @@ struct GameView: View {
         if (nextKakan) {
             nextKakan.toggle()
             canKakan.toggle()
-            gameService.socket.emit(
-                "Kakan",
-                gameData.roomID,
-                userData.userID,
-                gameData.encode(tiles: [tile])
-            )
+            selectedTileIdx = -1
+            kakanDiscardTile = tile
+            isInforming = true
+            gameService.socket.emit("InformKakan", gameData.roomID, userData.userID)
             return
         }
         if (nextAnkan) {
@@ -768,6 +774,13 @@ struct GameView: View {
                                     userData.userID,
                                     gameData.encode(tiles: [ankanDiscardTile])
                                 )
+                            } else if showingActionContent == .kakan {
+                                 gameService.socket.emit(
+                                    "Kakan",
+                                    gameData.roomID,
+                                    userData.userID,
+                                    gameData.encode(tiles: [kakanDiscardTile])
+                                 )
                             }
                         }
                         isInforming = false
