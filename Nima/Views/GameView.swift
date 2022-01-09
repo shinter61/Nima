@@ -649,6 +649,8 @@ struct GameView: View {
                                 resetMyActionTimer()
                                 gameService.socket.emit("InformPon", gameData.roomID, userData.userID)
                                 canPon = false
+                                canKakan = false
+                                canDaiminkan = false
                             }) {
                                 CustomText(content: "ポン", size: 24, tracking: 0)
                                     .foregroundColor(Colors.init().red)
