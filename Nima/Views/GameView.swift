@@ -471,12 +471,12 @@ struct GameView: View {
     }
     
     func discard(tile: Tile, index: Int) -> Void {
-        if (!isMyTurn ||
-           (nextRiichi && !waitExistsFor(tile: tile)) ||
-           (nextKakan && !canKakanFor(tile: tile)) ||
-           (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
-           (!isRiichi && nextAnkan && !canAnkanFor(tile: tile)) ||
-            isWon) { return }
+        if (!isMyTurn ||                                                        // 自分のターンではない
+           (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
+           (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
+           (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
+           (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
+            isWon) { return }                                                   // 既に和了している
         if (nextKakan) {
             nextKakan.toggle()
             canKakan.toggle()
