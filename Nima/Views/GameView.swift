@@ -125,7 +125,6 @@ struct GameView: View {
                 showingActionContent = .riichi
                 actionUserID = Int(dict["id"]!)!
                 showingActionNotice = true
-                riichiDiscardTile = gameData.decode(str: dict["discardTile"]!)[0]
             }
         }
         socket.on("InformPon") { (data, ack) in
@@ -530,7 +529,8 @@ struct GameView: View {
         resetMyDiscardTimer()
         discardCallback()
         if (isRiichi) {
-            gameService.socket.emit("InformRiichi", gameData.roomID, userData.userID, gameData.encode(tiles: [tile]))
+            riichiDiscardTile = tile
+            gameService.socket.emit("InformRiichi", gameData.roomID, userData.userID)
         } else {
             gameService.socket.emit(
                 "Discard",
