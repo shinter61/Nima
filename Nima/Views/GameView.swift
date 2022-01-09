@@ -13,6 +13,14 @@ struct Hand: Hashable, Codable {
     var han: Int
 }
 
+enum ShowingActionContent: String {
+    case riichi = "立直"
+    case pon = "ポン"
+    case ankan = "暗カン"
+    case kakan = "加カン"
+    case daiminkan = "大明カン"
+}
+
 struct GameView: View {
     @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
@@ -35,6 +43,15 @@ struct GameView: View {
     @State private var showingEndGame: Bool = false
     @State private var showingExhaustive: Bool = false
     @State private var showingWinNotice: Bool = false
+    
+    @State private var showingActionNotice: Bool = false
+    @State private var showingActionContent: ShowingActionContent = .riichi
+    @State private var actionUserID: Int = -1
+    @State private var riichiDiscardTile: Tile!
+    @State private var ankanDiscardTile: Tile!
+    @State private var kakanDiscardTile: Tile!
+    @State private var isInforming: Bool = false
+    
     @State private var score: Int = 0
     @State private var hands: [Hand] = []
     @State private var scoreName: String = ""
@@ -71,9 +88,6 @@ struct GameView: View {
                     startOpponentTimer()
                     
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
-                    if gameData.yourRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
-                        soundData.riichiSound.play()
-                    }
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.yourScore = Int(dict["score"]!)!
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
@@ -98,14 +112,51 @@ struct GameView: View {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myDrawWaits = gameData.decode(str: dict["drawWaits"]!)
                     gameData.myRonWaits = gameData.decode(str: dict["ronWaits"]!)
-                    if gameData.myRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
-                        soundData.riichiSound.play()
-                    }
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
                     isFuriten = gameData.isFuriten()
                     selectedTileIdx = -1
                 }
+            }
+        }
+        socket.on("InformRiichi") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.riichiSound.play()
+                showingActionContent = .riichi
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
+        socket.on("InformPon") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.ponSound.play()
+                showingActionContent = .pon
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
+        socket.on("InformAnkan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.kanSound.play()
+                showingActionContent = .ankan
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
+        socket.on("InformKakan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.kanSound.play()
+                showingActionContent = .kakan
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
+        socket.on("InformDaiminkan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.kanSound.play()
+                showingActionContent = .daiminkan
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
             }
         }
         socket.on("DistributeInitTiles") { (data, ack) in
@@ -172,7 +223,6 @@ struct GameView: View {
         }
         socket.on("Pon") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.ponSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
@@ -187,7 +237,6 @@ struct GameView: View {
         }
         socket.on("Daiminkan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.kanSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
@@ -201,7 +250,6 @@ struct GameView: View {
         }
         socket.on("Kakan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.kanSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
@@ -215,7 +263,6 @@ struct GameView: View {
         }
         socket.on("Ankan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.kanSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myAnkans = gameData.decode(str: dict["ankans"]!)
@@ -427,6 +474,7 @@ struct GameView: View {
         resetMyDiscardTimer()
         
         let lastTile: Tile = gameData.myTiles[gameData.myTiles.count - 1]
+        discardCallback()
         gameService.socket.emit(
             "Discard",
             gameData.roomID,
@@ -434,7 +482,6 @@ struct GameView: View {
             gameData.encode(tiles: [lastTile]),
             isRiichi
         )
-        discardCallback()
     }
     
     func ron() -> Void {
@@ -450,31 +497,28 @@ struct GameView: View {
     }
     
     func discard(tile: Tile, index: Int) -> Void {
-        if (!isMyTurn ||
-           (nextRiichi && !waitExistsFor(tile: tile)) ||
-           (nextKakan && !canKakanFor(tile: tile)) ||
-           (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
-           (!isRiichi && nextAnkan && !canAnkanFor(tile: tile)) ||
-            isWon) { return }
+        if (!isMyTurn ||                                                        // 自分のターンではない
+           (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
+           (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
+           (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
+           (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
+            isWon ||                                                            // 既に和了している
+            isInforming) { return }                                             // アクションを告知中
         if (nextKakan) {
             nextKakan.toggle()
             canKakan.toggle()
-            gameService.socket.emit(
-                "Kakan",
-                gameData.roomID,
-                userData.userID,
-                gameData.encode(tiles: [tile])
-            )
+            selectedTileIdx = -1
+            kakanDiscardTile = tile
+            isInforming = true
+            gameService.socket.emit("InformKakan", gameData.roomID, userData.userID)
             return
         }
         if (nextAnkan) {
             nextAnkan.toggle()
-            gameService.socket.emit(
-                "Ankan",
-                gameData.roomID,
-                userData.userID,
-                gameData.encode(tiles: [tile])
-            )
+            selectedTileIdx = -1
+            ankanDiscardTile = tile
+            isInforming = true
+            gameService.socket.emit("InformAnkan", gameData.roomID, userData.userID)
             return
         }
         if (nextRiichi) {
@@ -483,14 +527,19 @@ struct GameView: View {
             isRiichi = true
         }
         resetMyDiscardTimer()
-        gameService.socket.emit(
-            "Discard",
-            gameData.roomID,
-            userData.userID,
-            gameData.encode(tiles: [tile]),
-            isRiichi
-        )
         discardCallback()
+        if (isRiichi) {
+            riichiDiscardTile = tile
+            gameService.socket.emit("InformRiichi", gameData.roomID, userData.userID)
+        } else {
+            gameService.socket.emit(
+                "Discard",
+                gameData.roomID,
+                userData.userID,
+                gameData.encode(tiles: [tile]),
+                isRiichi
+            )
+        }
     }
     
     var body: some View {
@@ -574,7 +623,7 @@ struct GameView: View {
                         if (canDaiminkan && !isRiichi) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Daiminkan", gameData.roomID, userData.userID)
+                                gameService.socket.emit("InformDaiminkan", gameData.roomID, userData.userID)
                                 canDaiminkan = false
                                 canPon = false
                             }) {
@@ -593,7 +642,7 @@ struct GameView: View {
                         if (canPon && !isRiichi) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Pon", gameData.roomID, userData.userID)
+                                gameService.socket.emit("InformPon", gameData.roomID, userData.userID)
                                 canPon = false
                             }) {
                                 CustomText(content: "ポン", size: 24, tracking: 0)
@@ -663,12 +712,13 @@ struct GameView: View {
                                         .fill(Color.yellow.opacity(0.2))
                                         .frame(width: 30, height: 45, alignment: .center)
                                 }
-                                if (!isMyTurn ||
-                                   (nextRiichi && !waitExistsFor(tile: tile)) ||
-                                   (nextKakan && !canKakanFor(tile: tile)) ||
-                                   (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
-                                   (!isRiichi && nextAnkan && !canAnkanFor(tile: tile)) ||
-                                    isWon) {
+                                if (!isMyTurn ||                                                        // 自分のターンではない
+                                   (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
+                                   (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
+                                   (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
+                                   (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
+                                    isWon ||                                                            // 既に和了している
+                                    isInforming) {                                                      // アクションを告知中
                                     RoundedRectangle(cornerRadius: 2)
                                         .fill(Colors().lightGray.opacity(0.7))
                                         .frame(width: 32, height: 47, alignment: .center)
@@ -705,6 +755,50 @@ struct GameView: View {
                     .position(
                         x: width/2,
                         y: gameData.roundWinnerID == userData.userID ?  height*0.7 : height*0.3
+                    )
+                }
+                if self.showingActionNotice {
+                    ActionNoticeView(
+                        showingActionNotice: self.$showingActionNotice,
+                        showingActionContent: self.showingActionContent.rawValue
+                    )
+                    .onDisappear {
+                        if userData.userID == actionUserID {
+                            if showingActionContent == .riichi {
+                                gameService.socket.emit(
+                                    "Discard",
+                                    gameData.roomID,
+                                    userData.userID,
+                                    gameData.encode(tiles: [riichiDiscardTile]),
+                                    isRiichi
+                                )
+                            } else if showingActionContent == .pon {
+                                gameService.socket.emit("Pon", gameData.roomID, userData.userID)
+                            } else if showingActionContent == .ankan {
+                                gameService.socket.emit(
+                                    "Ankan",
+                                    gameData.roomID,
+                                    userData.userID,
+                                    gameData.encode(tiles: [ankanDiscardTile])
+                                )
+                            } else if showingActionContent == .kakan {
+                                 gameService.socket.emit(
+                                    "Kakan",
+                                    gameData.roomID,
+                                    userData.userID,
+                                    gameData.encode(tiles: [kakanDiscardTile])
+                                 )
+                            } else if showingActionContent == .daiminkan {
+                                gameService.socket.emit("Daiminkan", gameData.roomID, userData.userID)
+                            }
+                        }
+                        isInforming = false
+                        showingActionContent = .riichi
+                        actionUserID = -1
+                    }
+                    .position(
+                        x: width/2,
+                        y: actionUserID == userData.userID ?  height*0.7 : height*0.3
                     )
                 }
                 if self.opponentDiscardCountdown <= 0 {
