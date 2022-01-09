@@ -503,6 +503,7 @@ struct GameView: View {
         }
         if (nextAnkan) {
             nextAnkan.toggle()
+            selectedTileIdx = -1
             ankanDiscardTile = tile
             isInforming = true
             gameService.socket.emit("InformAnkan", gameData.roomID, userData.userID)
