@@ -30,6 +30,10 @@ struct RatingResponse: Decodable {
     let loserRating: Int
 }
 
+struct RankingResponse: Decodable {
+    let users: [User]
+}
+
 #if DEBUG
     let baseURL = "http://localhost:3000"
 #else
@@ -91,6 +95,23 @@ final class UserService {
                     switch response.result {
                     case .success(let res):
                         continuation.resume(returning: res)
+                        return
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                }
+        }
+    }
+    
+    @available(iOS 15.0.0, *)
+    func getRanking() async throws -> [User] {
+        try await withUnsafeThrowingContinuation { continuation in
+            AF.request("\(baseURL)/users/ranking", method: .get)
+                .responseDecodable(of: RankingResponse.self) { response in
+                    switch response.result {
+                    case .success(let users):
+                        continuation.resume(returning: users.users)
                         return
                     case .failure(let error):
                         continuation.resume(throwing: error)
