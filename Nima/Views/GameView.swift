@@ -16,6 +16,9 @@ struct Hand: Hashable, Codable {
 enum ShowingActionContent: String {
     case riichi = "立直"
     case pon = "ポン"
+    case ankan = "暗カン"
+    case kakan = "明カン"
+    case daiminkan = "大明カン"
 }
 
 struct GameView: View {
@@ -45,6 +48,8 @@ struct GameView: View {
     @State private var showingActionContent: ShowingActionContent = .riichi
     @State private var actionUserID: Int = -1
     @State private var riichiDiscardTile: Tile!
+    @State private var ankanDiscardTile: Tile!
+    @State private var isInforming: Bool = false
     
     @State private var score: Int = 0
     @State private var hands: [Hand] = []
@@ -126,6 +131,14 @@ struct GameView: View {
             if let dict = data[0] as? [String: String] {
                 soundData.ponSound.play()
                 showingActionContent = .pon
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
+        socket.on("InformAnkan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.kanSound.play()
+                showingActionContent = .ankan
                 actionUserID = Int(dict["id"]!)!
                 showingActionNotice = true
             }
@@ -236,7 +249,6 @@ struct GameView: View {
         }
         socket.on("Ankan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.kanSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myAnkans = gameData.decode(str: dict["ankans"]!)
@@ -476,7 +488,8 @@ struct GameView: View {
            (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
            (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
            (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
-            isWon) { return }                                                   // 既に和了している
+            isWon ||                                                            // 既に和了している
+            isInforming) { return }                                             // アクションを告知中
         if (nextKakan) {
             nextKakan.toggle()
             canKakan.toggle()
@@ -490,12 +503,9 @@ struct GameView: View {
         }
         if (nextAnkan) {
             nextAnkan.toggle()
-            gameService.socket.emit(
-                "Ankan",
-                gameData.roomID,
-                userData.userID,
-                gameData.encode(tiles: [tile])
-            )
+            ankanDiscardTile = tile
+            isInforming = true
+            gameService.socket.emit("InformAnkan", gameData.roomID, userData.userID)
             return
         }
         if (nextRiichi) {
@@ -688,12 +698,13 @@ struct GameView: View {
                                         .fill(Color.yellow.opacity(0.2))
                                         .frame(width: 30, height: 45, alignment: .center)
                                 }
-                                if (!isMyTurn ||
-                                   (nextRiichi && !waitExistsFor(tile: tile)) ||
-                                   (nextKakan && !canKakanFor(tile: tile)) ||
-                                   (isRiichi && ((!nextAnkan && index != gameData.myTiles.count - 1) || (nextAnkan && !canAnkanFor(tile: tile)))) ||
-                                   (!isRiichi && nextAnkan && !canAnkanFor(tile: tile)) ||
-                                    isWon) {
+                                if (!isMyTurn ||                                                        // 自分のターンではない
+                                   (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
+                                   (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
+                                   (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
+                                   (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
+                                    isWon ||                                                            // 既に和了している
+                                    isInforming) {                                                      // アクションを告知中
                                     RoundedRectangle(cornerRadius: 2)
                                         .fill(Colors().lightGray.opacity(0.7))
                                         .frame(width: 32, height: 47, alignment: .center)
@@ -749,8 +760,16 @@ struct GameView: View {
                                 )
                             } else if showingActionContent == .pon {
                                 gameService.socket.emit("Pon", gameData.roomID, userData.userID)
+                            } else if showingActionContent == .ankan {
+                                gameService.socket.emit(
+                                    "Ankan",
+                                    gameData.roomID,
+                                    userData.userID,
+                                    gameData.encode(tiles: [ankanDiscardTile])
+                                )
                             }
                         }
+                        isInforming = false
                         showingActionContent = .riichi
                         actionUserID = -1
                     }
