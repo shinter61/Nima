@@ -16,9 +16,6 @@ struct MatchingView: View {
     @Binding var isAdTiming: Bool
     @State private var matchingFinished: Bool = false
     func addHandler(socket: SocketIOClient!) -> Void {
-        socket.on(clientEvent: .connect) { (data, ack) in
-            socket.emit("StartMatching", userData.userID, userData.userName)
-        }
         socket.on("InformPlayersNames") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 gameData.roomID = dict["roomID"]!
@@ -66,10 +63,10 @@ struct MatchingView: View {
             ) { EmptyView() }
         }
         .onAppear {
-            if gameService.socket.handlers.count == 0 {
+            if gameService.socket.handlers.count == 1 {
                 addHandler(socket: gameService.socket)
             }
-            gameService.socket.connect(withPayload: ["name": userData.userName, "id": userData.userID])
+            gameService.socket.emit("StartMatching", userData.userID, userData.userName)
         }
     }
 }

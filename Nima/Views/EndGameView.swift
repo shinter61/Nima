@@ -58,7 +58,6 @@ struct EndGameView: View {
                 Button(action: {
                     Task {
                         await updateRate()
-                        gameService.socket.disconnect()
                         gameService.socket.removeAllHandlers()
                         gameData.allReset()
                         rootIsActive = false
