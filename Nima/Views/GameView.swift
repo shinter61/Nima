@@ -152,6 +152,14 @@ struct GameView: View {
                 showingActionNotice = true
             }
         }
+        socket.on("InformDaiminkan") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.kanSound.play()
+                showingActionContent = .daiminkan
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
         socket.on("DistributeInitTiles") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if userData.userID == Int(dict["id"]!) {
@@ -616,7 +624,7 @@ struct GameView: View {
                         if (canDaiminkan && !isRiichi) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Daiminkan", gameData.roomID, userData.userID)
+                                gameService.socket.emit("InformDaiminkan", gameData.roomID, userData.userID)
                                 canDaiminkan = false
                                 canPon = false
                             }) {
@@ -781,6 +789,8 @@ struct GameView: View {
                                     userData.userID,
                                     gameData.encode(tiles: [kakanDiscardTile])
                                  )
+                            } else if showingActionContent == .daiminkan {
+                                gameService.socket.emit("Daiminkan", gameData.roomID, userData.userID)
                             }
                         }
                         isInforming = false
