@@ -617,82 +617,6 @@ struct GameView: View {
                         }
                         NameView(name: userData.userName).position(x: width*0.2, y: height*0.75)
                     }
-                    Group {
-                        if (isMyTurn && gameData.canAnkanTiles.count != 0 && gameData.stockCount >= 1) {
-                            Button(action: { nextAnkan.toggle() }) {
-                                CustomText(content: "暗槓", size: 24, tracking: 0)
-                                    .foregroundColor(nextAnkan ? Colors.init().navy : Colors.init().red)
-                            }
-                            .position(x: width*0.45, y: height*0.8)
-                        }
-                        if (canDaiminkan && !isRiichi) {
-                            Button(action: {
-                                resetMyActionTimer()
-                                gameService.socket.emit("InformDaiminkan", gameData.roomID, userData.userID)
-                                canDaiminkan = false
-                                canPon = false
-                            }) {
-                                CustomText(content: "カン", size: 24, tracking: 0)
-                                    .foregroundColor(Colors.init().red)
-                            }
-                            .position(x: width*0.55, y: height*0.8)
-                        }
-                        if (canKakan && !isRiichi) {
-                            Button(action: { nextKakan.toggle() }) {
-                                CustomText(content: "加槓", size: 24, tracking: 0)
-                                    .foregroundColor(nextKakan ? Colors.init().navy : Colors.init().red)
-                            }
-                            .position(x: width*0.55, y: height*0.8)
-                        }
-                        if (canPon && !isRiichi) {
-                            Button(action: {
-                                resetMyActionTimer()
-                                gameService.socket.emit("InformPon", gameData.roomID, userData.userID)
-                                canPon = false
-                                canKakan = false
-                                canDaiminkan = false
-                                canRon = false
-                            }) {
-                                CustomText(content: "ポン", size: 24, tracking: 0)
-                                    .foregroundColor(Colors.init().red)
-                            }
-                            .position(x: width*0.65, y: height*0.8)
-                        }
-                        if (!isFuriten && canRon) {
-                            CustomText(content: "ロン", size: 24, tracking: 0)
-                                .foregroundColor(Colors.init().red)
-                                .onTapGesture(count: 3) { ron() }
-                                .onTapGesture(count: 2) { ron() }
-                                .onTapGesture(count: 1) { ron() }
-                                .position(x: width*0.75, y: height*0.8)
-                        }
-                        if (canRiichi && !isRiichi && gameData.isMenzen() && gameData.stockCount >= 1) {
-                            Button(action: { nextRiichi.toggle() }) {
-                                CustomText(content: "立直", size: 24, tracking: 0)
-                                    .foregroundColor(nextRiichi ? Colors.init().navy : Colors.init().red)
-                            }
-                            .position(x: width*0.65, y: height*0.8)
-                        }
-                        if (isWin) {
-                            CustomText(content: "ツモ", size: 24, tracking: 0)
-                                .foregroundColor(Colors.init().red)
-                                .onTapGesture(count: 3) { draw() }
-                                .onTapGesture(count: 2) { draw() }
-                                .onTapGesture(count: 1) { draw() }
-                                .position(x: width*0.75, y: height*0.8)
-                        }
-                        if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
-                            Button(action: {
-                                if canRon { isFuriten = true }
-                                resetMyActionTimer()
-                                skipAction()
-                            }) {
-                                CustomText(content: "スキップ", size: 24, tracking: 0)
-                                    .foregroundColor(.gray)
-                            }
-                            .position(x: width*0.85, y: height*0.8)
-                        }
-                    }
                     if ((canPon && !isRiichi) || (canRon && !isFuriten)) && !isMyTurn && myActionCountdown > 0 {
                         CustomText(content: "\(myActionCountdown)", size: 28, tracking: 0)
                             .foregroundColor(Colors.init().navy)
@@ -707,6 +631,146 @@ struct GameView: View {
                                   axis: (x: 10, y: 0, z: 0),
                                   anchorZ: -30,
                                   perspective: 1)
+                Group {
+                    if (isMyTurn && gameData.canAnkanTiles.count != 0 && gameData.stockCount >= 1) {
+                        Button(action: { nextAnkan.toggle() }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(nextAnkan ? Colors().navy : Colors().red)
+                                    .frame(width: 62, height: 30, alignment: .center)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 28, alignment: .center)
+                                CustomText(content: "暗槓", size: 24, tracking: 0)
+                                    .foregroundColor(nextAnkan ? Colors().navy : Colors().red)
+                            }
+                        }
+                        .position(x: width*0.45, y: height*0.8)
+                    }
+                    if (canDaiminkan && !isRiichi) {
+                        Button(action: {
+                            resetMyActionTimer()
+                            gameService.socket.emit("InformDaiminkan", gameData.roomID, userData.userID)
+                            canDaiminkan = false
+                            canPon = false
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Colors().navy)
+                                    .frame(width: 62, height: 30, alignment: .center)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 28, alignment: .center)
+                                CustomText(content: "カン", size: 24, tracking: 0)
+                                    .foregroundColor(Colors().navy)
+                            }
+                        }
+                        .position(x: width*0.55, y: height*0.8)
+                    }
+                    if (canKakan && !isRiichi) {
+                        Button(action: { nextKakan.toggle() }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(nextKakan ? Colors().navy : Colors().red)
+                                    .frame(width: 62, height: 30, alignment: .center)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 28, alignment: .center)
+                                CustomText(content: "加槓", size: 24, tracking: 0)
+                                    .foregroundColor(nextKakan ? Colors().navy : Colors().red)
+                            }
+                        }
+                        .position(x: width*0.55, y: height*0.8)
+                    }
+                    if (canPon && !isRiichi) {
+                        Button(action: {
+                            resetMyActionTimer()
+                            gameService.socket.emit("InformPon", gameData.roomID, userData.userID)
+                            canPon = false
+                            canKakan = false
+                            canDaiminkan = false
+                            canRon = false
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Colors().navy)
+                                    .frame(width: 62, height: 30, alignment: .center)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 28, alignment: .center)
+                                CustomText(content: "ポン", size: 24, tracking: 0)
+                                    .foregroundColor(Colors().navy)
+                            }
+                        }
+                        .position(x: width*0.65, y: height*0.8)
+                    }
+                    if (!isFuriten && canRon) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Colors().red)
+                                .frame(width: 62, height: 30, alignment: .center)
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.white)
+                                .frame(width: 60, height: 28, alignment: .center)
+                            CustomText(content: "ロン", size: 24, tracking: 0)
+                                .foregroundColor(Colors.init().red)
+                        }
+                        .onTapGesture(count: 3) { ron() }
+                        .onTapGesture(count: 2) { ron() }
+                        .onTapGesture(count: 1) { ron() }
+                        .position(x: width*0.75, y: height*0.8)
+                    }
+                    if (canRiichi && !isRiichi && gameData.isMenzen() && gameData.stockCount >= 1) {
+                        Button(action: { nextRiichi.toggle() }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(nextRiichi ? Colors().navy : Colors().red)
+                                    .frame(width: 62, height: 30, alignment: .center)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 28, alignment: .center)
+                                CustomText(content: "立直", size: 24, tracking: 0)
+                                    .foregroundColor(nextRiichi ? Colors().navy : Colors().red)
+                            }
+                        }
+                        .position(x: width*0.65, y: height*0.8)
+                    }
+                    if (isWin) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Colors().red)
+                                .frame(width: 62, height: 30, alignment: .center)
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.white)
+                                .frame(width: 60, height: 28, alignment: .center)
+                            CustomText(content: "ツモ", size: 24, tracking: 0)
+                                .foregroundColor(Colors().red)
+                        }
+                        .onTapGesture(count: 3) { draw() }
+                        .onTapGesture(count: 2) { draw() }
+                        .onTapGesture(count: 1) { draw() }
+                        .position(x: width*0.75, y: height*0.8)
+                    }
+                    if ((canRon && !isFuriten) || (canPon && !isRiichi)) {
+                        Button(action: {
+                            if canRon { isFuriten = true }
+                            resetMyActionTimer()
+                            skipAction()
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.black)
+                                    .frame(width: 90, height: 30, alignment: .center)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white)
+                                    .frame(width: 88, height: 28, alignment: .center)
+                                CustomText(content: "スキップ", size: 24, tracking: 0)
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .position(x: width*0.87, y: height*0.8)
+                    }
+                }
                 HStack(alignment: .center, spacing: 0, content: {
                     HStack(alignment: .center, spacing: -6, content: {
                         ForEach(Array(gameData.myTiles.enumerated()), id: \.offset) { index, tile in
