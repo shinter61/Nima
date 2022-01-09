@@ -900,7 +900,7 @@ struct GameView: View {
             }
         }
         .onAppear {
-            if gameService.socket.handlers.count == 1 {
+            if gameService.socket.handlers.count == 2 {
                 addHandler(socket: gameService.socket)
             }
         }

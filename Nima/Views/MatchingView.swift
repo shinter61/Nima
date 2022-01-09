@@ -63,7 +63,7 @@ struct MatchingView: View {
             ) { EmptyView() }
         }
         .onAppear {
-            if gameService.socket.handlers.count == 0 {
+            if gameService.socket.handlers.count == 1 {
                 addHandler(socket: gameService.socket)
             }
             gameService.socket.emit("StartMatching", userData.userID, userData.userName)

@@ -9,6 +9,7 @@ import SwiftUI
 import KeychainAccess
 import AppTrackingTransparency
 import GoogleMobileAds
+import SocketIO
 
 struct MainMenu: View {
     @EnvironmentObject var userData: UserData
@@ -22,6 +23,10 @@ struct MainMenu: View {
     @State private var showingRanking: Bool = false
     @State private var showingMyPage: Bool = false
     @State private var isAdTiming: Bool = true
+    
+    @State private var connectionsCount: Int = 0
+    @State private var connectionsUpdateTimer: Timer!
+    @State private var connectionsUpdateCountdown: Int = 10
     
     @available(iOS 15.0.0, *)
     func loginUser() async {
@@ -79,6 +84,26 @@ struct MainMenu: View {
         #endif
     }
     
+    func addHandler(socket: SocketIOClient!) -> Void {
+        socket.on("CurrentConnectionsCount") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                connectionsCount = Int(dict["connectionsCount"]!)!
+            }
+        }
+    }
+    
+    func startUpdateConnectionsCountTimer() -> Void {
+        var startTime: Date = Date()
+        connectionsUpdateTimer?.invalidate()
+        connectionsUpdateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            let current = Date()
+            let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
+            if diff >= 1 && diff < 2 { gameService.socket.emit("CurrentConnectionsCount") }
+            if diff >= 10 { startTime = Date() }
+            self.connectionsUpdateCountdown = 10 - diff
+        })
+    }
+    
     var body: some View {
         if #available(iOS 15.0, *) {
             GeometryReader { geometry in
@@ -97,12 +122,17 @@ struct MainMenu: View {
                     }
                     .position(x: width*0.3, y: height*0.7)
                     
-                    Button(action: {
-                        isAdTiming = true
-                        showingMatching = true
-                    }) {
-                        CustomText(content: "対戦する", size: 24, tracking: 2)
-                            .foregroundColor(Color.red)
+                    VStack {
+                        Button(action: {
+                            isAdTiming = true
+                            showingMatching = true
+                        }) {
+                            CustomText(content: "対戦する", size: 24, tracking: 2)
+                                .foregroundColor(Color.red)
+                        }
+                        .padding(.bottom, 24)
+                        CustomText(content: "接続数: \(connectionsCount)", size: 16, tracking: 0)
+                            .foregroundColor(Colors.init().navy)
                     }
                     .position(x: width*0.73, y: height*0.5)
                     
@@ -175,7 +205,11 @@ struct MainMenu: View {
             }
             .task {
                 await loginUser()
+                if gameService.socket.handlers.count == 0 {
+                    addHandler(socket: gameService.socket)
+                }
                 gameService.socket.connect(withPayload: ["name": userData.userName, "id": userData.userID])
+                startUpdateConnectionsCountTimer()
             }
             .onAppear {
                 if isAdTiming {
