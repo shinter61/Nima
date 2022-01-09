@@ -238,7 +238,6 @@ struct GameView: View {
         }
         socket.on("Daiminkan") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.kanSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkans = gameData.decode(str: dict["minkans"]!)
