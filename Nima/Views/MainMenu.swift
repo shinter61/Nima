@@ -12,6 +12,7 @@ import GoogleMobileAds
 
 struct MainMenu: View {
     @EnvironmentObject var userData: UserData
+    @EnvironmentObject var gameService: GameService
     @State private var showingMatching: Bool = false
     @State private var interstitial: Interstitial!
     @State private var trackingAuthorized: Bool?
@@ -172,7 +173,10 @@ struct MainMenu: View {
                     ) { EmptyView() }
                 }
             }
-            .task { await loginUser() }
+            .task {
+                await loginUser()
+                gameService.socket.connect(withPayload: ["name": userData.userName, "id": userData.userID])
+            }
             .onAppear {
                 if isAdTiming {
                     checkTrackingAuthorizationStatus()
@@ -188,6 +192,7 @@ struct MainMenu_Previews: PreviewProvider {
         if #available(iOS 15.0, *) {
             MainMenu()
                 .environmentObject(UserData())
+                .environmentObject(GameService())
                 .previewInterfaceOrientation(.landscapeLeft)
         }
     }
