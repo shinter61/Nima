@@ -88,6 +88,9 @@ struct GameView: View {
                     startOpponentTimer()
                     
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
+                    if gameData.yourRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
+                        Int(dict["riichiTurn"]!) == 1 ? soundData.doubleRiichiSound.play() : soundData.riichiSound.play()
+                    }
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.yourScore = Int(dict["score"]!)!
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
@@ -112,6 +115,9 @@ struct GameView: View {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myDrawWaits = gameData.decode(str: dict["drawWaits"]!)
                     gameData.myRonWaits = gameData.decode(str: dict["ronWaits"]!)
+                    if gameData.myRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
+                        Int(dict["riichiTurn"]!) == 1 ? soundData.doubleRiichiSound.play() : soundData.riichiSound.play()
+                   }
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
                     isFuriten = gameData.isFuriten()
@@ -121,7 +127,6 @@ struct GameView: View {
         }
         socket.on("InformRiichi") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.riichiSound.play()
                 showingActionContent = .riichi
                 actionUserID = Int(dict["id"]!)!
                 showingActionNotice = true
