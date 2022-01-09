@@ -35,6 +35,12 @@ struct GameView: View {
     @State private var showingEndGame: Bool = false
     @State private var showingExhaustive: Bool = false
     @State private var showingWinNotice: Bool = false
+    
+    @State private var showingActionNotice: Bool = false
+    @State private var showingActionContent: String = ""
+    @State private var actionUserID: Int = -1
+    @State private var riichiDiscardTile: Tile!
+    
     @State private var score: Int = 0
     @State private var hands: [Hand] = []
     @State private var scoreName: String = ""
@@ -71,9 +77,6 @@ struct GameView: View {
                     startOpponentTimer()
                     
                     gameData.yourDiscards = gameData.decode(str: dict["discards"]!)
-                    if gameData.yourRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
-                        soundData.riichiSound.play()
-                    }
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.yourScore = Int(dict["score"]!)!
                     if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
@@ -98,14 +101,20 @@ struct GameView: View {
                     gameData.myDiscards = gameData.decode(str: dict["discards"]!)
                     gameData.myDrawWaits = gameData.decode(str: dict["drawWaits"]!)
                     gameData.myRonWaits = gameData.decode(str: dict["ronWaits"]!)
-                    if gameData.myRiichiTurn == -1 && Int(dict["riichiTurn"]!) != -1 {
-                        soundData.riichiSound.play()
-                    }
                     gameData.myRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.myScore = Int(dict["score"]!)!
                     isFuriten = gameData.isFuriten()
                     selectedTileIdx = -1
                 }
+            }
+        }
+        socket.on("InformRiichi") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.riichiSound.play()
+                showingActionContent = "立直"
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+                riichiDiscardTile = gameData.decode(str: dict["discardTile"]!)[0]
             }
         }
         socket.on("DistributeInitTiles") { (data, ack) in
@@ -427,6 +436,7 @@ struct GameView: View {
         resetMyDiscardTimer()
         
         let lastTile: Tile = gameData.myTiles[gameData.myTiles.count - 1]
+        discardCallback()
         gameService.socket.emit(
             "Discard",
             gameData.roomID,
@@ -434,7 +444,6 @@ struct GameView: View {
             gameData.encode(tiles: [lastTile]),
             isRiichi
         )
-        discardCallback()
     }
     
     func ron() -> Void {
@@ -483,14 +492,18 @@ struct GameView: View {
             isRiichi = true
         }
         resetMyDiscardTimer()
-        gameService.socket.emit(
-            "Discard",
-            gameData.roomID,
-            userData.userID,
-            gameData.encode(tiles: [tile]),
-            isRiichi
-        )
         discardCallback()
+        if (isRiichi) {
+            gameService.socket.emit("InformRiichi", gameData.roomID, userData.userID, gameData.encode(tiles: [tile]))
+        } else {
+            gameService.socket.emit(
+                "Discard",
+                gameData.roomID,
+                userData.userID,
+                gameData.encode(tiles: [tile]),
+                isRiichi
+            )
+        }
     }
     
     var body: some View {
@@ -705,6 +718,29 @@ struct GameView: View {
                     .position(
                         x: width/2,
                         y: gameData.roundWinnerID == userData.userID ?  height*0.7 : height*0.3
+                    )
+                }
+                if self.showingActionNotice {
+                    ActionNoticeView(
+                        showingActionNotice: self.$showingActionNotice,
+                        showingActionContent: self.$showingActionContent
+                    )
+                    .onDisappear {
+                        if userData.userID == actionUserID {
+                            gameService.socket.emit(
+                                "Discard",
+                                gameData.roomID,
+                                userData.userID,
+                                gameData.encode(tiles: [riichiDiscardTile]),
+                                isRiichi
+                            )
+                        }
+                        showingActionContent = ""
+                        actionUserID = -1
+                    }
+                    .position(
+                        x: width/2,
+                        y: actionUserID == userData.userID ?  height*0.7 : height*0.3
                     )
                 }
                 if self.opponentDiscardCountdown <= 0 {
