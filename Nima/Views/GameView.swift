@@ -122,6 +122,14 @@ struct GameView: View {
                 riichiDiscardTile = gameData.decode(str: dict["discardTile"]!)[0]
             }
         }
+        socket.on("InformPon") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                soundData.ponSound.play()
+                showingActionContent = .pon
+                actionUserID = Int(dict["id"]!)!
+                showingActionNotice = true
+            }
+        }
         socket.on("DistributeInitTiles") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 if userData.userID == Int(dict["id"]!) {
@@ -186,7 +194,6 @@ struct GameView: View {
         }
         socket.on("Pon") { (data, ack) in
             if let dict = data[0] as? [String: String] {
-                soundData.ponSound.play()
                 if userData.userID == Int(dict["id"]!) {
                     gameData.myTiles = gameData.decode(str: dict["tiles"]!)
                     gameData.myMinkos = gameData.decode(str: dict["minkos"]!)
@@ -611,7 +618,7 @@ struct GameView: View {
                         if (canPon && !isRiichi) {
                             Button(action: {
                                 resetMyActionTimer()
-                                gameService.socket.emit("Pon", gameData.roomID, userData.userID)
+                                gameService.socket.emit("InformPon", gameData.roomID, userData.userID)
                                 canPon = false
                             }) {
                                 CustomText(content: "ポン", size: 24, tracking: 0)
@@ -732,13 +739,17 @@ struct GameView: View {
                     )
                     .onDisappear {
                         if userData.userID == actionUserID {
-                            gameService.socket.emit(
-                                "Discard",
-                                gameData.roomID,
-                                userData.userID,
-                                gameData.encode(tiles: [riichiDiscardTile]),
-                                isRiichi
-                            )
+                            if showingActionContent == .riichi {
+                                gameService.socket.emit(
+                                    "Discard",
+                                    gameData.roomID,
+                                    userData.userID,
+                                    gameData.encode(tiles: [riichiDiscardTile]),
+                                    isRiichi
+                                )
+                            } else if showingActionContent == .pon {
+                                gameService.socket.emit("Pon", gameData.roomID, userData.userID)
+                            }
                         }
                         showingActionContent = .riichi
                         actionUserID = -1
