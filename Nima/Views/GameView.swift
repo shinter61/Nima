@@ -651,6 +651,7 @@ struct GameView: View {
                                 canPon = false
                                 canKakan = false
                                 canDaiminkan = false
+                                canRon = false
                             }) {
                                 CustomText(content: "ポン", size: 24, tracking: 0)
                                     .foregroundColor(Colors.init().red)
