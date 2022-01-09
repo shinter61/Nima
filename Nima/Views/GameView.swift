@@ -13,6 +13,11 @@ struct Hand: Hashable, Codable {
     var han: Int
 }
 
+enum ShowingActionContent: String {
+    case riichi = "立直"
+    case pon = "ポン"
+}
+
 struct GameView: View {
     @EnvironmentObject var userData: UserData
     @EnvironmentObject var gameData: GameData
@@ -37,7 +42,7 @@ struct GameView: View {
     @State private var showingWinNotice: Bool = false
     
     @State private var showingActionNotice: Bool = false
-    @State private var showingActionContent: String = ""
+    @State private var showingActionContent: ShowingActionContent = .riichi
     @State private var actionUserID: Int = -1
     @State private var riichiDiscardTile: Tile!
     
@@ -111,7 +116,7 @@ struct GameView: View {
         socket.on("InformRiichi") { (data, ack) in
             if let dict = data[0] as? [String: String] {
                 soundData.riichiSound.play()
-                showingActionContent = "立直"
+                showingActionContent = .riichi
                 actionUserID = Int(dict["id"]!)!
                 showingActionNotice = true
                 riichiDiscardTile = gameData.decode(str: dict["discardTile"]!)[0]
@@ -723,7 +728,7 @@ struct GameView: View {
                 if self.showingActionNotice {
                     ActionNoticeView(
                         showingActionNotice: self.$showingActionNotice,
-                        showingActionContent: self.$showingActionContent
+                        showingActionContent: self.showingActionContent.rawValue
                     )
                     .onDisappear {
                         if userData.userID == actionUserID {
@@ -735,7 +740,7 @@ struct GameView: View {
                                 isRiichi
                             )
                         }
-                        showingActionContent = ""
+                        showingActionContent = .riichi
                         actionUserID = -1
                     }
                     .position(

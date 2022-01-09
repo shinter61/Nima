@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ActionNoticeView: View {
     @Binding var showingActionNotice: Bool
-    @Binding var showingActionContent: String
     @State private var countdown: Int = 2
     @State private var timer: Timer!
+    
+    var showingActionContent: String
     
     func startTimer() -> Void {
         let startTime: Date = Date()
@@ -47,7 +48,7 @@ struct ActionNoticeView: View {
 struct ActionNoticeView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            ActionNoticeView(showingActionNotice: .constant(false), showingActionContent:  .constant("立直"))
+            ActionNoticeView(showingActionNotice: .constant(false), showingActionContent:  "立直")
                 .previewInterfaceOrientation(.landscapeLeft)
         }
     }
