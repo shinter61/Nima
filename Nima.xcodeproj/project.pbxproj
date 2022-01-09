@@ -26,6 +26,7 @@
 		E53422A3276C20F8007FA044 /* RankingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A2276C20F8007FA044 /* RankingView.swift */; };
 		E53422A5276C229F007FA044 /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A4276C229F007FA044 /* RecordsView.swift */; };
 		E53422A7276C236F007FA044 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53422A6276C236F007FA044 /* MyPageView.swift */; };
+		E53B37BC278B8A940020D9BC /* ShineColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53B37BB278B8A940020D9BC /* ShineColor.swift */; };
 		E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35826BFCDC1000A45D8 /* NimaApp.swift */; };
 		E53BE35B26BFCDC1000A45D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BE35A26BFCDC1000A45D8 /* ContentView.swift */; };
 		E53BE35D26BFCDC2000A45D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E53BE35C26BFCDC2000A45D8 /* Assets.xcassets */; };
@@ -102,6 +103,7 @@
 		E53422A2276C20F8007FA044 /* RankingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingView.swift; sourceTree = "<group>"; };
 		E53422A4276C229F007FA044 /* RecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
 		E53422A6276C236F007FA044 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		E53B37BB278B8A940020D9BC /* ShineColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShineColor.swift; sourceTree = "<group>"; };
 		E53BE35526BFCDC1000A45D8 /* Nima.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nima.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53BE35826BFCDC1000A45D8 /* NimaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimaApp.swift; sourceTree = "<group>"; };
 		E53BE35A26BFCDC1000A45D8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			children = (
 				E51E714E27000F2800292CBB /* CustomText.swift */,
 				E50A8F5527155FC5000F253A /* Colors.swift */,
+				E53B37BB278B8A940020D9BC /* ShineColor.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				E58B88A2275C55C800424B96 /* UserService.swift in Sources */,
 				E50A8F5E27175EFD000F253A /* NameView.swift in Sources */,
 				E53422A3276C20F8007FA044 /* RankingView.swift in Sources */,
+				E53B37BC278B8A940020D9BC /* ShineColor.swift in Sources */,
 				E53BE38626BFD62B000A45D8 /* GameView.swift in Sources */,
 				E53BE35926BFCDC1000A45D8 /* NimaApp.swift in Sources */,
 			);
