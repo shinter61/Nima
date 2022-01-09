@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ActionNoticeView: View {
     @Binding var showingActionNotice: Bool
-    @State private var countdown: Int = 2
+    @State private var countdown: Int = 1
     @State private var timer: Timer!
     
     var showingActionContent: String
@@ -20,8 +20,8 @@ struct ActionNoticeView: View {
         timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
             let current = Date()
             let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
-            if diff >= 2 { self.timer?.invalidate() }
-            self.countdown = 2 - diff
+            if diff >= 1 { self.timer?.invalidate() }
+            self.countdown = 1 - diff
         })
     }
     
