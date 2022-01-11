@@ -92,11 +92,11 @@ struct RuleView: View {
                         VStack(alignment: .center, spacing: 20, content: {
                             CustomText(content: "親の跳満ツモは通常だと6000オールで合計18000点の収入なので、二麻の場合、子は半分の9000点を支払う。", size: 20, tracking: 0)
                                 .foregroundColor(Colors().navy)
-                            CustomText(content: "子の跳満ツモは通常だと3000・6000で合計12000点の収入なので、二麻の場合、子は半分の6000点を支払う。", size: 20, tracking: 0)
+                            CustomText(content: "子の跳満ツモは通常だと3000・6000で合計12000点の収入なので、二麻の場合、親は半分の6000点を支払う。", size: 20, tracking: 0)
                                 .foregroundColor(Colors().navy)
                             CustomText(content: "親の跳満ロンは18000点の収入なので、二麻の場合、子はそのまま18000点を支払う。", size: 20, tracking: 0)
                                 .foregroundColor(Colors().navy)
-                            CustomText(content: "子の跳満ロンは12000点の収入なので、二麻の場合、子はそのまま12000点を支払う。", size: 20, tracking: 0)
+                            CustomText(content: "子の跳満ロンは12000点の収入なので、二麻の場合、親はそのまま12000点を支払う。", size: 20, tracking: 0)
                                 .foregroundColor(Colors().navy)
                         })
                         Spacer(minLength: 50)
