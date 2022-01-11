@@ -304,6 +304,7 @@ struct GameView: View {
                 isRiichi = false
                 isWin = false
                 isFuriten = false
+                showingWaits = false
                 
                 showingWinNotice = true
                 
@@ -339,6 +340,7 @@ struct GameView: View {
                 isRiichi = false
                 isWin = false
                 isFuriten = false
+                showingWaits = false
                 
                 showingExhaustive = true
             }
@@ -408,6 +410,7 @@ struct GameView: View {
         nextAnkan = false
         canRiichi = false
         nextRiichi = false
+        showingWaits = false
     }
     
     func skipAction() -> Void {
