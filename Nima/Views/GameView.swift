@@ -43,6 +43,7 @@ struct GameView: View {
     @State private var showingEndGame: Bool = false
     @State private var showingExhaustive: Bool = false
     @State private var showingWinNotice: Bool = false
+    @State private var showingWaits: Bool = false
     
     @State private var showingActionNotice: Bool = false
     @State private var showingActionContent: ShowingActionContent = .riichi
@@ -57,6 +58,7 @@ struct GameView: View {
     @State private var scoreName: String = ""
     @State private var waitsCandidate: [WaitCandidate] = []
     @State private var isFuriten: Bool = false
+    @State private var riichiWaits: [Tile] = []
     
     @State private var isOpponentDraw: Bool = false
     @State private var opponentDiscardTimer: Timer!
@@ -303,6 +305,7 @@ struct GameView: View {
                 isRiichi = false
                 isWin = false
                 isFuriten = false
+                showingWaits = false
                 
                 showingWinNotice = true
                 
@@ -338,6 +341,7 @@ struct GameView: View {
                 isRiichi = false
                 isWin = false
                 isFuriten = false
+                showingWaits = false
                 
                 showingExhaustive = true
             }
@@ -407,6 +411,7 @@ struct GameView: View {
         nextAnkan = false
         canRiichi = false
         nextRiichi = false
+        showingWaits = false
     }
     
     func skipAction() -> Void {
@@ -502,13 +507,8 @@ struct GameView: View {
     }
     
     func discard(tile: Tile, index: Int) -> Void {
-        if (!isMyTurn ||                                                        // 自分のターンではない
-           (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
-           (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
-           (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
-           (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
-            isWon ||                                                            // 既に和了している
-            isInforming) { return }                                             // アクションを告知中
+        if !discardCondition(tile: tile, index: index) { return }
+        
         if (nextKakan) {
             nextKakan.toggle()
             canKakan.toggle()
@@ -545,6 +545,17 @@ struct GameView: View {
                 isRiichi
             )
         }
+    }
+    
+    func discardCondition(tile: Tile, index: Int) -> Bool {
+        if (!isMyTurn ||                                                        // 自分のターンではない
+           (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
+           (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
+           (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
+           (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
+            isWon ||                                                            // 既に和了している
+            isInforming) { return false }                                       // アクションを告知中
+        return true
     }
     
     var body: some View {
@@ -784,13 +795,7 @@ struct GameView: View {
                                         .fill(Color.yellow.opacity(0.2))
                                         .frame(width: 30, height: 45, alignment: .center)
                                 }
-                                if (!isMyTurn ||                                                        // 自分のターンではない
-                                   (nextRiichi && !waitExistsFor(tile: tile)) ||                        // 次に立直するが聴牌する牌ではない
-                                   (nextKakan && !canKakanFor(tile: tile)) ||                           // 次に加槓するが加槓できる牌ではない
-                                   (isRiichi && (!nextAnkan && index != gameData.myTiles.count - 1)) || // 立直中で今ツモってきた牌ではない
-                                   (nextAnkan && !canAnkanFor(tile: tile)) ||                           // 次に暗槓するが暗槓できる牌ではない
-                                    isWon ||                                                            // 既に和了している
-                                    isInforming) {                                                      // アクションを告知中
+                                if !discardCondition(tile: tile, index: index) {
                                     RoundedRectangle(cornerRadius: 2)
                                         .fill(Colors().lightGray.opacity(0.7))
                                         .frame(width: 32, height: 47, alignment: .center)
@@ -799,10 +804,17 @@ struct GameView: View {
                             .padding(.leading, index == (13 - gameData.myAnkans.count*3 - gameData.myMinkans.count*3 - gameData.myMinkos.count*3) ? 6.0 : 0.0)
                             .padding(.bottom, index == selectedTileIdx ? 12.0 : 0.0)
                             .onTapGesture {
+                                if !discardCondition(tile: tile, index: index) { return }
+                                
                                 if (selectedTileIdx == index) {
                                     discard(tile: tile, index: index)
                                 } else {
                                     selectedTileIdx = index
+                                    if nextRiichi {
+                                        let waitCandidate: WaitCandidate = waitsCandidate.first(where: { $0.tile.isEqual(tile: tile) })!
+                                        riichiWaits = waitCandidate.waitTiles
+                                        showingWaits = true // 捨て牌を選ぶ際の待ち牌の表示
+                                    }
                                 }
                             }
                         }
@@ -881,6 +893,24 @@ struct GameView: View {
                 }
                 if self.myDiscardCountdown <= 0 {
                     ActionEmptyView(action: callBackMyDiscardTimer)
+                }
+            }
+            
+            Group {
+                if showingWaits {
+                    WaitsView(waits: nextRiichi ? riichiWaits : gameData.myDrawWaits)
+                    .position(x: width/2, y: height*0.75)
+                }
+                if gameData.myDrawWaits.count > 0 {
+                    Button(action: {
+                        showingWaits.toggle()
+                    }) {
+                        Image(systemName: "info.circle.fill")
+                            .resizable()
+                            .frame(width: 24.0, height: 24.0, alignment: .center)
+                            .foregroundColor(Colors().navy)
+                    }
+                    .position(x: width*0.94, y: height*0.65)
                 }
             }
             
