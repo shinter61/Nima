@@ -43,6 +43,7 @@ struct GameView: View {
     @State private var showingEndGame: Bool = false
     @State private var showingExhaustive: Bool = false
     @State private var showingWinNotice: Bool = false
+    @State private var showingWaits: Bool = false
     
     @State private var showingActionNotice: Bool = false
     @State private var showingActionContent: ShowingActionContent = .riichi
@@ -881,6 +882,24 @@ struct GameView: View {
                 }
                 if self.myDiscardCountdown <= 0 {
                     ActionEmptyView(action: callBackMyDiscardTimer)
+                }
+            }
+            
+            Group {
+                if showingWaits {
+                    WaitsView(waits: gameData.myDrawWaits)
+                    .position(x: width/2, y: height*0.8)
+                }
+                if gameData.myDrawWaits.count > 0 {
+                    Button(action: {
+                        showingWaits.toggle()
+                    }) {
+                        Image(systemName: "info.circle.fill")
+                            .resizable()
+                            .frame(width: 24.0, height: 24.0, alignment: .center)
+                            .foregroundColor(Colors().navy)
+                    }
+                    .position(x: width*0.94, y: height*0.65)
                 }
             }
             
