@@ -914,6 +914,12 @@ struct GameView: View {
                 }
             }
             
+            // 対局開始時のみ表示
+            if (gameData.roundWind == "east" && gameData.round == 1 && gameData.honba == 0) ||
+                (gameData.roundWind == "" && gameData.round == 0 && gameData.honba == 0) {
+                StartGameView()
+            }
+            
             Group {
                 NavigationLink(
                     destination: ExhaustiveDrawView(rootIsActive: self.$rootIsActive).navigationBarHidden(true),
