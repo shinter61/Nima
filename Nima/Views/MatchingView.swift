@@ -22,10 +22,12 @@ struct MatchingView: View {
                 if userData.userID == Int(dict["player1ID"]!) {
                     gameData.opponentID = Int(dict["player2ID"]!)!
                     gameData.opponentName = dict["player2Name"]!
+                    gameData.opponentRating = Int(dict["player2Rating"]!)!
                     gameService.socket.emit("StartGame", gameData.roomID) // StartGameは2台につき1台からのみ発行
                 } else if userData.userID == Int(dict["player2ID"]!) {
                     gameData.opponentID = Int(dict["player1ID"]!)!
                     gameData.opponentName = dict["player1Name"]!
+                    gameData.opponentRating = Int(dict["player1Rating"]!)!
                 }
                 matchingFinished = true
             }
@@ -66,7 +68,7 @@ struct MatchingView: View {
             if gameService.socket.handlers.count == 1 {
                 addHandler(socket: gameService.socket)
             }
-            gameService.socket.emit("StartMatching", userData.userID, userData.userName)
+            gameService.socket.emit("StartMatching", userData.userID, userData.userName, userData.rating)
         }
     }
 }

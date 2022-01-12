@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct StartGameView: View {
+    @EnvironmentObject var userData: UserData
+    @EnvironmentObject var gameData: GameData
+    
     @State private var flag: Bool = true
 
     var body: some View {
@@ -35,11 +38,27 @@ struct StartGameView: View {
                             .foregroundColor(Color.white)
                             .position(x: width/2, y: height/2)
                             .transition(.opacity)
+                        VStack {
+                            CustomText(content: userData.userName, size: 32, tracking: 0)
+                                .foregroundColor(Color.white)
+                            CustomText(content: "レーティング: \(userData.rating)", size: 32, tracking: 0)
+                                .foregroundColor(Color.white)
+                        }
+                        .position(x: width*0.3, y: height*0.8)
+                        .transition(.move(edge: .leading))
+                        VStack {
+                            CustomText(content: gameData.opponentName, size: 32, tracking: 0)
+                                .foregroundColor(Color.white)
+                            CustomText(content: "レーティング: \(gameData.opponentRating)", size: 32, tracking: 0)
+                                .foregroundColor(Color.white)
+                        }
+                        .position(x: width*0.7, y: height*0.2)
+                        .transition(.move(edge: .trailing))
                     }
                 }
             }
             .task {
-                sleep(1)
+                sleep(2)
                 withAnimation {
                     self.flag.toggle()
                 }

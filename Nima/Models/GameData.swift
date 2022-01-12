@@ -38,6 +38,7 @@ final class GameData: ObservableObject {
     
     @Published var opponentID: Int = -1
     @Published var opponentName: String = ""
+    @Published var opponentRating: Int = -1
     
     @Published var round: Int = 0
     @Published var roundWind: String = ""
