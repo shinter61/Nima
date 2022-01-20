@@ -72,12 +72,6 @@ struct GameView: View {
     
     @State private var selectedTileIdx: Int = -1
     
-    init(rootIsActive: Binding<Bool>) {
-        self._rootIsActive = rootIsActive
-        UITableView.appearance().backgroundColor = .clear
-        UITableView.appearance().separatorStyle = .none
-    }
-    
     func addHandler(socket: SocketIOClient!) -> Void {
         socket.on("InformDiscards") { (data, ack) in
             if let dict = data[0] as? [String: String] {
