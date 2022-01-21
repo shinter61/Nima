@@ -153,6 +153,7 @@ struct MainMenu: View {
                                     gameData.allReset()
                                     isAdTiming = false
                                     matchingStarted = false
+                                    gameService.socket.emit("StopMatching", userData.userID)
                                 }) {
                                     Image(systemName: "multiply")
                                         .resizable()
