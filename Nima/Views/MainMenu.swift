@@ -183,24 +183,28 @@ struct MainMenu: View {
                                 .frame(width: 32.0, height: 32.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                         Button(action: { showingRecords = true }) {
                             Image(systemName: "folder")
                                 .resizable()
                                 .frame(width: 32.0, height: 32.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                         Button(action: { showingRanking = true }) {
                             Image(systemName: "crown")
                                 .resizable()
                                 .frame(width: 32.0, height: 28.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                         Button(action: { showingMyPage = true }) {
                             Image(systemName: "house")
                                 .resizable()
                                 .frame(width: 32.0, height: 32.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                     })
                     .position(x: width*0.73, y: height*0.9)
                     
