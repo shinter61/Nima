@@ -13,8 +13,10 @@ import SocketIO
 
 struct MainMenu: View {
     @EnvironmentObject var userData: UserData
+    @EnvironmentObject var gameData: GameData
     @EnvironmentObject var gameService: GameService
-    @State private var showingMatching: Bool = false
+    @State private var matchingStarted: Bool = false
+    @State private var matchingFinished: Bool = false
     @State private var interstitial: Interstitial!
     @State private var trackingAuthorized: Bool?
     
@@ -90,6 +92,23 @@ struct MainMenu: View {
                 connectionsCount = Int(dict["connectionsCount"]!)!
             }
         }
+        socket.on("InformPlayersNames") { (data, ack) in
+            if let dict = data[0] as? [String: String] {
+                gameData.roomID = dict["roomID"]!
+                if userData.userID == Int(dict["player1ID"]!) {
+                    gameData.opponentID = Int(dict["player2ID"]!)!
+                    gameData.opponentName = dict["player2Name"]!
+                    gameData.opponentRating = Int(dict["player2Rating"]!)!
+                    gameService.socket.emit("StartGame", gameData.roomID) // StartGameは2台につき1台からのみ発行
+                } else if userData.userID == Int(dict["player2ID"]!) {
+                    gameData.opponentID = Int(dict["player1ID"]!)!
+                    gameData.opponentName = dict["player1Name"]!
+                    gameData.opponentRating = Int(dict["player1Rating"]!)!
+                }
+                matchingStarted = false
+                matchingFinished = true
+            }
+        }
     }
     
     func startUpdateConnectionsCountTimer() -> Void {
@@ -123,13 +142,35 @@ struct MainMenu: View {
                     .position(x: width*0.3, y: height*0.7)
                     
                     VStack {
-                        Button(action: {
-                            isAdTiming = true
-                            showingMatching = true
-                        }) {
-                            CustomText(content: "対戦する", size: 24, tracking: 2)
-                                .foregroundColor(Color.red)
-                        }
+                        HStack(alignment: .center, spacing: 28, content: {
+                            if matchingStarted {
+                                CustomText(content: "マッチング中...", size: 24, tracking: 2)
+                                    .foregroundColor(Color.red)
+                                ProgressView()
+                                    .scaleEffect(x: 2, y: 2, anchor: .center)
+                                    .progressViewStyle(CircularProgressViewStyle(tint: Color.red))
+                                Button(action: {
+                                    gameData.allReset()
+                                    isAdTiming = false
+                                    matchingStarted = false
+                                    gameService.socket.emit("StopMatching", userData.userID)
+                                }) {
+                                    Image(systemName: "multiply")
+                                        .resizable()
+                                        .frame(width: 28.0, height: 28.0, alignment: .center)
+                                        .foregroundColor(Color.red)
+                                }
+                            } else {
+                                Button(action: {
+                                    isAdTiming = true
+                                    matchingStarted = true
+                                    gameService.socket.emit("StartMatching", userData.userID, userData.userName, userData.rating)
+                                }) {
+                                    CustomText(content: "対戦する", size: 24, tracking: 2)
+                                        .foregroundColor(Color.red)
+                                }
+                            }
+                        })
                         .padding(.bottom, 24)
                         CustomText(content: "接続数: \(connectionsCount)", size: 16, tracking: 0)
                             .foregroundColor(Colors.init().navy)
@@ -143,24 +184,28 @@ struct MainMenu: View {
                                 .frame(width: 32.0, height: 32.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                         Button(action: { showingRecords = true }) {
                             Image(systemName: "folder")
                                 .resizable()
                                 .frame(width: 32.0, height: 32.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                         Button(action: { showingRanking = true }) {
                             Image(systemName: "crown")
                                 .resizable()
                                 .frame(width: 32.0, height: 28.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                         Button(action: { showingMyPage = true }) {
                             Image(systemName: "house")
                                 .resizable()
                                 .frame(width: 32.0, height: 32.0, alignment: .center)
                                 .foregroundColor(Colors().navy)
                         }
+                        .disabled(matchingStarted)
                     })
                     .position(x: width*0.73, y: height*0.9)
                     
@@ -178,8 +223,8 @@ struct MainMenu: View {
                 
                 Group {
                     NavigationLink(
-                        destination: MatchingView(rootIsActive: self.$showingMatching, isAdTiming: self.$isAdTiming).navigationBarHidden(true),
-                        isActive: self.$showingMatching
+                        destination: GameView(rootIsActive: self.$matchingFinished).navigationBarHidden(true),
+                        isActive: self.$matchingFinished
                     ) { EmptyView() }
                     
                     NavigationLink(

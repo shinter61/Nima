@@ -12,7 +12,6 @@
 		7B456C0988837C982448976A /* Pods_NimaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 060C2BFED392535D454728B3 /* Pods_NimaTests.framework */; };
 		E50A8F4C2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */; };
 		E50A8F5627155FC5000F253A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5527155FC5000F253A /* Colors.swift */; };
-		E50A8F5827158345000F253A /* MatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5727158345000F253A /* MatchingView.swift */; };
 		E50A8F5C271751FF000F253A /* WindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5B271751FF000F253A /* WindView.swift */; };
 		E50A8F5E27175EFD000F253A /* NameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5D27175EFD000F253A /* NameView.swift */; };
 		E50A8F6027176518000F253A /* GameInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A8F5F27176518000F253A /* GameInfoView.swift */; };
@@ -91,7 +90,6 @@
 		DD3A2520BE53A9CD892076A6 /* Pods-NimaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NimaTests.debug.xcconfig"; path = "Target Support Files/Pods-NimaTests/Pods-NimaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E50A8F4B2714A7B2000F253A /* NagomiGokubosoGothic-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NagomiGokubosoGothic-ExtraLight.otf"; sourceTree = "<group>"; };
 		E50A8F5527155FC5000F253A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		E50A8F5727158345000F253A /* MatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingView.swift; sourceTree = "<group>"; };
 		E50A8F5B271751FF000F253A /* WindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindView.swift; sourceTree = "<group>"; };
 		E50A8F5D27175EFD000F253A /* NameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameView.swift; sourceTree = "<group>"; };
 		E50A8F5F27176518000F253A /* GameInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoView.swift; sourceTree = "<group>"; };
@@ -225,7 +223,6 @@
 				E528B8B126C1627200BC4736 /* DiscardsView.swift */,
 				E5A8422A26DE4033003230F6 /* AnkanView.swift */,
 				E53BE38526BFD62B000A45D8 /* GameView.swift */,
-				E50A8F5727158345000F253A /* MatchingView.swift */,
 				E50A8F5B271751FF000F253A /* WindView.swift */,
 				E50A8F5D27175EFD000F253A /* NameView.swift */,
 				E50A8F5F27176518000F253A /* GameInfoView.swift */,
@@ -617,7 +614,6 @@
 				E58B88A4275D727600424B96 /* UserData.swift in Sources */,
 				E52F33FA278448E900E94310 /* ActionNoticeView.swift in Sources */,
 				E51E714F27000F2800292CBB /* CustomText.swift in Sources */,
-				E50A8F5827158345000F253A /* MatchingView.swift in Sources */,
 				E53422A5276C229F007FA044 /* RecordsView.swift in Sources */,
 				E55DCEEE2730EC300005FF07 /* RegistPlayerNameView.swift in Sources */,
 				E50A8F6027176518000F253A /* GameInfoView.swift in Sources */,
