@@ -34,11 +34,11 @@ struct RankingResponse: Decodable {
     let users: [User]
 }
 
-#if DEBUG
-    let baseURL = "http://localhost:3000"
-#else
+//#if DEBUG
+//    let baseURL = "http://localhost:3000"
+//#else
     let baseURL = "https://nima-server.herokuapp.com"
-#endif
+//#endif
 
 final class UserService {
     @available(iOS 15.0.0, *)

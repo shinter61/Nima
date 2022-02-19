@@ -9,11 +9,11 @@ import Foundation
 import SocketIO
 
 final class GameService: ObservableObject {
-    #if DEBUG
-        private var manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
-    #else
+//    #if DEBUG
+//        private var manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
+//    #else
         private var manager = SocketManager(socketURL: URL(string: "https://nima-server.herokuapp.com/")!, config: [.log(true), .compress])
-    #endif
+//    #endif
     
     @Published var socket: SocketIOClient!
     
