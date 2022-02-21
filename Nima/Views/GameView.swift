@@ -44,6 +44,7 @@ struct GameView: View {
     @State private var showingExhaustive: Bool = false
     @State private var showingWinNotice: Bool = false
     @State private var showingWaits: Bool = false
+    @State private var showingSurrender: Bool = false
     
     @State private var showingActionNotice: Bool = false
     @State private var showingActionContent: ShowingActionContent = .riichi
@@ -823,6 +824,20 @@ struct GameView: View {
                         .padding(.trailing, width*0.03)
                 })
                 .position(x: width/2, y: height*0.93)
+                
+                Group {
+                    Button(action: { showingSurrender = true }) {
+                        Image(systemName: "flag")
+                            .resizable()
+                            .frame(width: 28.0, height: 28.0, alignment: .center)
+                            .foregroundColor(Colors().navy)
+                    }
+                    .position(x: width*0.1, y: height/2)
+                    if showingSurrender {
+                        SurrenderView(showingSurrender: self.$showingSurrender)
+                            .position(x: width/2, y: height/2)
+                    }
+                }
                 
                 if self.showingWinNotice {
                     WinNoticeView(
