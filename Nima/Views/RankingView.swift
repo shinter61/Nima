@@ -28,10 +28,20 @@ struct RankingView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .center, spacing: 0, content: {
-                CustomText(content: "ランキング", size: 32, tracking: 2)
-                    .foregroundColor(Colors().navy)
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
+                HStack {
+                    Button(action: {
+                        isAdTiming = false
+                        showingRanking = false
+                    }) { CustomText(content: "戻る", size: 24, tracking: 0) }
+                        .padding(.leading, 50)
+                    Spacer()
+                    CustomText(content: "ランキング", size: 32, tracking: 2)
+                        .foregroundColor(Colors().navy)
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                        .padding(.leading, -100)
+                    Spacer()
+                }
                 Divider()
                 HStack(alignment: .center, spacing: 54, content: {
                     CustomText(content: "順位", size: 20, tracking: 0)
