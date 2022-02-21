@@ -42,14 +42,7 @@ struct ScoreView: View {
             TilesView(winnerID: gameData.roundWinnerID)
                 .position(x: width*0.5, y: height*0.27)
             ForEach(Array(hands.enumerated()), id: \.offset) { index, hand in
-                HStack {
-                    CustomText(content: hand.name, size: 24, tracking: 0)
-                        .foregroundColor(Colors.init().navy)
-                    if hand.han < 100 {
-                        CustomText(content: "\(String(hand.han))飜", size: 16, tracking: 0)
-                            .foregroundColor(Colors.init().navy)
-                    }
-                }
+                ScoreHanView(handName: hand.name, handHan: hand.han, delay: Double(index))
                 .position(x: width*0.25, y: height*0.4 + 40*CGFloat(index))
             }
             Group {
@@ -99,6 +92,43 @@ struct ScoreView: View {
         .onDisappear { gameData.countdown = 3 }
     }
 }
+
+struct ScoreHanView: View {
+    @EnvironmentObject var soundData: SoundData
+    var handName: String
+    var handHan: Int
+    var delay: Double
+    @State var isHidden: Bool = true
+    
+    func show() -> Void {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.5) {
+            withAnimation() {
+                self.isHidden = false
+                soundData.discardSound.play()
+            }
+        }
+    }
+    
+    var body: some View {
+        if isHidden {
+            ActionEmptyView(action: show)
+        }
+        else {
+            HStack {
+                CustomText(content: handName, size: 24, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+                if handHan < 100 {
+                    CustomText(content: "\(String(handHan))飜", size: 16, tracking: 0)
+                        .foregroundColor(Colors.init().navy)
+                }
+            }
+            .transition(AnyTransition.slide.combined(with: AnyTransition.opacity))
+            .onAppear() {
+            }
+        }
+    }
+}
+
 
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {
