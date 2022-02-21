@@ -833,6 +833,7 @@ struct GameView: View {
                             .frame(width: 28.0, height: 28.0, alignment: .center)
                             .foregroundColor(Colors().navy)
                     }
+                    .disabled(showingWinNotice) // 別画面に遷移する直前は降参させない
                     .position(x: width*0.1, y: height/2)
                     if showingSurrender {
                         SurrenderView(showingSurrender: self.$showingSurrender)
