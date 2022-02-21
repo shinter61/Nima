@@ -53,6 +53,9 @@ struct EndGameView: View {
                 if gameData.isDisconnected {
                     CustomText(content: "接続切れ", size: 24, tracking: 0)
                         .position(x: width*0.8, y: height*0.5)
+                } else if gameData.isSurrender {
+                    CustomText(content: "降参", size: 24, tracking: 0)
+                        .position(x: width*0.8, y: height*0.5)
                 }
                 
                 Button(action: {

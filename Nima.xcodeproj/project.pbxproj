@@ -60,6 +60,7 @@
 		E5EFA565275AE49600D23066 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E5EFA564275AE49600D23066 /* Alamofire */; };
 		E5EFA56A275B175700D23066 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EFA569275B175700D23066 /* User.swift */; };
 		E5EFA56D275B1E2E00D23066 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E5EFA56C275B1E2E00D23066 /* KeychainAccess */; };
+		E5EFDD2727C3E94600DCDE58 /* SurrenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EFDD2627C3E94600DCDE58 /* SurrenderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		E5AFD62726CE4C0C00435171 /* MinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinkoView.swift; sourceTree = "<group>"; };
 		E5BD2C142718349E00EDE08F /* ExhaustiveDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhaustiveDrawView.swift; sourceTree = "<group>"; };
 		E5EFA569275B175700D23066 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E5EFDD2627C3E94600DCDE58 /* SurrenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurrenderView.swift; sourceTree = "<group>"; };
 		EB77A43C1F434C40ADA209ED /* Pods-NimaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NimaTests.release.xcconfig"; path = "Target Support Files/Pods-NimaTests/Pods-NimaTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -240,6 +242,7 @@
 				E52F33F9278448E900E94310 /* ActionNoticeView.swift */,
 				E53B37BD278D50F60020D9BC /* WaitsView.swift */,
 				E55BC917278ED0A00046C951 /* StartGameView.swift */,
+				E5EFDD2627C3E94600DCDE58 /* SurrenderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				E5856218271A3FA3000F6F9E /* FuritenView.swift in Sources */,
 				E50A8F5627155FC5000F253A /* Colors.swift in Sources */,
 				E53BE38826BFDA3E000A45D8 /* GameData.swift in Sources */,
+				E5EFDD2727C3E94600DCDE58 /* SurrenderView.swift in Sources */,
 				E5EFA56A275B175700D23066 /* User.swift in Sources */,
 				E50A8F5C271751FF000F253A /* WindView.swift in Sources */,
 				E5A8C61D26D495CB00B59318 /* EndGameView.swift in Sources */,
