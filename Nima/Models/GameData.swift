@@ -53,6 +53,7 @@ final class GameData: ObservableObject {
     @Published var countdown: Int = 3
     
     @Published var isDisconnected: Bool = false
+    @Published var isSurrender: Bool = false
     @Published var isGameEnd: Bool = false
     
     func allReset() -> Void {
@@ -93,6 +94,7 @@ final class GameData: ObservableObject {
         winnerID = -1
         
         isDisconnected = false
+        isSurrender = false
         isGameEnd = false
     }
     

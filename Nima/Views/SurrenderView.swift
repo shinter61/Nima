@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct SurrenderView: View {
+    @EnvironmentObject var gameData: GameData
+    @EnvironmentObject var userData: UserData
+    @EnvironmentObject var gameService: GameService
     @Binding var showingSurrender: Bool
     
     func pop() -> Void {
         showingSurrender = false
+    }
+    
+    func surrender() -> Void {
+        gameService.socket.emit("Surrender", gameData.roomID, userData.userID)
     }
     
     var body: some View {
@@ -36,8 +43,7 @@ struct SurrenderView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Button(action: {
-                        }) {
+                        Button(action: { surrender() }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(Colors().navy)
