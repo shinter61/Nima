@@ -89,10 +89,10 @@ struct GameView: View {
                     }
                     gameData.yourRiichiTurn = Int(dict["riichiTurn"]!)!
                     gameData.yourScore = Int(dict["score"]!)!
-                    if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) {
+                    if gameData.collectToitz().contains(gameData.yourDiscards.last!.name()) && gameData.stockCount != 0 {
                         canPon = true
                     }
-                    if gameData.collectAnko().contains(gameData.yourDiscards.last!.name()) {
+                    if gameData.collectAnko().contains(gameData.yourDiscards.last!.name()) && gameData.stockCount != 0 {
                         canDaiminkan = true
                     }
                     if gameData.myRonWaits.map({ $0.name() }).contains(gameData.yourDiscards.last!.name()) {
