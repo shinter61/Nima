@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SocketIO
+import AVFAudio
 
 struct ScoreView: View {
     @EnvironmentObject var userData: UserData
@@ -69,14 +70,16 @@ struct ScoreView: View {
                     }
                 }
             }
-            Group {
-                CustomText(content: scoreName, size: 36, tracking: 0)
-                    .foregroundColor(Colors.init().navy)
-                    .position(x: width*0.6, y: height*0.8)
-                CustomText(content: "\(score)点", size: 36, tracking: 0)
-                    .foregroundColor(Colors.init().navy)
-                    .position(x: width*0.8, y: height*0.8)
-            }
+            ScoreNameView(scoreName: scoreName, score: score, delay: Double(hands.count))
+                .position(x: width*0.6, y: height*0.8)
+//            Group {
+//                CustomText(content: scoreName, size: 36, tracking: 0)
+//                    .foregroundColor(Colors.init().navy)
+//                    .position(x: width*0.6, y: height*0.8)
+//                CustomText(content: "\(score)点", size: 36, tracking: 0)
+//                    .foregroundColor(Colors.init().navy)
+//                    .position(x: width*0.8, y: height*0.8)
+//            }
             CustomText(content: String(gameData.countdown), size: 20, tracking: 0)
                 .foregroundColor(Colors.init().navy)
                 .position(x: width*0.95, y: height*0.9)
@@ -100,11 +103,20 @@ struct ScoreHanView: View {
     var delay: Double
     @State var isHidden: Bool = true
     
+    func HanSEPlay() {
+        let SE: AVAudioPlayer = soundData.discardSound
+        if !SE.isPlaying {
+            SE.stop()
+            SE.currentTime = 0
+        }
+        SE.play()
+    }
+    
     func show() -> Void {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.6 + 0.3) {
             withAnimation() {
                 self.isHidden = false
-                soundData.discardSound.play()
+                HanSEPlay()
             }
         }
     }
@@ -123,8 +135,47 @@ struct ScoreHanView: View {
                 }
             }
             .transition(AnyTransition.slide.combined(with: AnyTransition.opacity))
-            .onAppear() {
+        }
+    }
+}
+
+struct ScoreNameView: View {
+    @EnvironmentObject var soundData: SoundData
+    var scoreName: String
+    var score: Int
+    var delay: Double
+    @State var isHidden: Bool = true
+    
+    func HanSEPlay() {
+        let SE: AVAudioPlayer = soundData.ponSound
+        if !SE.isPlaying {
+            SE.stop()
+            SE.currentTime = 0
+        }
+        SE.play()
+    }
+    
+    func show() -> Void {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.6 + 0.6) {
+            withAnimation() {
+                self.isHidden = false
+                HanSEPlay()
             }
+        }
+    }
+    
+    var body: some View {
+        if isHidden {
+            ActionEmptyView(action: show)
+        }
+        else {
+            HStack {
+                CustomText(content: scoreName, size: 36, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+                CustomText(content: "\(score)点", size: 36, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+            }
+            .transition(AnyTransition.opacity)
         }
     }
 }
