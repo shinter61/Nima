@@ -529,7 +529,7 @@ struct GameView: View {
         }
         resetMyDiscardTimer()
         discardCallback()
-        if (isRiichi) {
+        if isRiichi && gameData.myRiichiTurn == -1 {
             riichiDiscardTile = tile
             gameService.socket.emit("InformRiichi", gameData.roomID, userData.userID)
         } else {
