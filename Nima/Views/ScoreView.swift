@@ -104,7 +104,7 @@ struct ScoreHanView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.5) {
             withAnimation() {
                 self.isHidden = false
-                soundData.discardSound.play()
+                soundData.displayHandSound.play()
             }
         }
     }
