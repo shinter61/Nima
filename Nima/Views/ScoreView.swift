@@ -77,9 +77,11 @@ struct ScoreView: View {
                     .foregroundColor(Colors.init().navy)
                     .position(x: width*0.8, y: height*0.8)
             }
-            CustomText(content: String(gameData.countdown), size: 20, tracking: 0)
-                .foregroundColor(Colors.init().navy)
-                .position(x: width*0.95, y: height*0.9)
+            if gameData.countdown <= 3 {
+                CustomText(content: String(gameData.countdown), size: 20, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+                    .position(x: width*0.95, y: height*0.9)
+            }
             if gameData.countdown <= 0 {
                 ActionEmptyView(action: pop)
             }
@@ -88,8 +90,8 @@ struct ScoreView: View {
                 isActive: self.$showingEndGame
             ) { EmptyView() }
         }
-        .onAppear { gameData.startTimer() }
-        .onDisappear { gameData.countdown = 3 }
+        .onAppear { gameData.startTimer(initialCount: 3 + Int(ceil(Double(hands.count) * 0.5))) }
+        .onDisappear { gameData.countdown = 100 }
     }
 }
 
