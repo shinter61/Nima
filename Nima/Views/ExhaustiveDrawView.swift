@@ -106,8 +106,8 @@ struct ExhaustiveDrawView: View {
                 ) { EmptyView() }
             }
         }
-        .onAppear { gameData.startTimer() }
-        .onDisappear { gameData.countdown = 3 }
+        .onAppear { gameData.startTimer(initialCount: 3) }
+        .onDisappear { gameData.countdown = 100 }
     }
 }
 

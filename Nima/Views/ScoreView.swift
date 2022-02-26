@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SocketIO
+import AVFAudio
 
 struct ScoreView: View {
     @EnvironmentObject var userData: UserData
@@ -69,17 +70,13 @@ struct ScoreView: View {
                     }
                 }
             }
-            Group {
-                CustomText(content: scoreName, size: 36, tracking: 0)
-                    .foregroundColor(Colors.init().navy)
+            ScoreNameView(scoreName: scoreName, score: score, delay: Double(hands.count))
                     .position(x: width*0.6, y: height*0.8)
-                CustomText(content: "\(score)点", size: 36, tracking: 0)
+            if gameData.countdown <= 3 {
+                CustomText(content: String(gameData.countdown), size: 20, tracking: 0)
                     .foregroundColor(Colors.init().navy)
-                    .position(x: width*0.8, y: height*0.8)
+                    .position(x: width*0.95, y: height*0.9)
             }
-            CustomText(content: String(gameData.countdown), size: 20, tracking: 0)
-                .foregroundColor(Colors.init().navy)
-                .position(x: width*0.95, y: height*0.9)
             if gameData.countdown <= 0 {
                 ActionEmptyView(action: pop)
             }
@@ -88,8 +85,8 @@ struct ScoreView: View {
                 isActive: self.$showingEndGame
             ) { EmptyView() }
         }
-        .onAppear { gameData.startTimer() }
-        .onDisappear { gameData.countdown = 3 }
+        .onAppear { gameData.startTimer(initialCount: 3 + Int(ceil(Double(hands.count) * 0.5))) }
+        .onDisappear { gameData.countdown = 100 }
     }
 }
 
@@ -100,11 +97,20 @@ struct ScoreHanView: View {
     var delay: Double
     @State var isHidden: Bool = true
     
+    func HanSEPlay() {
+        let SE: AVAudioPlayer = soundData.displayHandSound
+        if !SE.isPlaying {
+            SE.stop()
+            SE.currentTime = 0
+        }
+        SE.play()
+    }
+    
     func show() -> Void {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.5) {
             withAnimation() {
                 self.isHidden = false
-                soundData.discardSound.play()
+                HanSEPlay()
             }
         }
     }
@@ -112,8 +118,7 @@ struct ScoreHanView: View {
     var body: some View {
         if isHidden {
             ActionEmptyView(action: show)
-        }
-        else {
+        } else {
             HStack {
                 CustomText(content: handName, size: 24, tracking: 0)
                     .foregroundColor(Colors.init().navy)
@@ -129,6 +134,48 @@ struct ScoreHanView: View {
     }
 }
 
+struct ScoreNameView: View {
+    @EnvironmentObject var soundData: SoundData
+    @State private var scale: CGFloat = 0
+    var scoreName: String
+    var score: Int
+    var delay: Double
+    @State var isHidden: Bool = true
+
+    func HanSEPlay() {
+        let SE: AVAudioPlayer = soundData.displayScoreSound
+        if !SE.isPlaying {
+            SE.stop()
+            SE.currentTime = 0
+        }
+        SE.play()
+    }
+
+    func show() -> Void {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay * 0.5) {
+            withAnimation() {
+                self.isHidden = false
+                HanSEPlay()
+                scale += 1
+            }
+        }
+    }
+
+    var body: some View {
+        if isHidden {
+            ActionEmptyView(action: show)
+        } else {
+            HStack {
+                CustomText(content: scoreName, size: 36, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+                CustomText(content: "\(score)点", size: 36, tracking: 0)
+                    .foregroundColor(Colors.init().navy)
+            }
+            .transition(AnyTransition.opacity)
+            .scaleEffect(scale)
+        }
+    }
+}
 
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {

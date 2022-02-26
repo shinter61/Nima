@@ -50,7 +50,7 @@ final class GameData: ObservableObject {
     @Published var roundWinType: String = ""
     
     @Published var timer: Timer!
-    @Published var countdown: Int = 3
+    @Published var countdown: Int = 100
     
     @Published var isDisconnected: Bool = false
     @Published var isSurrender: Bool = false
@@ -183,14 +183,16 @@ final class GameData: ObservableObject {
         return myMinkos.isEmpty && myMinkans.isEmpty
     }
     
-    func startTimer() {
+    func startTimer(initialCount: Int) {
+        self.countdown = initialCount
+        
         let startTime: Date = Date()
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: { _ in
             let current = Date()
             let diff = (Calendar.current.dateComponents([.second], from: startTime, to: current)).second!
-            if diff >= 3 { self.timer?.invalidate() }
-            self.countdown = 3 - diff
+            if diff >= initialCount { self.timer?.invalidate() }
+            self.countdown = initialCount - diff
         })
     }
     
