@@ -19,4 +19,5 @@ final class SoundData: ObservableObject {
     @Published var kanSound = try! AVAudioPlayer(data: NSDataAsset(name: "kan")!.data)
     @Published var ripaiSound = try! AVAudioPlayer(data: NSDataAsset(name: "ripai")!.data)
     @Published var displayHandSound = try! AVAudioPlayer(data: NSDataAsset(name: "display_hand")!.data)
+    @Published var displayScoreSound = try! AVAudioPlayer(data: NSDataAsset(name: "display_score")!.data)
 }
