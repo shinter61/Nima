@@ -198,9 +198,14 @@ final class GameData: ObservableObject {
     
     func isFuriten() -> Bool {
         var ans = false
+        var allMyDiscards: [Tile] = []
+        allMyDiscards = myDiscards
+        for i in 0..<(yourMinkos.count) { allMyDiscards.append(yourMinkos[i]) }
+        for i in 0..<(yourMinkans.count) { allMyDiscards.append(yourMinkos[i]) }
+        
         for i in 0..<(myRonWaits.count) {
-            for j in 0..<(myDiscards.count) {
-                if myRonWaits[i].isEqual(tile: myDiscards[j]) {
+            for j in 0..<(allMyDiscards.count) {
+                if myRonWaits[i].isEqual(tile: allMyDiscards[j]) {
                     ans = true
                     break
                 }
