@@ -201,7 +201,7 @@ final class GameData: ObservableObject {
         var allMyDiscards: [Tile] = []
         allMyDiscards = myDiscards
         for i in 0..<(yourMinkos.count) { allMyDiscards.append(yourMinkos[i]) }
-        for i in 0..<(yourMinkans.count) { allMyDiscards.append(yourMinkos[i]) }
+        for i in 0..<(yourMinkans.count) { allMyDiscards.append(yourMinkans[i]) }
         
         for i in 0..<(myRonWaits.count) {
             for j in 0..<(allMyDiscards.count) {
